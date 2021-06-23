@@ -1,0 +1,15 @@
+services: 
+    server: 
+        image: back
+        ports:
+            - 5000:5000
+        command: npm start
+    client:
+        image: front
+        ports:
+            - 3000:3000
+        command: npm run start
+    mongodb:
+        image: mongo
+        volumes: 
+            - ./data:/data/db
