@@ -1,0 +1,9 @@
+{
+  allChatRooms {
+    users {id}
+    messages {id}
+    creationDate
+    isActiv
+    title
+  }
+}

@@ -1,0 +1,24 @@
+mutation sendMessage($id: String!, $newMessage: CreateMessageInput!) {
+        sendMessage(_id: $id, newMessage: $newMessage) {
+            messages {
+                text
+                createdAt
+            }
+            createdAt
+            isActiv
+            title
+        }
+    }
+
+
+variables
+
+variables: {
+    id: chatId,
+    newMessage: {
+        author: {
+            id: '60899d221aeef5070efe5c45',
+            username: 'NiceUser',
+        },
+        text: message,
+    }

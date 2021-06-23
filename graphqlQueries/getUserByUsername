@@ -1,0 +1,25 @@
+query getUserByUsername($username: String!) {
+  getUserById(username: $username) {
+    username
+    firstname
+    lastname
+    password
+    chatrooms {
+      title
+    }
+    avatar
+    isConnected
+    email
+    birthDate
+    hobbies {
+      title
+      category
+    }
+  }
+}
+
+
+
+variables: {
+    username: "NiceUser"
+}

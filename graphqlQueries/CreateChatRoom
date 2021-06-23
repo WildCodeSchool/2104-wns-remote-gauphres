@@ -1,0 +1,36 @@
+mutation createChatRoom {
+  createChatRoom(data: {
+    title: "Ma Chat Room"
+  })
+  {
+    users {id}
+    messages {id}
+    creationDate
+    isActiv
+    title
+  }
+}
+
+mutation createChatRoom {
+  createChatRoom(
+    data: {
+      title: "Ma Chat Room"
+      users: [
+        { id: "60899d221aeef5070efe5c45", username: "NiceUser" }
+        { id: "608a60e2a2893b3d67787222", username: "BadUser" }
+      ]
+    }
+  ) {
+    users {
+      id
+      username
+    }
+
+    messages {
+      id
+    }
+    createdAt
+    isActiv
+    title
+  }
+}
