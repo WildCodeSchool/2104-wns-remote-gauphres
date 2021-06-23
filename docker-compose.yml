@@ -1,14 +1,20 @@
 services: 
     server: 
+        container_name: back
         image: back
         ports:
             - 5000:5000
         command: npm start
+        volumes:
+            - ./Back/:/Back/
     client:
+        container_name: front
         image: front
         ports:
             - 3000:3000
         command: npm run start
+        volumes:
+            - ./Front/:/Front/
     mongodb:
         image: mongo
         volumes: 
