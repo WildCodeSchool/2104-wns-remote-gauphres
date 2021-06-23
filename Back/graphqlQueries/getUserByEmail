@@ -1,0 +1,13 @@
+ {
+  getOneUser(email: "userEmail@email.com") {
+    username
+    firstname
+    lastname
+    password
+    chatrooms {title}
+    avatar
+    isConnected
+    email
+    birthDate
+  }
+}

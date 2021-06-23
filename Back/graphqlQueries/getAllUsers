@@ -1,0 +1,12 @@
+{
+  getAllUsers {
+    username
+    firstname
+    lastname
+    chatrooms {title}
+    avatar
+    isConnected
+    email
+    birthDate
+  }
+}

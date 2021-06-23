@@ -1,0 +1,17 @@
+ {
+  getOneChatRoom(_id: "608aa75c09feab277fe800b3") {
+    title
+    users {
+        username
+        id
+        }
+    messages {
+        id
+        text
+        author
+        createdAt
+        }
+    createdAt
+    isActiv
+  }
+}

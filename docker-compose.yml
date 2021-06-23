@@ -1,0 +1,25 @@
+services: 
+    server: 
+        container_name: 2104-wns-remote-gauphres_server
+        build:
+            context: ./Back
+            dockerfile: Dockerfile
+        ports:
+            - 5000:5000
+        command: npm start
+        volumes:
+            - ./Back/:/app/
+    client:
+        container_name: 2104-wns-remote-gauphres_client
+        build: 
+            context: ./Front
+            dockerfile: Dockerfile
+        ports:
+            - 3000:3000
+        command: npm run start
+        volumes:
+            - ./Front/:/app/
+    mongodb:
+        image: mongo
+        volumes: 
+            - ./data:/data/db

@@ -1,0 +1,13 @@
+mutation updateUserMood {
+  updateUserMood(
+    newMood: {
+    userId: "60899d221aeef5070efe5c45",
+    title: "otherFirstname",
+    image: "otherLastname",
+    })
+  {
+    userMood {
+      title
+    }
+  }
+}
