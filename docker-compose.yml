@@ -25,11 +25,8 @@ services:
         ports:
             - 27017:27017 
         volumes: 
-            - mongodbdata:/data/db
+            - ./data:/data/db
         restart: always
-
-volumes:
-    mongodbdata:
 
 networks:
     default:
