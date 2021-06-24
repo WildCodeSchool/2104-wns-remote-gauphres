@@ -20,12 +20,7 @@ services:
         volumes:
             - ./Front/:/app/
     mongodb:
-        container_name: mongodb
         image: mongo
         volumes: 
             - ./data:/data/db
         restart: always
-
-networks:
-    default:
-        name: mongodb-network
