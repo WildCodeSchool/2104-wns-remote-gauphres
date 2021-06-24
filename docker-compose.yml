@@ -7,6 +7,8 @@ services:
         ports:
             - 5000:5000
         command: npm start
+        links: 
+            - mongodb:data
         volumes:
             - ./Back/:/app/
     client:
@@ -20,6 +22,8 @@ services:
         volumes:
             - ./Front/:/app/
     mongodb:
+        container_name: mongo
         image: mongo
+        restart: always
         volumes: 
             - ./data:/data/db
