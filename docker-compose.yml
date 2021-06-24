@@ -19,7 +19,18 @@ services:
         command: npm run start
         volumes:
             - ./Front/:/app/
-    mongodb:
+    mongo:
+        container_name: mongodb
         image: mongo
+        ports:
+            - 27017:27017 
         volumes: 
-            - ./data:/data/db
+            - mongodbdata:/data/db
+        restart: always
+
+volumes:
+    mongodbdata:
+
+networks:
+    default:
+        name: mongo-network

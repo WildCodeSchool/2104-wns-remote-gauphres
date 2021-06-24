@@ -19,8 +19,8 @@ app.use(express.json());
 app.use(cors());
 
 async function start() {
-    // Connect to Atlas DB
-    const uri = `mongodb+srv://gauphreAdmin:OALByCtSaYHbDHaG@moowdydb.afpoa.mongodb.net/moowdyDb?retryWrites=true&w=majority`;
+    // Connect to Mongo docker image
+    const uri = `mongodb://mongodb:27017/moowdyDb`;
     mongoose.connect(uri, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
