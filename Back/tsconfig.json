@@ -1,8 +1,4 @@
 {
-  "extends": "../tsconfig.json",
-  "paths": {
-    "src/*": ["./src/*"],
-  },
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
@@ -75,5 +71,5 @@
   "include": [
     "./src/**/*"
   ],
-
+  "exclude": ["nodes_modules"]
 }
