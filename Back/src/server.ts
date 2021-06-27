@@ -8,6 +8,7 @@ import { ApolloServer } from 'apollo-server';
 import { ChatRoomResolver } from './resolvers/ChatRoomResolver';
 import { ArticleResolver } from './resolvers/ArticleResolver';
 import { MoodResolver } from './resolvers/MoodResolver';
+import Fixtures from 'node-mongodb-fixtures';
 
 const app = express();
 
@@ -28,6 +29,15 @@ async function start() {
         autoIndex: true,
         useFindAndModify: false,
     });
+
+    console.log('Fixtures started');
+    const fixtures = new Fixtures();
+    fixtures
+        .connect(uri)
+        .then(() => fixtures.unload())
+        .then(() => fixtures.load())
+        .then(() => fixtures.disconnect());
+    console.log('Fixtures finished');
 
     const schema = await buildSchema({
         resolvers: [
