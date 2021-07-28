@@ -55,10 +55,6 @@ export class User {
     @Field()
     createdAt?: Date;
 
-    @Prop()
-    @Field()
-    accessToken?: string;
-
     @Prop({ type: Mood })
     @Field((type) => Mood)
     userMood?: Mood;
@@ -121,22 +117,6 @@ export class MessageSender {
 export class ArticleCreator {
     @Field()
     username!: string;
-}
-
-@ObjectType()
-export class UserWithToken {
-    @Field()
-    accessToken!: string;
-    @Field()
-    user!: User;
-}
-
-@InputType()
-export class LoginInput {
-    @Field()
-    email!: string;
-    @Field()
-    password!: string;
 }
 
 @InputType()

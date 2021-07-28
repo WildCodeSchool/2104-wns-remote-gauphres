@@ -8,7 +8,7 @@ export type UserMood = {
 
 export type User = {
     id: string;
-    username: string;
+    userName: string;
     firstname: string;
     lastname: string;
     password: string;
@@ -26,7 +26,7 @@ export const UserContext = createContext<
 const FIND_USER = gql`
     query getUserByEmail($email: String!) {
         getUserByEmail(email: $email) {
-            username
+            userName
             firstname
             lastname
             password
