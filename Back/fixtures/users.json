@@ -1,26 +1,38 @@
 [
     {
+        "id": 1,
         "username": "user",
         "firstname": "user",
         "lastname": "user",
         "password": "user",
         "email": "user@email.com",
-        "birthDate": "2012-11-24"
+        "birthDate": "2012-11-24",
+        "avatar": "https://resize-gulli.jnsmedia.fr/r/890,__ym__/img//var/jeunesse/storage/images/gulli/chaine-tv/dessins-animes/pokemon/pokemon/pikachu/26571681-1-fre-FR/Pikachu.jpg",
+        "isConnected": true,
+        "createdAt": "2021-07-28",
+        "chatrooms": [1, 2, 3],
+        "hobbies": ["hobby1", "hooby2"],
+        "mood": {
+            "title": "mySadMood",
+            "image": "https://openmoji.org/data/color/svg/1F612.svg"
+        }
     },
     {
-        "username": "user 2",
-        "firstname": "user 2",
-        "lastname": "user 2",
-        "password": "user 2",
+        "id": 2,
+        "username": "user2",
+        "firstname": "user2",
+        "lastname": "user2",
+        "password": "user2",
         "email": "user2@email.com",
-        "birthDate": "2012-11-24"
-    },
-    {
-        "username": "user 3",
-        "firstname": "user 3",
-        "lastname": "user 3",
-        "password": "user 3",
-        "email": "user 3@email.com",
-        "birthDate": "2012-11-24"
+        "birthDate": "2012-11-24",
+        "avatar": "https://resize-gulli.jnsmedia.fr/r/890,__ym__/img//var/jeunesse/storage/images/gulli/chaine-tv/dessins-animes/pokemon/pokemon/pikachu/26571681-1-fre-FR/Pikachu.jpg",
+        "isConnected": true,
+        "createdAt": "2021-07-29",
+        "chatrooms": [1, 2, 3],
+        "hobbies": ["hobby3", "hooby4"],
+        "mood": {
+            "title": "myGoodMood",
+            "image": "https://openmoji.org/data/color/svg/1F604.svg"
+        }
     }
 ]
