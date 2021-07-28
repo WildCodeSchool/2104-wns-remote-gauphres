@@ -1,16 +1,17 @@
 import React, { FC } from 'react';
-import { Link } from 'react-router-dom';
+import Link from './style';
+import Button from '../../Button/Button';
 
 const HomePage: FC = () => {
     return (
         <>
             <div>Home Page</div>
-            <button type="button">
+            <Button>
                 <Link to="/login">Se connecter</Link>
-            </button>
-            <button type="button">
+            </Button>
+            <Button>
                 <Link to="/register">Créer un compte</Link>
-            </button>
+            </Button>
         </>
     );
 };
