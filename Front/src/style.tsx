@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 import { colors } from './components/style/theme';
 
-export const Menu = styled.div`
+export const SideMenuContainer = styled.div`
     display: flex;
     flex-direction: row;
     background-color: ${colors.light};
