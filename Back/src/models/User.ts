@@ -56,9 +56,9 @@ export class User {
     @Field()
     accessToken?: string;
 
-    @Prop({ required: false })
+    @Prop()
     @Field((type) => Mood)
-    userMood?: Mood;
+    userMood?: Object;
 }
 
 export const UserModel = getModelForClass(User);
@@ -101,6 +101,21 @@ export class UserChatRoom {
     @Field({ nullable: true })
     avatar?: string;
 
+    @Field()
+    isConnected?: boolean = false;
+}
+
+@ObjectType()
+export class UserChatRoomType {
+    @Prop()
+    @Field()
+    username?: string;
+
+    @Prop()
+    @Field()
+    avatar?: string;
+
+    @Prop()
     @Field()
     isConnected?: boolean = false;
 }

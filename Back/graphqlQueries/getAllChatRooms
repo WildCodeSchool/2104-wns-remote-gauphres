@@ -1,9 +1,9 @@
 {
-  allChatRooms {
-    users {id}
-    messages {id}
-    creationDate
-    isActiv
+  getAllChatRooms{
     title
+		users {username isConnected avatar}
+    createdAt
+    messages {text author}
+
   }
 }

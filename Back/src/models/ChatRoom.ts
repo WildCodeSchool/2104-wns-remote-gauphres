@@ -1,7 +1,7 @@
 import { getModelForClass, Prop } from '@typegoose/typegoose';
 import { Field, InputType, ObjectType } from 'type-graphql';
 import { Message } from './Message';
-import { User, UserChatRoom } from './User';
+import { User, UserChatRoom, UserChatRoomType } from './User';
 
 @ObjectType()
 export class ChatRoom {
@@ -13,9 +13,9 @@ export class ChatRoom {
     @Field()
     title?: string;
 
-    @Prop({ type: User })
-    @Field((type) => [User])
-    users?: User[];
+    @Prop({ type: UserChatRoomType })
+    @Field((type) => [UserChatRoomType])
+    users?: UserChatRoomType[];
 
     @Prop({ type: Message })
     @Field((type) => [Message])
