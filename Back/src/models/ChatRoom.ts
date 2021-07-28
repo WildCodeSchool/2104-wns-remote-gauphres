@@ -9,6 +9,10 @@ export class ChatRoom {
     @Field()
     id!: string;
 
+    @Prop()
+    @Field()
+    title?: string;
+
     @Prop({ type: User })
     @Field((type) => [User])
     users?: User[];
@@ -25,9 +29,6 @@ export class ChatRoom {
     @Field()
     isActiv?: Boolean;
 
-    @Prop()
-    @Field()
-    title?: string;
 }
 export const ChatRoomModel = getModelForClass(ChatRoom);
 

@@ -51,7 +51,7 @@ export class UserResolver {
         await user.save();
         return {
             user,
-            accessToken: sign( { userId: user.id}, 'secretJWT')
+            accessToken: sign({ userId: user.id }, 'secretJWT')
         };
     }
 
@@ -66,7 +66,7 @@ export class UserResolver {
         }
         return {
             user,
-            accessToken: sign( {userId: user.id}, 'secretJWT')
+            accessToken: sign({ userId: user.id }, 'secretJWT')
         };
     }
 

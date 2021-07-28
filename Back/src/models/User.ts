@@ -1,8 +1,6 @@
 import { getModelForClass, Prop, Ref } from '@typegoose/typegoose';
 import { Field, InputType, ObjectType } from 'type-graphql';
-import { ChatRoom } from './ChatRoom';
 import { Mood } from './Mood';
-import { Hobby } from './Hobby';
 
 @ObjectType()
 export class User {
@@ -26,13 +24,13 @@ export class User {
     @Field()
     password?: string;
 
-    @Prop({ ref: 'ChatRoom' })
-    @Field(() => [ChatRoom])
-    chatrooms?: Ref<ChatRoom>[];
+    @Prop()
+    @Field(() => [String])
+    chatrooms?: string[];
 
-    @Prop({ ref: 'Hobby' })
-    @Field(() => [Hobby])
-    hobbies?: Hobby[];
+    @Prop()
+    @Field(() => [String])
+    hobbies?: string[];
 
     @Prop()
     @Field({ nullable: true })
@@ -58,8 +56,8 @@ export class User {
     @Field()
     accessToken?: string;
 
-    @Prop({ type: Mood })
-    @Field(() => Mood)
+    @Prop({ required: false })
+    @Field((type) => Mood)
     userMood?: Mood;
 }
 

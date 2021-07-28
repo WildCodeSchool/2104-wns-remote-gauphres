@@ -4,19 +4,15 @@ import { MessageSender, User } from './User';
 
 @ObjectType()
 export class Message {
-    @Prop()
     @Field()
-    id?: string;
+    id?: number;
 
-    @Prop()
     @Field()
     text!: string;
 
-    @Prop({ type: User })
-    @Field((type) => User)
-    author?: User;
+    @Field()
+    author?: string;
 
-    @Prop()
     @Field()
     createdAt?: Date;
 }

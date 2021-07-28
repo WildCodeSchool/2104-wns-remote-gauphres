@@ -7,7 +7,6 @@ import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server';
 import { ChatRoomResolver } from './resolvers/ChatRoomResolver';
 import { ArticleResolver } from './resolvers/ArticleResolver';
-import { MoodResolver } from './resolvers/MoodResolver';
 import Fixtures from 'node-mongodb-fixtures';
 
 const app = express();
@@ -44,7 +43,6 @@ async function start() {
             UserResolver,
             ChatRoomResolver,
             ArticleResolver,
-            MoodResolver,
         ],
     });
 
