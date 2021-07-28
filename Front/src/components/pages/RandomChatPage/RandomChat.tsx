@@ -5,6 +5,8 @@ import ChatForm from '../../Chat/ChatForm/ChatForm';
 import { UserContext, User } from '../../../contexts/UserContext';
 import { ChatPage } from './style';
 import MemberCard from '../../Chat/MemberCard/MemberCard';
+import SideMenu from '../../SideMenu/SideMenu';
+import { SideMenuContainer } from '../../../style';
 
 const chatRoomTest = '608aa75c09feab277fe800b3';
 
@@ -58,7 +60,8 @@ const RandomChat: FC = () => {
     }, [data]);
 
     return (
-        <>
+        <SideMenuContainer>
+            <SideMenu />
             <ChatPage>
                 <ChatView
                     user={user && user[0]}
@@ -67,7 +70,7 @@ const RandomChat: FC = () => {
                 <ChatForm chatId={chatRoomTest} />
             </ChatPage>
             <MemberCard />
-        </>
+        </SideMenuContainer>
     );
 };
 
