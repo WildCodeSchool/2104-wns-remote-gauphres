@@ -18,3 +18,6 @@ export const MenuContainer = styled.div`
         }
     }
 `;
+export const UserConnectedContainer = styled.div`
+    background-color: ${colors.light};
+`;
