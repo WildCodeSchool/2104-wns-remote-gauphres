@@ -27,7 +27,7 @@ export class ChatRoom {
 
     @Prop()
     @Field()
-    isActiv?: boolean = true;
+    isActiv?: boolean;
 
 }
 export const ChatRoomModel = getModelForClass(ChatRoom);

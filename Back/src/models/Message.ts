@@ -31,7 +31,4 @@ export class CreateMessageInput {
 
     @Field()
     author?: string;
-
-    @Field()
-    createdAt: Date = new Date(Date.now());
 }

@@ -45,15 +45,17 @@ export class ChatRoomResolver {
 
     @Mutation(() => ChatRoom)
     async sendMessage(
-        @Arg('_id') _id: string,
+        @Arg('id') id: string,
         @Arg('newMessage', () => CreateMessageInput) message: Message
     ) {
         if (Validators.isMessageValid(message)) {
+            const createdAt = new Date(Date.now());
+            const newMessage = {...message, createdAt: createdAt}
             const updatedChatRoom = await ChatRoomModel.findOneAndUpdate(
-                { _id: _id },
+                { id: id },
                 {
                     $push: {
-                        messages: message,
+                        messages: newMessage,
                     },
                 }
             );
