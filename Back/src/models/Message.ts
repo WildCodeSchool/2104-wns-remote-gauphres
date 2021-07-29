@@ -1,6 +1,6 @@
 import { Prop } from '@typegoose/typegoose';
 import { Field, InputType, ObjectType } from 'type-graphql';
-import { MessageSender, User } from './User';
+
 
 @ObjectType()
 export class Message {
