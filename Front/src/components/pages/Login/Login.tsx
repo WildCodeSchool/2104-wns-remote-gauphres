@@ -18,24 +18,26 @@ type FormValues = {
     password: string;
 };
 
-const LoginPage: FC<FormValues> = ({ datas }: FormValues) => {
+const LoginPage: FC<FormValues> = () => {
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm<FormValues>();
-    const [loginUser, { datas }] = useMutation(LOGIN_USER);
+    const [loginUser] = useMutation(LOGIN_USER);
+
+    const onSubmitForm = (datas: FormValues) => {
+        loginUser({
+            variables: {
+                email: datas.email,
+                password: datas.password,
+            },
+        });
+    };
 
     return (
         <Container>
-            <Form onSubmit={handleSubmit((datas) => {
-                loginUser({
-                    variables: {
-                        email: datas.email,
-                        password: datas.password,
-                    },
-                }),
-            })}>
+            <Form onSubmit={handleSubmit(onSubmitForm)}>
                 <Title>Connecte toi !</Title>
                 <Input>
                     <TextInput
@@ -50,9 +52,9 @@ const LoginPage: FC<FormValues> = ({ datas }: FormValues) => {
                         {...register('password', {
                             required: 'Ce champ est obligatoire',
                             minLength: {
-                                value: 5,
+                                value: 3,
                                 message:
-                                    'Votre mot de passe doit faire au moins 5 caractères',
+                                    'Votre mot de passe doit faire au moins 3 caractères',
                             },
                         })}
                         label="Mot de passe"
