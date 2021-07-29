@@ -1,10 +1,11 @@
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
 import {
-    CreateUserInput,
-    loggedUser,
-    LoginUserInput,
+    UserCreationInput,
+    UserLoginInput,
     User,
     UserModel,
+    UserMoodInput,
+    UserHobbiesInput,
 } from '../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -43,8 +44,9 @@ export class UserResolver {
     }
 
     @Mutation(() => User)
-    async createUser(@Arg('newUser') newUser: CreateUserInput) {
+    async createUser(@Arg('newUser') newUser: UserCreationInput) {
         const user = await UserModel.create(newUser);
+        user.createdAt = new Date(Date.now());
         user.birthDate = new Date(newUser.birthDate!);
         user.password = bcrypt.hashSync(newUser.password!, 10);
         await user.save();
@@ -52,23 +54,33 @@ export class UserResolver {
     }
 
     @Mutation(() => String)
-    async Login(@Arg('currentUser') currentUser: LoginUserInput) {
+    async Login(@Arg('currentUser') currentUser: UserLoginInput) {
         const user = await UserModel.findOne({ email: currentUser.email })
         if (user && bcrypt.compareSync(currentUser.password!, user.password!)) {
-            const moowdyToken = jwt.sign({ userId: user.id }, 'moowdyJwtKey');
+            const moowdyToken = jwt.sign({ userEmail: user.email }, 'moowdyJwtKey');
             return moowdyToken;
         } else {
             throw new AuthenticationError("Invalid credentials");
         }
     }
 
-    /* @Mutation(() => User)
-    async updateUserMood(@Arg('newMood') newMood: CreateMoodInputForUser) {
+    @Mutation(() => User)
+    async updateUserMood(@Arg('currentUser') currentUser: UserMoodInput) {
         const updatedUserMood = await UserModel.findOneAndUpdate(
-            { _id: newMood.userId },
-            { userMood: { title: newMood.title, image: newMood.image } }
+            { email: currentUser.email },
+            { userMood: { title: currentUser.newMood?.title, image: currentUser.newMood?.image } }
         );
 
-        return updatedUserMood;
-    } */
+        return updatedUserMood; // That return the previous mood in the playground
+    }
+
+    @Mutation(() => User)
+    async updateUserHobbies(@Arg('currentUser') currentUser: UserHobbiesInput) {
+        const updatedUserHobbies = await UserModel.findOneAndUpdate(
+            { email: currentUser.email },
+            { hobbies: currentUser.hobbies }
+        )
+
+        return updatedUserHobbies; // That return the previous hobbies in the playground
+    }
 }
