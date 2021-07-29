@@ -33,6 +33,14 @@ export class UserResolver {
         return user;
     }
 
+    @Query(() => [User])
+    async getUsersConnected(): Promise<User[]> {
+        const users = await UserModel.find(
+            { isConnected:true }
+        );
+        return users;
+    }
+
     // TODO: As MongoDb use random ID that we can't really use in the app
     // we don't need this query yet. It will be replace by getUserByusername.
 
