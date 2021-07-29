@@ -1,13 +1,14 @@
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
 import {
-    CreateMoodInputForUser,
     CreateUserInput,
+    loggedUser,
+    LoginUserInput,
     User,
     UserModel,
-    UserWithToken,
 } from '../models/User';
-import { sign } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { AuthenticationError } from 'apollo-server-errors';
 
 @Resolver(User)
 export class UserResolver {
@@ -34,30 +35,26 @@ export class UserResolver {
     }
 
     @Mutation(() => User)
-    async createUser(@Arg('data') data: CreateUserInput) {
-        const user = await UserModel.create(data);
-        user.birthDate = new Date(data.birthDate!);
-        user.password = bcrypt.hashSync(data.password!, 10);
+    async createUser(@Arg('newUser') newUser: CreateUserInput) {
+        const user = await UserModel.create(newUser);
+        user.birthDate = new Date(newUser.birthDate!);
+        user.password = bcrypt.hashSync(newUser.password!, 10);
         await user.save();
         return user;
     }
 
-    @Mutation(() => UserWithToken)
-    async Login(
-        @Arg("email") email: string,
-        @Arg("password") password: string
-    ): Promise<UserWithToken> {
-        const user = await UserModel.findOne({ email, password });
-        if (!user) {
-            throw new Error('Cet utilisateur est introuvable')
+    @Mutation(() => String)
+    async Login(@Arg('currentUser') currentUser: LoginUserInput) {
+        const user = await UserModel.findOne({ email: currentUser.email })
+        if (user && bcrypt.compareSync(currentUser.password!, user.password!)) {
+            const moowdyToken = jwt.sign({ userId: user.id }, 'moowdyJwtKey');
+            return moowdyToken;
+        } else {
+            throw new AuthenticationError("Invalid credentials");
         }
-        return {
-            user,
-            accessToken: sign({ userId: user.id }, 'secretJWT')
-        };
     }
 
-    @Mutation(() => User)
+    /* @Mutation(() => User)
     async updateUserMood(@Arg('newMood') newMood: CreateMoodInputForUser) {
         const updatedUserMood = await UserModel.findOneAndUpdate(
             { _id: newMood.userId },
@@ -65,5 +62,5 @@ export class UserResolver {
         );
 
         return updatedUserMood;
-    }
+    } */
 }
