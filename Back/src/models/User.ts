@@ -1,6 +1,6 @@
-import { getModelForClass, Prop, Ref } from '@typegoose/typegoose';
+import { getModelForClass, Prop } from '@typegoose/typegoose';
 import { Field, InputType, ObjectType } from 'type-graphql';
-import { Mood } from './Mood';
+import { Mood, MoodInput } from './Mood';
 
 @ObjectType()
 export class User {
@@ -54,13 +54,13 @@ export class User {
 
     @Prop()
     @Field((type) => Mood, { nullable: true })
-    userMood?: Object;
+    userMood?: Mood;
 }
 
 export const UserModel = getModelForClass(User);
 
 @InputType()
-export class CreateUserInput {
+export class UserCreationInput {
     @Field()
     username?: string;
 
@@ -79,8 +79,11 @@ export class CreateUserInput {
     @Field()
     birthDate?: Date;
 
-    @Field()
-    createdAt?: Date = new Date(Date.now());
+    @Field((type) => [String], { nullable: true })
+    hobbies?: string[];
+
+    @Field({ nullable: true })
+    createdAt?: Date;
 
     @Field()
     isConnected: boolean = false;
@@ -88,13 +91,32 @@ export class CreateUserInput {
 }
 
 @InputType()
-export class LoginUserInput {
+export class UserLoginInput {
     @Field()
     email?: string;
 
     @Field()
     password?: string;
 }
+
+@InputType()
+export class UserMoodInput {
+    @Field()
+    email?: string;
+
+    @Field((type) => MoodInput)
+    newMood?: MoodInput;
+}
+
+@InputType()
+export class UserHobbiesInput {
+    @Field()
+    email?: string;
+
+    @Field((type) => [String])
+    hobbies?: string[];
+}
+
 
 // TODO: beside to refacto
 @InputType()
@@ -137,32 +159,4 @@ export class MessageSender {
 export class ArticleCreator {
     @Field()
     username!: string;
-}
-
-@ObjectType()
-export class UserWithToken {
-    @Field()
-    accessToken!: string;
-    @Field()
-    user!: User;
-}
-
-@InputType()
-export class LoginInput {
-    @Field()
-    email!: string;
-    @Field()
-    password!: string;
-}
-
-@InputType()
-export class CreateMoodInputForUser {
-    @Field()
-    userId!: string;
-
-    @Field()
-    title!: string;
-
-    @Field()
-    image!: string;
 }
