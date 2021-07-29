@@ -9,7 +9,8 @@ query getUserByUsername($username: String!) {
     isConnected
     email
     birthDate
-    hobbies 
+    hobbies
+    userMood{title image}
   }
 }
 
