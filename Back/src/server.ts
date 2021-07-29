@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { UserResolver } from './resolvers/UserResolver';
 import { buildSchema } from 'type-graphql';

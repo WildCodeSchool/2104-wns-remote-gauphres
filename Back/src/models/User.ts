@@ -25,11 +25,11 @@ export class User {
     password?: string;
 
     @Prop()
-    @Field(() => [String])
+    @Field(() => [String], { nullable: true })
     chatrooms?: string[];
 
     @Prop()
-    @Field(() => [String])
+    @Field(() => [String], { nullable: true })
     hobbies?: string[];
 
     @Prop()
@@ -53,18 +53,14 @@ export class User {
     createdAt?: Date;
 
     @Prop()
-    @Field()
-    accessToken?: string;
-
-    @Prop()
-    @Field((type) => Mood)
+    @Field((type) => Mood, { nullable: true })
     userMood?: Object;
 }
 
 export const UserModel = getModelForClass(User);
 
 @InputType()
-export class UserInput {
+export class CreateUserInput {
     @Field()
     username?: string;
 
@@ -80,9 +76,6 @@ export class UserInput {
     @Field()
     email?: string;
 
-    @Field({ nullable: true })
-    avatar?: string;
-
     @Field()
     birthDate?: Date;
 
@@ -90,7 +83,8 @@ export class UserInput {
     createdAt?: Date = new Date(Date.now());
 
     @Field()
-    isConnected?: boolean = false;
+    isConnected: boolean = false;
+
 }
 
 @InputType()
