@@ -9,6 +9,7 @@
     createdAt
     messages {text author}
     createdAt
+    isActiv
   }
 }
 
