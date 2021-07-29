@@ -26,10 +26,11 @@ export class ChatRoomResolver {
 
     @Mutation(() => ChatRoom)
     async createChatRoom(
-        @Arg('data', () => CreateChatRoomInput) chatRoomData: CreateChatRoomInput
+        @Arg('data') data: CreateChatRoomInput
     ): Promise<ChatRoom> {
         const createdAt = new Date(Date.now());
-        const chatRoomWithDate = {createdAt: createdAt, ...chatRoomData}
+     
+        const chatRoomWithDate = {createdAt: createdAt, ...data}
         const newChatRoom = await ChatRoomModel.create(chatRoomWithDate);
         await newChatRoom.save();
 

@@ -2,7 +2,7 @@
     {
         "id": "1",
         "title": "La Super Chatroom",
-        "users": [
+        "chatRoomUsers": [
             {
                 "id": "1",
                 "username": "user",
