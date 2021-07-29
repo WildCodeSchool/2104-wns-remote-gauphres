@@ -98,7 +98,7 @@ export class UserChatRoom {
     @Field()
     username?: string;
 
-    @Field({ nullable: true })
+    @Field()
     avatar?: string;
 
     @Field()

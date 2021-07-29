@@ -17,9 +17,9 @@ export class ChatRoomResolver {
     }
 
     @Query(() => ChatRoom)
-    async getOneChatRoom(@Arg('_id') id: string) {
+    async getOneChatRoom(@Arg('id') id: string) {
         const chatroom = await ChatRoomModel.findOne({
-            _id: new mongoose.Types.ObjectId(id),
+            id: id,
         });
         return chatroom;
     }

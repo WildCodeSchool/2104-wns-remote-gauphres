@@ -1,6 +1,6 @@
 import { getModelForClass, Prop } from '@typegoose/typegoose';
 import { Field, InputType, ObjectType } from 'type-graphql';
-import { Message } from './Message';
+import { CreateMessageInput, Message } from './Message';
 import { User, UserChatRoom, UserChatRoomType } from './User';
 
 @ObjectType()
@@ -27,7 +27,7 @@ export class ChatRoom {
 
     @Prop()
     @Field()
-    isActiv?: Boolean;
+    isActiv?: boolean = true;
 
 }
 export const ChatRoomModel = getModelForClass(ChatRoom);
@@ -45,4 +45,7 @@ export class CreateChatRoomInput {
 
     @Field((type) => [UserChatRoom])
     users?: UserChatRoom[];
+
+    @Field((type) => [CreateMessageInput])
+    messages?:CreateMessageInput
 }

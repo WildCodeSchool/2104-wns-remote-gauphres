@@ -24,10 +24,13 @@ export class Message {
 @InputType()
 export class CreateMessageInput {
     @Field()
+    id?: number;
+    
+    @Field()
     text!: string;
 
-    @Field((type) => MessageSender)
-    author?: MessageSender;
+    @Field()
+    author?: string;
 
     @Field()
     createdAt: Date = new Date(Date.now());
