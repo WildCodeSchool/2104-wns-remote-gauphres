@@ -1,9 +1,6 @@
 import { getModelForClass, Prop, Ref } from '@typegoose/typegoose';
-import { type } from 'node:os';
 import { Field, InputType, ObjectType } from 'type-graphql';
-import { ChatRoom } from './ChatRoom';
 import { Mood } from './Mood';
-import { Hobby } from './Hobby';
 
 @ObjectType()
 export class User {
@@ -27,13 +24,13 @@ export class User {
     @Field()
     password?: string;
 
-    @Prop({ ref: 'ChatRoom' })
-    @Field((type) => [ChatRoom])
-    chatrooms?: Ref<ChatRoom>[];
+    @Prop()
+    @Field(() => [String])
+    chatrooms?: string[];
 
-    @Prop({ ref: 'Hobby' })
-    @Field(() => [Hobby])
-    hobbies?: Hobby[];
+    @Prop()
+    @Field(() => [String])
+    hobbies?: string[];
 
     @Prop()
     @Field({ nullable: true })
@@ -55,9 +52,13 @@ export class User {
     @Field()
     createdAt?: Date;
 
-    @Prop({ type: Mood })
+    @Prop()
+    @Field()
+    accessToken?: string;
+
+    @Prop()
     @Field((type) => Mood)
-    userMood?: Mood;
+    userMood?: Object;
 }
 
 export const UserModel = getModelForClass(User);
@@ -97,9 +98,24 @@ export class UserChatRoom {
     @Field()
     username?: string;
 
-    @Field({ nullable: true })
+    @Field()
     avatar?: string;
 
+    @Field()
+    isConnected?: boolean = false;
+}
+
+@ObjectType()
+export class UserChatRoomType {
+    @Prop()
+    @Field()
+    username?: string;
+
+    @Prop()
+    @Field()
+    avatar?: string;
+
+    @Prop()
     @Field()
     isConnected?: boolean = false;
 }
@@ -117,6 +133,22 @@ export class MessageSender {
 export class ArticleCreator {
     @Field()
     username!: string;
+}
+
+@ObjectType()
+export class UserWithToken {
+    @Field()
+    accessToken!: string;
+    @Field()
+    user!: User;
+}
+
+@InputType()
+export class LoginInput {
+    @Field()
+    email!: string;
+    @Field()
+    password!: string;
 }
 
 @InputType()

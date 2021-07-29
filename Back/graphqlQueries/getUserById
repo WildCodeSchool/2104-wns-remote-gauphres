@@ -1,6 +1,6 @@
 query getUserById($id: String!) {
   getUserById(id: $id) {
-    userName
+    username
     firstname
     lastname
     password
@@ -21,5 +21,5 @@ query getUserById($id: String!) {
 
 
 variables: {
-    id: "608a60e2a2893b3d67787222"
+    id: "610178dbc12889006a058ff3"
 }

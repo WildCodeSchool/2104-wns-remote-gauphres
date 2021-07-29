@@ -1,17 +1,16 @@
- {
-  getOneChatRoom(_id: "608aa75c09feab277fe800b3") {
+ query GetOneChatRoom($id: String! ){
+  getOneChatRoom(id: $id) {
     title
-    users {
-        username
-        id
-        }
-    messages {
-        id
-        text
-        author
-        createdAt
-        }
+		users {
+      username 
+      isConnected 
+      avatar
+    }
+    createdAt
+    messages {text author}
     createdAt
     isActiv
   }
 }
+
+variables{"id": "1"}

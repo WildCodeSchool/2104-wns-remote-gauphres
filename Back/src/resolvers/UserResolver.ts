@@ -5,7 +5,9 @@ import {
     User,
     UserInput,
     UserModel,
+    UserWithToken,
 } from '../models/User';
+import { sign } from 'jsonwebtoken';
 
 @Resolver(User)
 export class UserResolver {
@@ -50,12 +52,30 @@ export class UserResolver {
         return user;
     } */
 
-    @Mutation(() => User)
+    @Mutation(() => UserWithToken)
     async createUser(@Arg('data') data: UserInput) {
-        const newUser = await UserModel.create(data);
-        newUser.birthDate = new Date(data.birthDate!);
-        await newUser.save();
-        return newUser;
+        const user = await UserModel.create(data);
+        user.birthDate = new Date(data.birthDate!);
+        await user.save();
+        return {
+            user,
+            accessToken: sign({ userId: user.id }, 'secretJWT')
+        };
+    }
+
+    @Mutation(() => UserWithToken)
+    async Login(
+        @Arg("email") email: string,
+        @Arg("password") password: string
+    ): Promise<UserWithToken> {
+        const user = await UserModel.findOne({ email, password });
+        if (!user) {
+            throw new Error('Cet utilisateur est introuvable')
+        }
+        return {
+            user,
+            accessToken: sign({ userId: user.id }, 'secretJWT')
+        };
     }
 
     @Mutation(() => User)

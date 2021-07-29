@@ -13,7 +13,7 @@ const FIND_CHAT = gql`
         getOneChatRoom(_id: $id) {
             title
             users {
-                userName
+                username
                 firstname
                 lastname
                 avatar
@@ -23,7 +23,7 @@ const FIND_CHAT = gql`
                 text
                 author {
                     id
-                    userName
+                    username
                 }
                 createdAt
             }

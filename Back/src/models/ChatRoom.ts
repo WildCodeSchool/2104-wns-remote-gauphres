@@ -1,7 +1,7 @@
 import { getModelForClass, Prop } from '@typegoose/typegoose';
 import { Field, InputType, ObjectType } from 'type-graphql';
-import { Message } from './Message';
-import { User, UserChatRoom } from './User';
+import { CreateMessageInput, Message } from './Message';
+import { User, UserChatRoom, UserChatRoomType } from './User';
 
 @ObjectType()
 export class ChatRoom {
@@ -9,9 +9,13 @@ export class ChatRoom {
     @Field()
     id!: string;
 
-    @Prop({ type: User })
-    @Field((type) => [User])
-    users?: User[];
+    @Prop()
+    @Field()
+    title?: string;
+
+    @Prop({ type: UserChatRoomType })
+    @Field((type) => [UserChatRoomType])
+    users?: UserChatRoomType[];
 
     @Prop({ type: Message })
     @Field((type) => [Message])
@@ -23,11 +27,8 @@ export class ChatRoom {
 
     @Prop()
     @Field()
-    isActiv?: Boolean;
+    isActiv?: boolean = true;
 
-    @Prop()
-    @Field()
-    title?: string;
 }
 export const ChatRoomModel = getModelForClass(ChatRoom);
 
@@ -44,4 +45,7 @@ export class CreateChatRoomInput {
 
     @Field((type) => [UserChatRoom])
     users?: UserChatRoom[];
+
+    @Field((type) => [CreateMessageInput])
+    messages?:CreateMessageInput
 }
