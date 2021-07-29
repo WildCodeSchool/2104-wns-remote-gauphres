@@ -1,13 +1,18 @@
- {
-  getOneUser(email: "userEmail@email.com") {
+query getUserByEmail($email: String!) {
+  getUserByEmail(email: $email) {
     username
     firstname
     lastname
     password
-    chatrooms {title}
+    chatrooms
     avatar
     isConnected
     email
     birthDate
+    hobbies
+    userMood{title image}
   }
 }
+
+variables:
+{ "email": "user@email.com"}

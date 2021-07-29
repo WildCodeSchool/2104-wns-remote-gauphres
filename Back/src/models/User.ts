@@ -1,8 +1,6 @@
 import { getModelForClass, Prop, Ref } from '@typegoose/typegoose';
 import { Field, InputType, ObjectType } from 'type-graphql';
-import { ChatRoom } from './ChatRoom';
 import { Mood } from './Mood';
-import { Hobby } from './Hobby';
 
 @ObjectType()
 export class User {
@@ -26,13 +24,13 @@ export class User {
     @Field()
     password?: string;
 
-    @Prop({ ref: 'ChatRoom' })
-    @Field(() => [ChatRoom])
-    chatrooms?: Ref<ChatRoom>[];
+    @Prop()
+    @Field(() => [String])
+    chatrooms?: string[];
 
-    @Prop({ ref: 'Hobby' })
-    @Field(() => [Hobby])
-    hobbies?: Hobby[];
+    @Prop()
+    @Field(() => [String])
+    hobbies?: string[];
 
     @Prop()
     @Field({ nullable: true })
@@ -58,9 +56,9 @@ export class User {
     @Field()
     accessToken?: string;
 
-    @Prop({ type: Mood })
-    @Field(() => Mood)
-    userMood?: Mood;
+    @Prop()
+    @Field((type) => Mood)
+    userMood?: Object;
 }
 
 export const UserModel = getModelForClass(User);
@@ -100,9 +98,24 @@ export class UserChatRoom {
     @Field()
     username?: string;
 
-    @Field({ nullable: true })
+    @Field()
     avatar?: string;
 
+    @Field()
+    isConnected?: boolean = false;
+}
+
+@ObjectType()
+export class UserChatRoomType {
+    @Prop()
+    @Field()
+    username?: string;
+
+    @Prop()
+    @Field()
+    avatar?: string;
+
+    @Prop()
     @Field()
     isConnected?: boolean = false;
 }

@@ -6,15 +6,15 @@ import { MessageSender, User } from './User';
 export class Message {
     @Prop()
     @Field()
-    id?: string;
+    id?: number;
 
     @Prop()
     @Field()
     text!: string;
 
-    @Prop({ type: User })
-    @Field((type) => User)
-    author?: User;
+    @Prop()
+    @Field()
+    author?: string;
 
     @Prop()
     @Field()
@@ -24,10 +24,13 @@ export class Message {
 @InputType()
 export class CreateMessageInput {
     @Field()
+    id?: number;
+    
+    @Field()
     text!: string;
 
-    @Field((type) => MessageSender)
-    author?: MessageSender;
+    @Field()
+    author?: string;
 
     @Field()
     createdAt: Date = new Date(Date.now());
