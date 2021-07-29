@@ -1,5 +1,5 @@
 import { Prop } from "@typegoose/typegoose";
-import { Field, ObjectType } from "type-graphql";
+import { Field, InputType, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class Mood {
@@ -10,5 +10,22 @@ export class Mood {
     @Prop()
     @Field()
     image?: string;
+
+    @Prop()
+    @Field()
+    createdAt?: Date;
+}
+
+@InputType()
+export class MoodInput {
+
+    @Field()
+    title?: string;
+
+    @Field()
+    image?: string;
+
+    @Field()
+    createdAt: Date = new Date(Date.now());
 }
 

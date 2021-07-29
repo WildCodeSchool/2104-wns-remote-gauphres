@@ -26,9 +26,11 @@ export class ChatRoomResolver {
 
     @Mutation(() => ChatRoom)
     async createChatRoom(
-        @Arg('data') data: CreateChatRoomInput
+        @Arg('data', () => CreateChatRoomInput) chatRoomData: CreateChatRoomInput
     ): Promise<ChatRoom> {
-        const newChatRoom = await ChatRoomModel.create(data);
+        const createdAt = new Date(Date.now());
+        const chatRoomWithDate = {createdAt: createdAt, ...chatRoomData}
+        const newChatRoom = await ChatRoomModel.create(chatRoomWithDate);
         await newChatRoom.save();
 
         // enregistre un champ userId quand un user rejoint une chatroom
