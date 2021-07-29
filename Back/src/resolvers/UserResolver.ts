@@ -1,13 +1,13 @@
-import { mongoose } from '@typegoose/typegoose';
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
 import {
     CreateMoodInputForUser,
+    CreateUserInput,
     User,
-    UserInput,
     UserModel,
     UserWithToken,
 } from '../models/User';
 import { sign } from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 @Resolver(User)
 export class UserResolver {
@@ -33,26 +33,13 @@ export class UserResolver {
         return user;
     }
 
-    // TODO: As MongoDb use random ID that we can't really use in the app
-    // we don't need this query yet. It will be replace by getUserByusername.
-
-    /* @Query(() => User)
-    async getUserById(@Arg('_id') id: string) {
-        const user = await UserModel.findOne({
-            _id: new mongoose.Types.ObjectId(id),
-        });
-        return user;
-    } */
-
-    @Mutation(() => UserWithToken)
-    async createUser(@Arg('data') data: UserInput) {
+    @Mutation(() => User)
+    async createUser(@Arg('data') data: CreateUserInput) {
         const user = await UserModel.create(data);
         user.birthDate = new Date(data.birthDate!);
+        user.password = bcrypt.hashSync(data.password!, 10);
         await user.save();
-        return {
-            user,
-            accessToken: sign({ userId: user.id }, 'secretJWT')
-        };
+        return user;
     }
 
     @Mutation(() => UserWithToken)
