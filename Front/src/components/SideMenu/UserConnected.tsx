@@ -24,7 +24,7 @@ const UserConnected: FC = () => {
 
     return (
         <div>
-            <p>{userConnected?.length} autres utilisateurs connectés</p>
+            <p>- {userConnected?.length} connectées -</p>
         </div>
     );
 };

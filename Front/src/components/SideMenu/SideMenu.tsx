@@ -5,8 +5,9 @@ import { IoBeer, IoPersonAddSharp } from 'react-icons/io5';
 import { AiOutlineWechat } from 'react-icons/ai';
 import { RiArticleLine } from 'react-icons/ri';
 import { BiCoffeeTogo } from 'react-icons/bi';
-import { MenuContainer } from './style';
+import { MenuContainer, UsersConnectedContainer } from './style';
 import  UserConnected from './UserConnected';
+import  AllUsers from './AllUsers';
 
 
 
@@ -20,7 +21,10 @@ const SideMenu: FC = () => {
             <NavLink to="/members" activeStyle={{color: "purple"}}><IoPersonAddSharp /> Membres</NavLink>
             <NavLink to="/events" activeStyle={{color: "purple"}}><IoBeer /> Evenements</NavLink>
         </MenuContainer>
-        <UserConnected />
+        <UsersConnectedContainer>
+            <AllUsers />
+            <UserConnected />
+        </UsersConnectedContainer>
     </div>
     );
 };
