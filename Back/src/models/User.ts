@@ -88,6 +88,16 @@ export class CreateUserInput {
 }
 
 @InputType()
+export class LoginUserInput {
+    @Field()
+    email?: string;
+
+    @Field()
+    password?: string;
+}
+
+// TODO: beside to refacto
+@InputType()
 export class UserChatRoom {
     @Field()
     username?: string;
