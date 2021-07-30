@@ -35,7 +35,6 @@ const LoginPage: FC<FormValues> = () => {
         });
     };
 
-    console.log(errors);
     return (
         <Container>
             <Form onSubmit={handleSubmit(onSubmitForm)}>
