@@ -15,6 +15,7 @@ import {
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { gql, useMutation } from '@apollo/client';
+import { useHistory } from 'react-router-dom';
 import {
     Title,
     SubTitle,
@@ -32,6 +33,12 @@ const CREATE_USER = gql`
         createUser(newUser: $newUser) {
             email
         }
+    }
+`;
+
+const LOGIN = gql`
+    mutation Login($currentUser: UserLoginInput!) {
+        Login(currentUser: $currentUser)
     }
 `;
 
@@ -61,17 +68,19 @@ const steps = [
 ];
 
 const SignUpPage: FC = () => {
+    const history = useHistory();
     const [showPassword, setShowPassword] = useState(false);
     const [formStep, setFormStep] = useState(0);
     const [selectedHobbies, setSelectedHobbies] = useState<string[]>([]);
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     const {
-        handleSubmit,
         watch,
+        handleSubmit,
         register,
         formState: { errors },
     } = useForm({ mode: 'all' });
     const [createUser] = useMutation(CREATE_USER);
+    const [login] = useMutation(LOGIN);
 
     const EyeIcon = ({ show, ...props }: EyeIconProps) => {
         if (show) {
@@ -84,30 +93,25 @@ const SignUpPage: FC = () => {
         setSelectedHobbies(event.target.value);
     };
 
-    const onSubmitForm = ({
-        username,
-        email,
-        password,
-        firstname,
-        lastname,
-        birthDate,
-        city,
-        hobbies,
-    }: FormValues) => {
-        createUser({
+    const onSubmitForm = async (data: FormValues) => {
+        const createResult = await createUser({
             variables: {
                 newUser: {
-                    username,
-                    email,
-                    password,
-                    firstname,
-                    lastname,
-                    birthDate,
-                    city,
-                    hobbies,
+                    ...data,
                 },
             },
         });
+        if (createResult.data.createUser) {
+            const loginResult = await login({
+                variables: {
+                    currentUser: {
+                        email: data.email,
+                        password: data.password,
+                    },
+                },
+            });
+            if (loginResult.data.Login) history.push('/dashboard');
+        }
     };
 
     const renderButton = () => {
@@ -341,6 +345,7 @@ const SignUpPage: FC = () => {
                     </InputDiv>
                 )}
                 {renderButton()}
+                <pre>{JSON.stringify(watch(), null, 2)}</pre>
             </Form>
         </Container>
     );
