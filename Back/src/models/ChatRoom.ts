@@ -15,11 +15,11 @@ export class ChatRoom {
     title?: string;
 
     @Prop({ type: () => [UserChatRoomType] })
-    @Field((type) => [UserChatRoomType])
+    @Field(() => [UserChatRoomType])
     chatRoomUsers?: UserChatRoomType[];
 
     @Prop({ type: () => [Message] })
-    @Field((type) => [Message])
+    @Field(() => [Message])
     messages?: Message[];
 
     @Prop()
@@ -29,7 +29,6 @@ export class ChatRoom {
     @Prop()
     @Field()
     isActiv?: boolean;
-
 }
 export const ChatRoomModel = getModelForClass(ChatRoom);
 
@@ -39,14 +38,14 @@ export class CreateChatRoomInput {
     id!: string;
 
     @Field()
-    isActiv: boolean = true;
+    isActiv = true;
 
     @Field()
     title?: string;
 
-    @Field((type) => [UserChatRoom])
+    @Field(() => [UserChatRoom])
     chatRoomUsers?: UserChatRoom[];
 
-    @Field((type) => [CreateMessageInput])
-    messages?: CreateMessageInput[]
+    @Field(() => [CreateMessageInput])
+    messages?: CreateMessageInput[];
 }

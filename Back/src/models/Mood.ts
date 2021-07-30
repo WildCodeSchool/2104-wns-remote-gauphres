@@ -1,5 +1,5 @@
-import { Prop } from "@typegoose/typegoose";
-import { Field, InputType, ObjectType } from "type-graphql";
+import { Prop } from '@typegoose/typegoose';
+import { Field, InputType, ObjectType } from 'type-graphql';
 
 @ObjectType()
 export class Mood {

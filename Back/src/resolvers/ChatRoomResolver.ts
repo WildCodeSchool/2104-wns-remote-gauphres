@@ -1,4 +1,3 @@
-import { mongoose } from '@typegoose/typegoose';
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
 import {
     ChatRoom,
@@ -6,10 +5,10 @@ import {
     CreateChatRoomInput,
 } from '../models/ChatRoom';
 import { CreateMessageInput, Message } from '../models/Message';
-import { Validators } from '../services/Validators';
+import Validators from '../services/Validators';
 
 @Resolver(ChatRoom)
-export class ChatRoomResolver {
+class ChatRoomResolver {
     @Query(() => [ChatRoom])
     async getAllChatRooms(): Promise<ChatRoom[]> {
         const chatrooms = await ChatRoomModel.find();
@@ -17,9 +16,9 @@ export class ChatRoomResolver {
     }
 
     @Query(() => ChatRoom)
-    async getOneChatRoom(@Arg('id') id: string) {
+    async getOneChatRoom(@Arg('id') id: string): Promise<ChatRoom> {
         const chatroom = await ChatRoomModel.findOne({
-            id: id,
+            id,
         });
         return chatroom;
     }
@@ -29,8 +28,8 @@ export class ChatRoomResolver {
         @Arg('data') data: CreateChatRoomInput
     ): Promise<ChatRoom> {
         const createdAt = new Date(Date.now());
-     
-        const chatRoomWithDate = {createdAt: createdAt, ...data}
+
+        const chatRoomWithDate = { createdAt, ...data };
         const newChatRoom = await ChatRoomModel.create(chatRoomWithDate);
         await newChatRoom.save();
 
@@ -50,12 +49,12 @@ export class ChatRoomResolver {
     async sendMessage(
         @Arg('id') id: string,
         @Arg('newMessage', () => CreateMessageInput) message: Message
-    ) {
+    ): Promise<ChatRoom> {
         if (Validators.isMessageValid(message)) {
             const createdAt = new Date(Date.now());
-            const newMessage = {createdAt: createdAt, ...message}
+            const newMessage = { createdAt, ...message };
             const updatedChatRoom = await ChatRoomModel.findOneAndUpdate(
-                { id: id },
+                { id },
                 {
                     $push: {
                         messages: newMessage,
@@ -63,8 +62,9 @@ export class ChatRoomResolver {
                 }
             );
             return updatedChatRoom;
-        } else {
-            throw new Error("A message can't be empty");
         }
+        throw new Error("A message can't be empty");
     }
 }
+
+export default ChatRoomResolver;

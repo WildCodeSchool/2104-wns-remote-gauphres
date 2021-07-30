@@ -53,7 +53,7 @@ export class User {
     createdAt?: Date;
 
     @Prop()
-    @Field((type) => Mood, { nullable: true })
+    @Field(() => Mood, { nullable: true })
     userMood?: Mood;
 }
 
@@ -79,15 +79,14 @@ export class UserCreationInput {
     @Field()
     birthDate?: Date;
 
-    @Field((type) => [String], { nullable: true })
+    @Field(() => [String], { nullable: true })
     hobbies?: string[];
 
     @Field({ nullable: true })
     createdAt?: Date;
 
     @Field()
-    isConnected: boolean = false;
-
+    isConnected = false;
 }
 
 @InputType()
@@ -104,7 +103,7 @@ export class UserMoodInput {
     @Field()
     email?: string;
 
-    @Field((type) => MoodInput)
+    @Field(() => MoodInput)
     newMood?: MoodInput;
 }
 
@@ -113,17 +112,16 @@ export class UserHobbiesInput {
     @Field()
     email?: string;
 
-    @Field((type) => [String])
+    @Field(() => [String])
     hobbies?: string[];
 }
-
 
 // TODO: beside to refacto
 @InputType()
 export class UserChatRoom {
     @Field()
-    id?: string
-    
+    id?: string;
+
     @Field()
     username?: string;
 
@@ -141,8 +139,8 @@ export class UserChatRoom {
 export class UserChatRoomType {
     @Prop()
     @Field()
-    id?: string
-    
+    id?: string;
+
     @Prop()
     @Field()
     username?: string;

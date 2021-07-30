@@ -1,19 +1,21 @@
+/* eslint-disable no-console */
 import 'reflect-metadata';
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import jwt from 'jsonwebtoken'
-import { UserResolver } from './resolvers/UserResolver';
+import jwt from 'jsonwebtoken';
 import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server';
-import { ChatRoomResolver } from './resolvers/ChatRoomResolver';
-import { ArticleResolver } from './resolvers/ArticleResolver';
 import Fixtures from 'node-mongodb-fixtures';
+import { AuthenticationError } from 'apollo-server-errors';
+import UserResolver from './resolvers/UserResolver';
+import ChatRoomResolver from './resolvers/ChatRoomResolver';
+import { ArticleResolver } from './resolvers/ArticleResolver';
 
 const app = express();
-const moowdyJwtKey = "this_is_the_moowdy_secret_jwt_key"; // TODO: put in env variable
+const moowdyJwtKey = 'this_is_the_moowdy_secret_jwt_key'; // TODO: put in env variable
 
-require('dotenv').config();
+// require('dotenv').config(); => FOR ENV FILE THAT WE DON'T HAVE FOR NOW
 
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
@@ -42,11 +44,7 @@ async function start() {
     console.log('Fixtures finished');
 
     const schema = await buildSchema({
-        resolvers: [
-            UserResolver,
-            ChatRoomResolver,
-            ArticleResolver,
-        ],
+        resolvers: [UserResolver, ChatRoomResolver, ArticleResolver],
     });
 
     const server = new ApolloServer({
@@ -60,9 +58,12 @@ async function start() {
                 try {
                     payload = jwt.verify(moowdyToken, moowdyJwtKey);
                     return payload;
-                } catch (err) { }
+                } catch (err) {
+                    throw new AuthenticationError('Bad token');
+                }
             }
-        }
+            return req;
+        },
     });
 
     const { url } = await server.listen(5000);

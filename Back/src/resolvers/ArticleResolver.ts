@@ -2,12 +2,13 @@ import { Arg, Mutation, Query, Resolver } from 'type-graphql';
 import { Article, ArticleModel, CreateArticleInput } from '../models/Article';
 
 @Resolver(Article)
-export class ArticleResolver {
+class ArticleResolver {
     @Query(() => [Article])
     async getAllArticles(): Promise<Article[]> {
         const articles = await ArticleModel.find();
         return articles;
     }
+
     @Mutation(() => Article)
     async createArticle(
         @Arg('data') data: CreateArticleInput
@@ -18,3 +19,5 @@ export class ArticleResolver {
         return newArticle;
     }
 }
+
+export default ArticleResolver;
