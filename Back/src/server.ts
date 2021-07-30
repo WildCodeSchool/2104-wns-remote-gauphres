@@ -27,7 +27,7 @@ async function start() {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
-        autoIndex: true,
+        autoIndex: false,
         useFindAndModify: false,
     });
 
