@@ -6,10 +6,8 @@ import { Title, Container, Form, TextInput, Input } from './style';
 import Button from '../../Button/Button';
 
 const LOGIN_USER = gql`
-    mutation Login($email: String!, $password: String!) {
-        Login(email: $email, password: $password) {
-            email
-        }
+    mutation Login($user: UserLoginInput!) {
+        Login(currentUser: $user)
     }
 `;
 
@@ -23,18 +21,21 @@ const LoginPage: FC<FormValues> = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<FormValues>();
+    } = useForm({ mode: 'all' });
     const [loginUser] = useMutation(LOGIN_USER);
 
     const onSubmitForm = (datas: FormValues) => {
         loginUser({
             variables: {
-                email: datas.email,
-                password: datas.password,
+                user: {
+                    email: datas.email,
+                    password: datas.password,
+                },
             },
         });
     };
 
+    console.log(errors);
     return (
         <Container>
             <Form onSubmit={handleSubmit(onSubmitForm)}>
@@ -42,12 +43,16 @@ const LoginPage: FC<FormValues> = () => {
                 <Input>
                     <TextInput
                         {...register('email', {
-                            required: 'Ce champ est obligatoire',
+                            required: {
+                                value: true,
+                                message: 'Ce champ est obligatoire',
+                            },
                         })}
                         label="Email"
                         variant="outlined"
+                        error={errors.email}
+                        helperText={errors.email && errors.email.message}
                     />
-                    {errors.email && <p>{errors.email.message}</p>}
                     <TextInput
                         {...register('password', {
                             required: 'Ce champ est obligatoire',
@@ -59,8 +64,9 @@ const LoginPage: FC<FormValues> = () => {
                         })}
                         label="Mot de passe"
                         variant="outlined"
+                        error={errors.password}
+                        helperText={errors.password && errors.password.message}
                     />
-                    {errors.password && <p>{errors.password.message}</p>}
                 </Input>
                 <Button type="submit">Se connecter</Button>
             </Form>
