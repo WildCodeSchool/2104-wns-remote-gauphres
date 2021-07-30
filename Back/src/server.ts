@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import jwt from 'jsonwebtoken'
 import { UserResolver } from './resolvers/UserResolver';
 import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server';
@@ -10,6 +11,7 @@ import { ArticleResolver } from './resolvers/ArticleResolver';
 import Fixtures from 'node-mongodb-fixtures';
 
 const app = express();
+const moowdyJwtKey = "this_is_the_moowdy_secret_jwt_key"; // TODO: put in env variable
 
 require('dotenv').config();
 
@@ -29,6 +31,7 @@ async function start() {
         useFindAndModify: false,
     });
 
+    // Add fixtures in the DB
     console.log('Fixtures started');
     const fixtures = new Fixtures();
     fixtures
@@ -46,7 +49,22 @@ async function start() {
         ],
     });
 
-    const server = new ApolloServer({ schema, playground: true });
+    const server = new ApolloServer({
+        schema,
+        playground: true,
+        // Requests interceptor
+        context: ({ req }) => {
+            const moowdyToken = req.headers.authorization;
+            if (moowdyToken) {
+                let payload;
+                try {
+                    payload = jwt.verify(moowdyToken, moowdyJwtKey);
+                    return payload;
+                } catch (err) { }
+            }
+        }
+    });
+
     const { url } = await server.listen(5000);
     console.log(`server ok on ${url}`);
 }
