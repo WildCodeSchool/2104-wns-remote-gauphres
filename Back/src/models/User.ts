@@ -8,7 +8,7 @@ export class User {
     @Field()
     id?: string;
 
-    @Prop({ unique: true })
+    @Prop()
     @Field()
     username?: string;
 
@@ -122,6 +122,9 @@ export class UserHobbiesInput {
 @InputType()
 export class UserChatRoom {
     @Field()
+    id?: string
+    
+    @Field()
     username?: string;
 
     @Field()
@@ -129,12 +132,19 @@ export class UserChatRoom {
 
     @Field()
     isConnected?: boolean = false;
+
+    @Field(() => [String])
+    hobbies?: string[];
 }
 
 @ObjectType()
 export class UserChatRoomType {
     @Prop()
     @Field()
+    id?: string
+    
+    @Prop()
+    @Field()
     username?: string;
 
     @Prop()
@@ -144,6 +154,10 @@ export class UserChatRoomType {
     @Prop()
     @Field()
     isConnected?: boolean = false;
+
+    @Prop()
+    @Field(() => [String])
+    hobbies?: string[];
 }
 
 @InputType()

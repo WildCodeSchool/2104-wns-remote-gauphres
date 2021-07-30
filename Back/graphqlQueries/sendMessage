@@ -1,24 +1,21 @@
 mutation sendMessage($id: String!, $newMessage: CreateMessageInput!) {
-        sendMessage(_id: $id, newMessage: $newMessage) {
-            messages {
+        sendMessage(id: $id, newMessage: $newMessage) {
+            message {
+                id
                 text
+                author
                 createdAt
             }
-            createdAt
-            isActiv
-            title
         }
     }
 
 
-variables
-
-variables: {
-    id: chatId,
-    newMessage: {
-        author: {
-            id: '60899d221aeef5070efe5c45',
-            username: 'NiceUser',
-        },
-        text: message,
+variables: 
+    {
+    "id": "1",
+    "newMessage": {
+      	"id": 4,
+        "author": "user",
+        "text": "quel est ton sport préféré"
     }
+}

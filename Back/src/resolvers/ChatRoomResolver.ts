@@ -28,7 +28,10 @@ export class ChatRoomResolver {
     async createChatRoom(
         @Arg('data') data: CreateChatRoomInput
     ): Promise<ChatRoom> {
-        const newChatRoom = await ChatRoomModel.create(data);
+        const createdAt = new Date(Date.now());
+     
+        const chatRoomWithDate = {createdAt: createdAt, ...data}
+        const newChatRoom = await ChatRoomModel.create(chatRoomWithDate);
         await newChatRoom.save();
 
         // enregistre un champ userId quand un user rejoint une chatroom
@@ -45,15 +48,17 @@ export class ChatRoomResolver {
 
     @Mutation(() => ChatRoom)
     async sendMessage(
-        @Arg('_id') _id: string,
+        @Arg('id') id: string,
         @Arg('newMessage', () => CreateMessageInput) message: Message
     ) {
         if (Validators.isMessageValid(message)) {
+            const createdAt = new Date(Date.now());
+            const newMessage = {createdAt: createdAt, ...message}
             const updatedChatRoom = await ChatRoomModel.findOneAndUpdate(
-                { _id: _id },
+                { id: id },
                 {
                     $push: {
-                        messages: message,
+                        messages: newMessage,
                     },
                 }
             );

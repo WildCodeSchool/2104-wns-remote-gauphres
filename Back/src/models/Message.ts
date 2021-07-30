@@ -1,6 +1,6 @@
 import { Prop } from '@typegoose/typegoose';
 import { Field, InputType, ObjectType } from 'type-graphql';
-import { MessageSender, User } from './User';
+
 
 @ObjectType()
 export class Message {
@@ -17,7 +17,7 @@ export class Message {
     author?: string;
 
     @Prop()
-    @Field()
+    @Field({nullable:true})
     createdAt?: Date;
 }
 
@@ -31,7 +31,4 @@ export class CreateMessageInput {
 
     @Field()
     author?: string;
-
-    @Field()
-    createdAt: Date = new Date(Date.now());
 }
