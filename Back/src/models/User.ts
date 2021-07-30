@@ -1,4 +1,4 @@
-import { getModelForClass, Prop } from '@typegoose/typegoose';
+import { getModelForClass, index, Prop } from '@typegoose/typegoose';
 import { Field, InputType, ObjectType } from 'type-graphql';
 import { Mood, MoodInput } from './Mood';
 
@@ -117,34 +117,31 @@ export class UserHobbiesInput {
     hobbies?: string[];
 }
 
+@InputType()
+export class UserChatRoomInput {
+    @Field()
+    id?: string;
+
+    @Field()
+    username?: string;
+
+    @Field()
+    avatar?: string;
+
+    @Field((type) => [String])
+    hobbies?: string[];
+
+    @Field((type) => MoodInput)
+    userMood?: MoodInput;
+
+    @Field()
+    isConnected?: boolean;
+
+}
+
 
 // TODO: beside to refacto
-@InputType()
-export class UserChatRoom {
-    @Field()
-    username?: string;
 
-    @Field()
-    avatar?: string;
-
-    @Field()
-    isConnected?: boolean = false;
-}
-
-@ObjectType()
-export class UserChatRoomType {
-    @Prop()
-    @Field()
-    username?: string;
-
-    @Prop()
-    @Field()
-    avatar?: string;
-
-    @Prop()
-    @Field()
-    isConnected?: boolean = false;
-}
 
 @InputType()
 export class MessageSender {

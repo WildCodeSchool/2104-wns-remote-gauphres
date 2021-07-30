@@ -1,7 +1,7 @@
 import { getModelForClass, Prop } from '@typegoose/typegoose';
 import { Field, InputType, ObjectType } from 'type-graphql';
-import { CreateMessageInput, Message } from './Message';
-import { User, UserChatRoom, UserChatRoomType } from './User';
+import { Message } from './Message';
+import { User, UserChatRoomInput } from './User';
 
 @ObjectType()
 export class ChatRoom {
@@ -13,9 +13,9 @@ export class ChatRoom {
     @Field()
     title?: string;
 
-    @Prop({ type: UserChatRoomType })
-    @Field((type) => [UserChatRoomType])
-    users?: UserChatRoomType[];
+    @Prop({ type: User })
+    @Field((type) => [User])
+    users?: User[];
 
     @Prop({ type: Message })
     @Field((type) => [Message])
@@ -33,19 +33,22 @@ export class ChatRoom {
 export const ChatRoomModel = getModelForClass(ChatRoom);
 
 @InputType()
-export class CreateChatRoomInput {
+export class ChatroomCreateInput {
     @Field()
-    createdAt: Date = new Date(Date.now());
-
-    @Field()
-    isActiv: boolean = true;
+    id?: string;
 
     @Field()
     title?: string;
 
-    @Field((type) => [UserChatRoom])
-    users?: UserChatRoom[];
+    @Field((type) => [UserChatRoomInput])
+    users?: UserChatRoomInput[];
 
-    @Field((type) => [CreateMessageInput])
-    messages?: CreateMessageInput
+    @Field((type) => [String], { nullable: true })
+    messages?: string[]
+
+    @Field()
+    isActiv?: boolean;
+
+    @Field({ nullable: true })
+    createdAt?: Date;
 }
