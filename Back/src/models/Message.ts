@@ -17,7 +17,7 @@ export class Message {
     author?: string;
 
     @Prop()
-    @Field()
+    @Field({nullable:true})
     createdAt?: Date;
 }
 

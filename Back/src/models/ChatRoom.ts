@@ -3,7 +3,7 @@ import { Field, InputType, ObjectType } from 'type-graphql';
 import { CreateMessageInput, Message } from './Message';
 import { UserChatRoom, UserChatRoomType } from './User';
 
-@index({ id: 1 }, { unique: true })
+@index({ id: 'text' }, { unique: true })
 @ObjectType()
 export class ChatRoom {
     @Prop()

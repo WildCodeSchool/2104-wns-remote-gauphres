@@ -53,7 +53,7 @@ export class ChatRoomResolver {
     ) {
         if (Validators.isMessageValid(message)) {
             const createdAt = new Date(Date.now());
-            const newMessage = {...message, createdAt: createdAt}
+            const newMessage = {createdAt: createdAt, ...message}
             const updatedChatRoom = await ChatRoomModel.findOneAndUpdate(
                 { id: id },
                 {
