@@ -153,6 +153,10 @@ export class UserChatRoomType {
 
     @Prop()
     @Field()
+    avatar?: string;
+
+    @Prop()
+    @Field()
     isConnected?: boolean = false;
 
     @Prop()

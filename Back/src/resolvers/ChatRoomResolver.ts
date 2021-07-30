@@ -1,8 +1,8 @@
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
 import {
     ChatRoom,
-    ChatroomCreateInput,
     ChatRoomModel,
+    CreateChatRoomInput,
 } from '../models/ChatRoom';
 import { CreateMessageInput, Message } from '../models/Message';
 import Validators from '../services/Validators';
@@ -25,7 +25,7 @@ class ChatRoomResolver {
 
     @Mutation(() => ChatRoom)
     async createChatRoom(
-        @Arg('newChatRoom') newChatRoom: ChatroomCreateInput
+        @Arg('newChatRoom') newChatRoom: CreateChatRoomInput
     ): Promise<ChatRoom> {
         const chatRoom = await ChatRoomModel.create(newChatRoom);
         chatRoom.createdAt = new Date(Date.now());

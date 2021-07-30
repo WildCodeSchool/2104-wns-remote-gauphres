@@ -33,9 +33,12 @@ export class ChatRoom {
 export const ChatRoomModel = getModelForClass(ChatRoom);
 
 @InputType()
-export class ChatroomCreateInput {
+export class CreateChatRoomInput {
     @Field()
     id!: string;
+
+    @Field(() => Boolean)
+    isActiv = true;
 
     @Field()
     title?: string;
@@ -45,10 +48,4 @@ export class ChatroomCreateInput {
 
     @Field(() => [CreateMessageInput])
     messages?: CreateMessageInput[];
-
-    @Field()
-    isActiv?: boolean;
-
-    @Field({ nullable: true })
-    createdAt?: Date;
 }
