@@ -50,6 +50,10 @@ export class User {
 
     @Prop()
     @Field()
+    city?: string;
+
+    @Prop()
+    @Field()
     createdAt?: Date;
 
     @Prop()
@@ -78,6 +82,9 @@ export class UserCreationInput {
 
     @Field()
     birthDate?: Date;
+
+    @Field()
+    city?: string;
 
     @Field((type) => [String], { nullable: true })
     hobbies?: string[];

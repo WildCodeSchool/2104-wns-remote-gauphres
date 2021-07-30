@@ -28,8 +28,10 @@ import {
 import Button from '../../Button/Button';
 
 const CREATE_USER = gql`
-    mutation createUser($data: !) {
-        createUser(data: $user)
+    mutation createUser($newUser: UserCreationInput!) {
+        createUser(newUser: $newUser) {
+            email
+        }
     }
 `;
 
@@ -38,7 +40,19 @@ interface EyeIconProps {
     show: boolean;
     style: any;
 }
-const hobbies = ['football', 'tennis', 'basketball', 'golf'];
+
+interface FormValues {
+    username: string;
+    email: string;
+    password: string;
+    firstname: string;
+    lastname: string;
+    birthDate: string;
+    city: string;
+    hobbies: string[];
+}
+
+const hobbiesList = ['football', 'tennis', 'basketball', 'golf'];
 
 const steps = [
     'Informations de compte',
@@ -53,10 +67,9 @@ const SignUpPage: FC = () => {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     const {
         handleSubmit,
-        getValues,
         watch,
         register,
-        formState: { isValid, errors },
+        formState: { errors },
     } = useForm({ mode: 'all' });
     const [createUser] = useMutation(CREATE_USER);
 
@@ -71,7 +84,31 @@ const SignUpPage: FC = () => {
         setSelectedHobbies(event.target.value);
     };
 
-    const onSubmitForm = (datas: any) => {};
+    const onSubmitForm = ({
+        username,
+        email,
+        password,
+        firstname,
+        lastname,
+        birthDate,
+        city,
+        hobbies,
+    }: FormValues) => {
+        createUser({
+            variables: {
+                newUser: {
+                    username,
+                    email,
+                    password,
+                    firstname,
+                    lastname,
+                    birthDate,
+                    city,
+                    hobbies,
+                },
+            },
+        });
+    };
 
     const renderButton = () => {
         const handleClick = (e: any) => {
@@ -135,9 +172,11 @@ const SignUpPage: FC = () => {
                         <TextInput
                             label="Pseudo"
                             variant="outlined"
-                            error={errors.pseudo}
-                            helperText={errors.pseudo && errors.pseudo.message}
-                            {...register('pseudo', {
+                            error={errors.username}
+                            helperText={
+                                errors.username && errors.username.message
+                            }
+                            {...register('username', {
                                 required: {
                                     value: true,
                                     message: 'Merci de renseigner un pseudo',
@@ -225,11 +264,11 @@ const SignUpPage: FC = () => {
                         <TextInput
                             label="Date de naissance"
                             variant="outlined"
-                            error={errors.birthdate}
+                            error={errors.birthDate}
                             helperText={
-                                errors.birthdate && errors.birthdate.message
+                                errors.birthDate && errors.birthDate.message
                             }
-                            {...register('birthdate', {
+                            {...register('birthDate', {
                                 required: {
                                     value: true,
                                     message:
@@ -288,21 +327,20 @@ const SignUpPage: FC = () => {
                                 </div>
                             )}
                         >
-                            {hobbies.map((hobbie) => (
-                                <MenuItem key={hobbie} value={hobbie}>
+                            {hobbiesList.map((hobby) => (
+                                <MenuItem key={hobby} value={hobby}>
                                     <Checkbox
                                         checked={selectedHobbies.includes(
-                                            hobbie
+                                            hobby
                                         )}
                                     />
-                                    <ListItemText primary={hobbie} />
+                                    <ListItemText primary={hobby} />
                                 </MenuItem>
                             ))}
                         </Select>
                     </InputDiv>
                 )}
                 {renderButton()}
-                <pre>{JSON.stringify(watch(), null, 2)}</pre>
             </Form>
         </Container>
     );
