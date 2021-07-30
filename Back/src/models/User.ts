@@ -85,7 +85,7 @@ export class UserCreationInput {
     @Field({ nullable: true })
     createdAt?: Date;
 
-    @Field()
+    @Field(() => Boolean)
     isConnected = false;
 }
 

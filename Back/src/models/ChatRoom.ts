@@ -37,7 +37,7 @@ export class CreateChatRoomInput {
     @Field()
     id!: string;
 
-    @Field()
+    @Field(() => Boolean)
     isActiv = true;
 
     @Field()
