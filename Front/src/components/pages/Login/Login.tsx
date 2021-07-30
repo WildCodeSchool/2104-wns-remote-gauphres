@@ -2,6 +2,7 @@
 import { gql, useMutation } from '@apollo/client';
 import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 import { Title, Container, Form, TextInput, Input } from './style';
 import Button from '../../Button/Button';
 
@@ -17,6 +18,7 @@ type FormValues = {
 };
 
 const LoginPage: FC<FormValues> = () => {
+    const history = useHistory();
     const {
         register,
         handleSubmit,
@@ -24,8 +26,8 @@ const LoginPage: FC<FormValues> = () => {
     } = useForm({ mode: 'all' });
     const [loginUser] = useMutation(LOGIN_USER);
 
-    const onSubmitForm = (datas: FormValues) => {
-        loginUser({
+    const onSubmitForm = async (datas: FormValues) => {
+        const result = await loginUser({
             variables: {
                 user: {
                     email: datas.email,
@@ -33,6 +35,9 @@ const LoginPage: FC<FormValues> = () => {
                 },
             },
         });
+        if (result.data.Login) {
+            history.push('/dashboard');
+        }
     };
 
     return (
