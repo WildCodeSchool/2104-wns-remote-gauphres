@@ -1,4 +1,4 @@
-import { getModelForClass, Prop } from '@typegoose/typegoose';
+import { getModelForClass, index, Prop } from '@typegoose/typegoose';
 import { Field, InputType, ObjectType } from 'type-graphql';
 import { Mood, MoodInput } from './Mood';
 
@@ -50,6 +50,10 @@ export class User {
 
     @Prop()
     @Field()
+    city?: string;
+
+    @Prop()
+    @Field()
     createdAt?: Date;
 
     @Prop()
@@ -78,6 +82,9 @@ export class UserCreationInput {
 
     @Field()
     birthDate?: Date;
+
+    @Field({ nullable: true })
+    city?: string;
 
     @Field(() => [String], { nullable: true })
     hobbies?: string[];
@@ -116,7 +123,6 @@ export class UserHobbiesInput {
     hobbies?: string[];
 }
 
-// TODO: beside to refacto
 @InputType()
 export class UserChatRoom {
     @Field()
@@ -144,10 +150,6 @@ export class UserChatRoomType {
     @Prop()
     @Field()
     username?: string;
-
-    @Prop()
-    @Field()
-    avatar?: string;
 
     @Prop()
     @Field()

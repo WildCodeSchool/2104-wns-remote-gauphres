@@ -1,7 +1,19 @@
 import styled from 'styled-components';
-import TextField from '@material-ui/core/TextField';
+import {
+    TextField,
+    Stepper as StepperBase,
+    Select as SelectBase,
+} from '@material-ui/core';
+import { colors } from '../../style/theme';
+
+export const Stepper = styled(StepperBase)`
+    background-color: #fac748 !important;
+    width: 70%;
+    min-width: 16rem !important;
+`;
 
 export const TextInput = styled(TextField)`
+    min-width: 16rem !important;
     width: 70%;
     margin-bottom: 2rem !important;
 `;
@@ -15,10 +27,17 @@ export const Container = styled.div`
     width: 100vw;
 `;
 export const Title = styled.h2`
+    text-align-last: center;
     font-size: 32px;
 `;
 
-export const Form = styled.div`
+export const SubTitle = styled.h3`
+    font-size: 22px;
+    font-style: italic;
+    font-weight: lighter;
+`;
+
+export const Form = styled.form`
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -29,10 +48,14 @@ export const Form = styled.div`
     width: 60%;
 `;
 
-export const Input = styled.div`
+export const InputDiv = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: space-around;
+    width: 70%;
+`;
+
+export const Select = styled(SelectBase)`
     width: 70%;
 `;
