@@ -1,6 +1,6 @@
 import { Message } from '../models/Message';
 
-export class Validators {
+class Validators {
     static isMessageValid(message: Message): boolean {
         if (!message || message.text.trim() === '') {
             return false;
@@ -8,3 +8,5 @@ export class Validators {
         return true;
     }
 }
+
+export default Validators;

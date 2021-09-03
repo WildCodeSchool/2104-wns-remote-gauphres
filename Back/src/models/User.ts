@@ -1,6 +1,6 @@
-import { getModelForClass, Prop, Ref } from '@typegoose/typegoose';
+import { getModelForClass, Prop } from '@typegoose/typegoose';
 import { Field, InputType, ObjectType } from 'type-graphql';
-import { Mood } from './Mood';
+import { Mood, MoodInput } from './Mood';
 
 @ObjectType()
 export class User {
@@ -8,7 +8,7 @@ export class User {
     @Field()
     id?: string;
 
-    @Prop({ unique: true })
+    @Prop()
     @Field()
     username?: string;
 
@@ -25,11 +25,11 @@ export class User {
     password?: string;
 
     @Prop()
-    @Field(() => [String])
+    @Field(() => [String], { nullable: true })
     chatrooms?: string[];
 
     @Prop()
-    @Field(() => [String])
+    @Field(() => [String], { nullable: true })
     hobbies?: string[];
 
     @Prop()
@@ -50,21 +50,21 @@ export class User {
 
     @Prop()
     @Field()
-    createdAt?: Date;
+    city?: string;
 
     @Prop()
     @Field()
-    accessToken?: string;
+    createdAt?: Date;
 
     @Prop()
-    @Field((type) => Mood)
-    userMood?: Object;
+    @Field(() => Mood, { nullable: true })
+    userMood?: Mood;
 }
 
 export const UserModel = getModelForClass(User);
 
 @InputType()
-export class UserInput {
+export class UserCreationInput {
     @Field()
     username?: string;
 
@@ -80,21 +80,54 @@ export class UserInput {
     @Field()
     email?: string;
 
-    @Field({ nullable: true })
-    avatar?: string;
-
     @Field()
     birthDate?: Date;
 
+    @Field({ nullable: true })
+    city?: string;
+
+    @Field(() => [String], { nullable: true })
+    hobbies?: string[];
+
+    @Field({ nullable: true })
+    createdAt?: Date;
+
+    @Field(() => Boolean)
+    isConnected = false;
+}
+
+@InputType()
+export class UserLoginInput {
     @Field()
-    createdAt?: Date = new Date(Date.now());
+    email?: string;
 
     @Field()
-    isConnected?: boolean = false;
+    password?: string;
+}
+
+@InputType()
+export class UserMoodInput {
+    @Field()
+    email?: string;
+
+    @Field(() => MoodInput)
+    newMood?: MoodInput;
+}
+
+@InputType()
+export class UserHobbiesInput {
+    @Field()
+    email?: string;
+
+    @Field(() => [String])
+    hobbies?: string[];
 }
 
 @InputType()
 export class UserChatRoom {
+    @Field()
+    id?: string;
+
     @Field()
     username?: string;
 
@@ -103,12 +136,19 @@ export class UserChatRoom {
 
     @Field()
     isConnected?: boolean = false;
+
+    @Field(() => [String])
+    hobbies?: string[];
 }
 
 @ObjectType()
 export class UserChatRoomType {
     @Prop()
     @Field()
+    id?: string;
+
+    @Prop()
+    @Field()
     username?: string;
 
     @Prop()
@@ -118,6 +158,10 @@ export class UserChatRoomType {
     @Prop()
     @Field()
     isConnected?: boolean = false;
+
+    @Prop()
+    @Field(() => [String])
+    hobbies?: string[];
 }
 
 @InputType()
@@ -133,32 +177,4 @@ export class MessageSender {
 export class ArticleCreator {
     @Field()
     username!: string;
-}
-
-@ObjectType()
-export class UserWithToken {
-    @Field()
-    accessToken!: string;
-    @Field()
-    user!: User;
-}
-
-@InputType()
-export class LoginInput {
-    @Field()
-    email!: string;
-    @Field()
-    password!: string;
-}
-
-@InputType()
-export class CreateMoodInputForUser {
-    @Field()
-    userId!: string;
-
-    @Field()
-    title!: string;
-
-    @Field()
-    image!: string;
 }

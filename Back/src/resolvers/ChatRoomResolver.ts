@@ -1,4 +1,3 @@
-import { mongoose } from '@typegoose/typegoose';
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
 import {
     ChatRoom,
@@ -6,10 +5,10 @@ import {
     CreateChatRoomInput,
 } from '../models/ChatRoom';
 import { CreateMessageInput, Message } from '../models/Message';
-import { Validators } from '../services/Validators';
+import Validators from '../services/Validators';
 
 @Resolver(ChatRoom)
-export class ChatRoomResolver {
+class ChatRoomResolver {
     @Query(() => [ChatRoom])
     async getAllChatRooms(): Promise<ChatRoom[]> {
         const chatrooms = await ChatRoomModel.find();
@@ -17,18 +16,33 @@ export class ChatRoomResolver {
     }
 
     @Query(() => ChatRoom)
-    async getOneChatRoom(@Arg('id') id: string) {
+    async getOneChatRoom(@Arg('id') id: string): Promise<ChatRoom> {
         const chatroom = await ChatRoomModel.findOne({
-            id: id,
+            id,
         });
         return chatroom;
     }
 
     @Mutation(() => ChatRoom)
     async createChatRoom(
+        @Arg('newChatRoom') newChatRoom: CreateChatRoomInput
+    ): Promise<ChatRoom> {
+        const chatRoom = await ChatRoomModel.create(newChatRoom);
+        chatRoom.createdAt = new Date(Date.now());
+        chatRoom.isActiv = true;
+
+        await chatRoom.save();
+        return chatRoom;
+    }
+
+    /* @Mutation(() => ChatRoom)
+    async createChatRoom(
         @Arg('data') data: CreateChatRoomInput
     ): Promise<ChatRoom> {
-        const newChatRoom = await ChatRoomModel.create(data);
+        const createdAt = new Date(Date.now());
+
+        const chatRoomWithDate = { createdAt, ...data };
+        const newChatRoom = await ChatRoomModel.create(chatRoomWithDate);
         await newChatRoom.save();
 
         // enregistre un champ userId quand un user rejoint une chatroom
@@ -41,25 +55,28 @@ export class ChatRoomResolver {
         // enregistre un champ userId = à l'id user dans la collection user
         // getRandomChatroom ??
         return newChatRoom;
-    }
+    } */
 
     @Mutation(() => ChatRoom)
     async sendMessage(
-        @Arg('_id') _id: string,
+        @Arg('id') id: string,
         @Arg('newMessage', () => CreateMessageInput) message: Message
-    ) {
+    ): Promise<ChatRoom> {
         if (Validators.isMessageValid(message)) {
+            const createdAt = new Date(Date.now());
+            const newMessage = { createdAt, ...message };
             const updatedChatRoom = await ChatRoomModel.findOneAndUpdate(
-                { _id: _id },
+                { id },
                 {
                     $push: {
-                        messages: message,
+                        messages: newMessage,
                     },
                 }
             );
             return updatedChatRoom;
-        } else {
-            throw new Error("A message can't be empty");
         }
+        throw new Error("A message can't be empty");
     }
 }
+
+export default ChatRoomResolver;

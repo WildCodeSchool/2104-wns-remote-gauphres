@@ -1,16 +1,18 @@
-import { mongoose } from '@typegoose/typegoose';
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { AuthenticationError } from 'apollo-server-errors';
 import {
-    CreateMoodInputForUser,
+    UserCreationInput,
+    UserLoginInput,
     User,
-    UserInput,
     UserModel,
-    UserWithToken,
+    UserMoodInput,
+    UserHobbiesInput,
 } from '../models/User';
-import { sign } from 'jsonwebtoken';
 
 @Resolver(User)
-export class UserResolver {
+class UserResolver {
     @Query(() => [User])
     async getAllUsers(): Promise<User[]> {
         const users = await UserModel.find();
@@ -18,73 +20,84 @@ export class UserResolver {
     }
 
     @Query(() => User)
-    async getUserByEmail(@Arg('email') email: string) {
+    async getUserByEmail(@Arg('email') email: string): Promise<User> {
         const user = await UserModel.findOne({
-            email: email,
+            email,
         });
         return user;
     }
 
     @Query(() => User)
-    async getUserByUsername(@Arg('username') username: string) {
+    async getUserByUsername(@Arg('username') username: string): Promise<User> {
         const user = await UserModel.findOne({
-            username: username,
+            username,
         });
         return user;
     }
 
     @Query(() => [User])
     async getUsersConnected(): Promise<User[]> {
-        const users = await UserModel.find(
-            { isConnected:true }
-        );
+        const users = await UserModel.find({ isConnected: true });
         return users;
     }
 
-    // TODO: As MongoDb use random ID that we can't really use in the app
-    // we don't need this query yet. It will be replace by getUserByusername.
-
-    /* @Query(() => User)
-    async getUserById(@Arg('_id') id: string) {
-        const user = await UserModel.findOne({
-            _id: new mongoose.Types.ObjectId(id),
-        });
-        return user;
-    } */
-
-    @Mutation(() => UserWithToken)
-    async createUser(@Arg('data') data: UserInput) {
-        const user = await UserModel.create(data);
-        user.birthDate = new Date(data.birthDate!);
+    @Mutation(() => User)
+    async createUser(
+        @Arg('newUser') newUser: UserCreationInput
+    ): Promise<User> {
+        const user = await UserModel.create(newUser);
+        if (user) {
+            user.createdAt = new Date(Date.now());
+            user.birthDate = new Date(newUser.birthDate!);
+            user.password = bcrypt.hashSync(newUser.password!, 10);
+        }
         await user.save();
-        return {
-            user,
-            accessToken: sign({ userId: user.id }, 'secretJWT')
-        };
+        return user;
     }
 
-    @Mutation(() => UserWithToken)
+    @Mutation(() => String)
     async Login(
-        @Arg("email") email: string,
-        @Arg("password") password: string
-    ): Promise<UserWithToken> {
-        const user = await UserModel.findOne({ email, password });
-        if (!user) {
-            throw new Error('Cet utilisateur est introuvable')
+        @Arg('currentUser') currentUser: UserLoginInput
+    ): Promise<string> {
+        const user = await UserModel.findOne({ email: currentUser.email });
+        if (user && bcrypt.compareSync(currentUser.password!, user.password!)) {
+            const moowdyToken = jwt.sign(
+                { userEmail: user.email },
+                'moowdyJwtKey'
+            );
+            return moowdyToken;
         }
-        return {
-            user,
-            accessToken: sign({ userId: user.id }, 'secretJWT')
-        };
+        throw new AuthenticationError('Invalid credentials');
     }
 
     @Mutation(() => User)
-    async updateUserMood(@Arg('newMood') newMood: CreateMoodInputForUser) {
+    async updateUserMood(
+        @Arg('currentUser') currentUser: UserMoodInput
+    ): Promise<User> {
         const updatedUserMood = await UserModel.findOneAndUpdate(
-            { _id: newMood.userId },
-            { userMood: { title: newMood.title, image: newMood.image } }
+            { email: currentUser.email },
+            {
+                userMood: {
+                    title: currentUser.newMood?.title,
+                    image: currentUser.newMood?.image,
+                },
+            }
         );
 
-        return updatedUserMood;
+        return updatedUserMood; // That return the previous mood in the playground
+    }
+
+    @Mutation(() => User)
+    async updateUserHobbies(
+        @Arg('currentUser') currentUser: UserHobbiesInput
+    ): Promise<User> {
+        const updatedUserHobbies = await UserModel.findOneAndUpdate(
+            { email: currentUser.email },
+            { hobbies: currentUser.hobbies }
+        );
+
+        return updatedUserHobbies; // That return the previous hobbies in the playground
     }
 }
+
+export default UserResolver;

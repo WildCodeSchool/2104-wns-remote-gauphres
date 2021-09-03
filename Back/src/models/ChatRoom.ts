@@ -1,8 +1,9 @@
-import { getModelForClass, Prop } from '@typegoose/typegoose';
+import { getModelForClass, index, Prop } from '@typegoose/typegoose';
 import { Field, InputType, ObjectType } from 'type-graphql';
 import { CreateMessageInput, Message } from './Message';
-import { User, UserChatRoom, UserChatRoomType } from './User';
+import { UserChatRoom, UserChatRoomType } from './User';
 
+@index({ id: 'text' }, { unique: true })
 @ObjectType()
 export class ChatRoom {
     @Prop()
@@ -13,12 +14,12 @@ export class ChatRoom {
     @Field()
     title?: string;
 
-    @Prop({ type: UserChatRoomType })
-    @Field((type) => [UserChatRoomType])
-    users?: UserChatRoomType[];
+    @Prop({ type: () => [UserChatRoomType] })
+    @Field(() => [UserChatRoomType])
+    chatRoomUsers?: UserChatRoomType[];
 
-    @Prop({ type: Message })
-    @Field((type) => [Message])
+    @Prop({ type: () => [Message] })
+    @Field(() => [Message])
     messages?: Message[];
 
     @Prop()
@@ -27,25 +28,24 @@ export class ChatRoom {
 
     @Prop()
     @Field()
-    isActiv?: boolean = true;
-
+    isActiv?: boolean;
 }
 export const ChatRoomModel = getModelForClass(ChatRoom);
 
 @InputType()
 export class CreateChatRoomInput {
     @Field()
-    createdAt: Date = new Date(Date.now());
+    id!: string;
 
-    @Field()
-    isActiv: boolean = true;
+    @Field(() => Boolean)
+    isActiv = true;
 
     @Field()
     title?: string;
 
-    @Field((type) => [UserChatRoom])
-    users?: UserChatRoom[];
+    @Field(() => [UserChatRoom])
+    chatRoomUsers?: UserChatRoom[];
 
-    @Field((type) => [CreateMessageInput])
-    messages?:CreateMessageInput
+    @Field(() => [CreateMessageInput])
+    messages?: CreateMessageInput[];
 }
