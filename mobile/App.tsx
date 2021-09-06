@@ -8,7 +8,7 @@ import {
 
 const { manifest } = Constants;
 
-const uriClient = `http://${manifest.debuggerHost
+const uriClient = `http://${manifest?.debuggerHost
   ?.split(`:`)
   ?.shift()
   ?.concat(`:5000`)}`; 
@@ -32,5 +32,17 @@ export default function App() {
     <ApolloProvider client={client}>
       <LoginScreen /> 
     </ApolloProvider>
+  );
+}
+
+// Routing for the camera components
+const CameraStack = createNativeStackNavigator();
+
+function CameraStackScreen() {
+  return (
+    <CameraStack.Navigator>
+      <CameraStack.Screen name="CameraScreen" component={CameraScreen} options={{headerShown:false}}/>
+      <CameraStack.Screen name="ShowPicture" component={ShowPicture} options={{headerShown:false}} />
+    </CameraStack.Navigator>
   );
 }

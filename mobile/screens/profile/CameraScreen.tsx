@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
 import { Camera } from 'expo-camera';
+import * as ImageManipulator from "expo-image-manipulator";
 
-export default function App() {
+const CameraScreen = ({navigation}: any) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const cameraRef = useRef(null);
@@ -20,7 +21,7 @@ export default function App() {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
-  return (
+  return (    
     <View style={styles.container}>
       <Camera style={styles.camera} type={type} ref={cameraRef}>
         <View style={styles.buttonContainer}>
@@ -41,12 +42,17 @@ export default function App() {
         title="Take a picture"
         onPress={async () => {
           const pictureMetadata = await cameraRef.current.takePictureAsync();
-          console.log("pictureMetadata", pictureMetadata);
+          const sizingImage = await ImageManipulator.manipulateAsync(pictureMetadata.uri, [
+            { resize: { width: 480, height: 640} },
+          ]);
+          navigation.navigate('ShowPicture');
         }}
       />
     </View>
   );
 }
+
+export default CameraScreen;
 
 const styles = StyleSheet.create({
     container: {
