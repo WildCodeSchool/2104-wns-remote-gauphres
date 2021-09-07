@@ -14,6 +14,9 @@ const uriClient = `http://${manifest?.debuggerHost
   ?.concat(`:5000`)}`; 
 
 // Initialize Apollo Client
+const IP = '10.33.33.181'
+const uri = `http://${IP}:5000/graphql`;
+
 const client = new ApolloClient({
   uri: uriClient,
   cache: new InMemoryCache()

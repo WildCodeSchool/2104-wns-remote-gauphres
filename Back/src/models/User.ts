@@ -124,6 +124,15 @@ export class UserHobbiesInput {
 }
 
 @InputType()
+export class UserPictureInput {
+    @Field()
+    email?: string;
+
+    @Field()
+    picture?: string;
+}
+
+@InputType()
 export class UserChatRoom {
     @Field()
     id?: string;

@@ -1,9 +1,22 @@
 import React, {useEffect, useState} from "react";
-import { Button, Image, View, StyleSheet, TouchableHighlight, TouchableOpacity } from "react-native";
+import { Image, View, StyleSheet, TouchableOpacity } from "react-native";
 import * as FileSystem from 'expo-file-system';
+import { gql, useMutation } from '@apollo/client';
+import { useRoute } from "@react-navigation/native";
 
-const ShowPicture = ({navigation}:any) => {
+
+const UPDATE_PICTURE = gql`
+  mutation updateUserPicture($picture: UserPictureInput) {
+    updateUserPicture(updatedPicture: $picture)
+  }
+`
+
+const ShowPicture = ({navigation}: any) => {
+  const route = useRoute();
+  const {screen, ...pictureUri}: any = route.params;
+  // const navigation = useNavigation();
     const [imagesURI, setImagesURI] = useState<string[]> ([]);
+    const [updatedPicture] = useMutation(UPDATE_PICTURE);
     useEffect(() => {
         (async () => {
           const images = await FileSystem.readDirectoryAsync(
@@ -14,6 +27,7 @@ const ShowPicture = ({navigation}:any) => {
       }, []);      
 
     return imagesURI.length > 0 ? (
+      
         <><Image
         style={{
           flex: 1,
@@ -23,6 +37,7 @@ const ShowPicture = ({navigation}:any) => {
         source={{
           uri: FileSystem.cacheDirectory + "ImageManipulator/" + imagesURI[0],
         }} />
+
         <View>
           <TouchableOpacity 
             style={styles.backButton}
@@ -36,8 +51,15 @@ const ShowPicture = ({navigation}:any) => {
           <TouchableOpacity 
             style={styles.validateButton}
             onPress={async () => {
-            await FileSystem.deleteAsync(FileSystem.cacheDirectory + "ImageManipulator"); // upload photo
-            navigation.navigate('CameraScreen'); // go to profil page
+              console.log(pictureUri);
+              await updatedPicture({
+                variables: {
+                  user: {
+                    avatar: pictureUri.uri,
+                  },
+                },
+              })              
+              navigation.navigate('ProfileScreen');
           }}>
             <Image style={styles.validateButton} source={require('/home/benoit/Documents/Dev++/Moowdy/2104-wns-remote-gauphres/mobile/assets/validateButton.png')} />
           </TouchableOpacity>

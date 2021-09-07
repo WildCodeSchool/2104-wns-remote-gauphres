@@ -9,6 +9,7 @@ import {
     UserModel,
     UserMoodInput,
     UserHobbiesInput,
+    UserPictureInput,
 } from '../models/User';
 
 @Resolver(User)
@@ -84,10 +85,11 @@ class UserResolver {
                     title: currentUser.newMood?.title,
                     image: currentUser.newMood?.image,
                 },
-            }
+            },
+            { new: true }
         );
 
-        return updatedUserMood; // That return the previous mood in the playground
+        return updatedUserMood;
     }
 
     @Mutation(() => User)
@@ -96,10 +98,24 @@ class UserResolver {
     ): Promise<User> {
         const updatedUserHobbies = await UserModel.findOneAndUpdate(
             { email: currentUser.email },
-            { hobbies: currentUser.hobbies }
+            { hobbies: currentUser.hobbies },
+            { new: true }
         );
 
-        return updatedUserHobbies; // That return the previous hobbies in the playground
+        return updatedUserHobbies;
+    }
+
+    @Mutation(() => User)
+    async updateUserPicture(
+        @Arg('currentUser') currentUser: UserPictureInput
+    ): Promise<User> {
+        const updatedUserPicture = await UserModel.findOneAndUpdate(
+            { email: currentUser.email },
+            { avatar: currentUser.picture },
+            { new: true }
+        );
+
+        return updatedUserPicture;
     }
 }
 
