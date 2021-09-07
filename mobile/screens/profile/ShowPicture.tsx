@@ -7,8 +7,8 @@ import noValidateButtonImg from '../../assets/noValidateButton.png';
 import validateButtonImg from '../../assets/validateButton.png';
 
 const UPDATE_PICTURE = gql`
-  mutation updateUserPicture($picture: UserPictureInput) {
-    updateUserPicture(updatedPicture: $picture)
+  mutation updateUserPicture($user: UserPictureInput) {
+    updateUserPicture(currentUser: $user)
   }
 `
 
@@ -51,12 +51,12 @@ const ShowPicture = ({navigation}: any) => {
 
           <TouchableOpacity 
             style={styles.validateButton}
-            onPress={async () => {
-              console.log(pictureUri);
+            onPress={async (data) => {
               await updatedPicture({
                 variables: {
                   user: {
-                    avatar: pictureUri.uri,
+                    email: 'user@email.com',
+                    picture: pictureUri.picture,
                   },
                 },
               })              
