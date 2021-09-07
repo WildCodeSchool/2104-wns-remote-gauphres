@@ -1,23 +1,79 @@
 import React, { useState } from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { StyleSheet, TextInput, View, Text, TouchableOpacity } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import CameraScreen from "./CameraScreen";
+import HomeScreen from "./HomeScreen";
+import NotifScreen from "./NotifScreen";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const Tab = createBottomTabNavigator();
 
-// Initialize Apollo Client
-const client = new ApolloClient({
-  uri: 'http://localhost:5000/graphql',
-  cache: new InMemoryCache()
-});
 
-export default function App() {
+// const Stack = createNativeStackNavigator();
+
+// function LoginStack() {
+//   return (
+//     <Stack.Navigator>
+//       <Stack.Screen name="Home" component={HomeScreen} />
+//     </Stack.Navigator>
+//   );
+// }
+
+const LOGIN_USER = gql`
+    mutation Login($user: UserLoginInput!) {
+        Login(currentUser: $user)
+    }
+`;
+
+export default function LoginScreen() {
+  
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loginUser] = useMutation(LOGIN_USER);
+    const [token, setToken] = useState('');
+    const [tokenBack, setTokenBack] = useState('');
 
+    const storeData = async (value: string) => {
+        try {
+          await AsyncStorage.setItem('@storage_Key', value)
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    console.log(token);
+
+    const getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@storage_Key')
+            if(value !== null) {
+                setTokenBack(value);
+                console.log('retour:', value);
+            }
+        } catch(e) {
+            console.log(e);
+        }
+    }
+    console.log(tokenBack);
+
+    getData();
+    if (tokenBack) {
+        console.log('coucou');
+        // return (
+        //     <NavigationContainer>
+        //         <Tab.Navigator>
+        //             <Tab.Screen name="Camera" component={CameraScreen} />
+        //             <Tab.Screen name="Images" component={HomeScreen} />
+        //             <Tab.Screen name="Feed" component={NotifScreen} />
+        //         </Tab.Navigator>
+        //     </NavigationContainer>
+        // );
+    };
+    
     return (
      <> 
-      <ApolloProvider client={client}>
         <View style={styles.titlesContainer}>
           <Text style={styles.mainTitle}>!Moowdy</Text>
           <Text style={styles.secondaryTitle}>Connecte-toi</Text>
@@ -36,12 +92,27 @@ export default function App() {
           />
           <TouchableOpacity 
             style={styles.loginButton}
-            onPress={() => console.log('Je me connecte')}
-          >
+            onPress={async () => {
+                console.log(email);        
+                console.log(password);        
+
+                const result = await loginUser({
+                    variables: {
+                        user: {
+                            email,
+                            password
+                        }
+                    }
+                });
+                if (result.data.Login) {
+                    setToken(result.data.Login);
+                    storeData(result.data.Login);
+                }
+            }}
+            >
             <Text style={styles.textBtn}>Connexion</Text>
           </TouchableOpacity>   
         </View>
-      </ApolloProvider>
     </>
     );
   }
