@@ -20,14 +20,13 @@ const client = new ApolloClient({
 });
 
 export default function App() {
+    const [nunitoLoaded] = UseNunito({
+        Nunito_400Regular,
+    });
 
-  const [nunitoLoaded] = UseNunito({
-    Nunito_400Regular,
-  });
-
-  if (!nunitoLoaded) {
-      return null ;
-  }
+    if (!nunitoLoaded) {
+        return null ;
+    }
 
   return (
     <ApolloProvider client={client}>
