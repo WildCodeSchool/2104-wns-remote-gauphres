@@ -3,7 +3,8 @@ import { Image, View, StyleSheet, TouchableOpacity } from "react-native";
 import * as FileSystem from 'expo-file-system';
 import { gql, useMutation } from '@apollo/client';
 import { useRoute } from "@react-navigation/native";
-
+import noValidateButtonImg from '../../assets/noValidateButton.png';
+import validateButtonImg from '../../assets/validateButton.png';
 
 const UPDATE_PICTURE = gql`
   mutation updateUserPicture($picture: UserPictureInput) {
@@ -45,7 +46,7 @@ const ShowPicture = ({navigation}: any) => {
             await FileSystem.deleteAsync(FileSystem.cacheDirectory + "ImageManipulator"); // clean cache and go back to CameraScreen
             navigation.navigate('CameraScreen');
           }}>
-            <Image style={styles.backButton} source={require('/home/benoit/Documents/Dev++/Moowdy/2104-wns-remote-gauphres/mobile/assets/noValidateButton.png')} />
+            <Image style={styles.backButton} source={noValidateButtonImg} />
           </TouchableOpacity>
 
           <TouchableOpacity 
@@ -61,7 +62,7 @@ const ShowPicture = ({navigation}: any) => {
               })              
               navigation.navigate('ProfileScreen');
           }}>
-            <Image style={styles.validateButton} source={require('/home/benoit/Documents/Dev++/Moowdy/2104-wns-remote-gauphres/mobile/assets/validateButton.png')} />
+            <Image style={styles.validateButton} source={validateButtonImg} />
           </TouchableOpacity>
         </View></>
   ) : null;

@@ -39,13 +39,14 @@ export default function App() {
 }
 
 // Routing for the camera components
-const CameraStack = createNativeStackNavigator();
+const ProfileStack = createNativeStackNavigator();
 
-function CameraStackScreen() {
+function ProfileStackScreen() {
   return (
-    <CameraStack.Navigator>
-      <CameraStack.Screen name="CameraScreen" component={CameraScreen} options={{headerShown:false}}/>
-      <CameraStack.Screen name="ShowPicture" component={ShowPicture} options={{headerShown:false}} />
-    </CameraStack.Navigator>
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{headerShown:false}}/>
+      <ProfileStack.Screen name="CameraScreen" component={CameraScreen} options={{headerShown:false}}/>
+      <ProfileStack.Screen name="ShowPicture" component={ShowPicture} options={{headerShown:false}} />
+    </ProfileStack.Navigator>
   );
 }
