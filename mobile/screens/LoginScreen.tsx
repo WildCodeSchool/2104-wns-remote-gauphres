@@ -3,22 +3,22 @@ import { gql, useMutation } from "@apollo/client";
 import { StyleSheet, TextInput, View, Text, TouchableOpacity } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CameraScreen from "./CameraScreen";
 import HomeScreen from "./HomeScreen";
 import NotifScreen from "./NotifScreen";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const Tab = createBottomTabNavigator();
-
-
-// const Stack = createNativeStackNavigator();
+const LogStack = createNativeStackNavigator();
 
 // function LoginStack() {
 //   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Home" component={HomeScreen} />
-//     </Stack.Navigator>
+//     <LogStack.Navigator>
+//       <LogStack.Screen name="Homepage" component={HomeScreen} />
+//       <LogStack.Screen name="ImagePage" component={CameraScreen} />
+//       <LogStack.Screen name="NotifPage" component={NotifScreen} />
+//     </LogStack.Navigator>
 //   );
 // }
 
@@ -28,7 +28,7 @@ const LOGIN_USER = gql`
     }
 `;
 
-export default function LoginScreen() {
+export default function LoginScreen({navigation}: any) {
   
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -40,7 +40,7 @@ export default function LoginScreen() {
         try {
           await AsyncStorage.setItem('@storage_Key', value)
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     };
     console.log(token);
@@ -53,7 +53,7 @@ export default function LoginScreen() {
                 console.log('retour:', value);
             }
         } catch(e) {
-            console.log(e);
+            console.error(e);
         }
     }
     console.log(tokenBack);
@@ -61,15 +61,15 @@ export default function LoginScreen() {
     getData();
     if (tokenBack) {
         console.log('coucou');
-        // return (
-        //     <NavigationContainer>
-        //         <Tab.Navigator>
-        //             <Tab.Screen name="Camera" component={CameraScreen} />
-        //             <Tab.Screen name="Images" component={HomeScreen} />
-        //             <Tab.Screen name="Feed" component={NotifScreen} />
-        //         </Tab.Navigator>
-        //     </NavigationContainer>
-        // );
+        return (
+            <NavigationContainer>
+                <Tab.Navigator>
+                    <Tab.Screen name="Home" component={HomeScreen} />
+                    <Tab.Screen name="Images" component={CameraScreen} />
+                    <Tab.Screen name="Notif" component={NotifScreen} />
+                </Tab.Navigator>
+            </NavigationContainer>
+        );
     };
     
     return (
@@ -107,6 +107,7 @@ export default function LoginScreen() {
                 if (result.data.Login) {
                     setToken(result.data.Login);
                     storeData(result.data.Login);
+                    navigation.navigate("Home");
                 }
             }}
             >
