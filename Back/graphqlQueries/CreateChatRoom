@@ -1,5 +1,5 @@
 mutation createChatRoom($data: CreateChatRoomInput!) {
-  createChatRoom(data: $data) {
+  createChatRoom(newChatRoom: $data) {
     id
     title
   }
