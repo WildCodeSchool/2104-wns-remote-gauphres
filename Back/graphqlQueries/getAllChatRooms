@@ -2,7 +2,7 @@
   getAllChatRooms{
     id
     title
-		users {
+		chatRoomUsers {
       username 
       isConnected 
       avatar

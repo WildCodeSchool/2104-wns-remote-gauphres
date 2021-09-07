@@ -5,22 +5,12 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import CameraScreen from "./CameraScreen";
 import HomeScreen from "./HomeScreen";
 import NotifScreen from "./NotifScreen";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import ProfileScreen from "./ProfileScreen";
 
 const Tab = createBottomTabNavigator();
-const LogStack = createNativeStackNavigator();
-
-// function LoginStack() {
-//   return (
-//     <LogStack.Navigator>
-//       <LogStack.Screen name="Homepage" component={HomeScreen} />
-//       <LogStack.Screen name="ImagePage" component={CameraScreen} />
-//       <LogStack.Screen name="NotifPage" component={NotifScreen} />
-//     </LogStack.Navigator>
-//   );
-// }
 
 const LOGIN_USER = gql`
     mutation Login($user: UserLoginInput!) {
@@ -60,14 +50,30 @@ export default function LoginScreen({navigation}: any) {
 
     getData();
     if (tokenBack) {
-        console.log('coucou');
         return (
             <NavigationContainer>
-                <Tab.Navigator>
-                    <Tab.Screen name="Home" component={HomeScreen} />
-                    <Tab.Screen name="Images" component={CameraScreen} />
-                    <Tab.Screen name="Notif" component={NotifScreen} />
-                </Tab.Navigator>
+            <Tab.Navigator
+                screenOptions={({ route }) => ({
+                  tabBarIcon: ({ focused, color, size }) => {
+                    let iconName;
+        
+                    if (route.name === "Notifications") {
+                      iconName = focused ? "notifications" : "notifications-outline";
+                    } else if (route.name === "Home") {
+                      iconName = focused ? "home" : "home-outline";
+                    } else if (route.name === "Profile") {
+                      iconName = focused ? "person" : "person-outline";
+                    }
+                    return <Ionicons name={iconName} size={size} color={color} />;
+                  },
+                  tabBarActiveTintColor: "#6E56EC",
+                  tabBarInactiveTintColor: "gray",
+                })}
+              >
+                <Tab.Screen name="Profile" component={ProfileScreen} />
+                <Tab.Screen name="Home" component={HomeScreen} />
+                <Tab.Screen name="Notifications" component={NotifScreen} />
+            </Tab.Navigator>
             </NavigationContainer>
         );
     };
