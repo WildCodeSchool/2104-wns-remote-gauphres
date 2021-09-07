@@ -1,5 +1,5 @@
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
-import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server-errors';
 import {
@@ -49,7 +49,7 @@ class UserResolver {
         if (user) {
             user.createdAt = new Date(Date.now());
             user.birthDate = new Date(newUser.birthDate!);
-            user.password = bcrypt.hashSync(newUser.password!, 10);
+            user.password = bcryptjs.hashSync(newUser.password!, 10);
         }
         await user.save();
         return user;
@@ -60,7 +60,10 @@ class UserResolver {
         @Arg('currentUser') currentUser: UserLoginInput
     ): Promise<string> {
         const user = await UserModel.findOne({ email: currentUser.email });
-        if (user && bcrypt.compareSync(currentUser.password!, user.password!)) {
+        if (
+            user &&
+            bcryptjs.compareSync(currentUser.password!, user.password!)
+        ) {
             const moowdyToken = jwt.sign(
                 { userEmail: user.email },
                 'moowdyJwtKey'
