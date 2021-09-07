@@ -11,7 +11,7 @@ const { manifest } = Constants;
 const uriClient = `http://${manifest.debuggerHost
   ?.split(`:`)
   ?.shift()
-  ?.concat(`:5000`)}`;
+  ?.concat(`:5000`)}`; 
 
 // Initialize Apollo Client
 const client = new ApolloClient({
