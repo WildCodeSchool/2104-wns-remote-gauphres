@@ -8,7 +8,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeScreen from "./HomeScreen";
 import NotifScreen from "./NotifScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import ProfileScreen from "./ProfileScreen";
+import ProfileScreen from "./profile/ProfileScreen";
+import CameraScreen from "./profile/CameraScreen";
+import ShowPicture from "./profile/ShowPicture";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,6 +19,19 @@ const LOGIN_USER = gql`
         Login(currentUser: $user)
     }
 `;
+
+// Routing for the camera components
+const ProfileStack = createNativeStackNavigator();
+
+function ProfileStackScreen() {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{headerShown:false}}/>
+      <ProfileStack.Screen name="CameraScreen" component={CameraScreen} options={{headerShown:false}}/>
+      <ProfileStack.Screen name="ShowPicture" component={ShowPicture} options={{headerShown:false}} />
+    </ProfileStack.Navigator>
+  );
+}
 
 export default function LoginScreen({navigation}: any) {
   
@@ -53,6 +68,7 @@ export default function LoginScreen({navigation}: any) {
         return (
             <NavigationContainer>
             <Tab.Navigator
+                initialRouteName="Home"
                 screenOptions={({ route }) => ({
                   tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
@@ -61,7 +77,7 @@ export default function LoginScreen({navigation}: any) {
                       iconName = focused ? "notifications" : "notifications-outline";
                     } else if (route.name === "Home") {
                       iconName = focused ? "home" : "home-outline";
-                    } else if (route.name === "Profile") {
+                    } else if (route.name === "ProfileStack") {
                       iconName = focused ? "person" : "person-outline";
                     }
                     return <Ionicons name={iconName} size={size} color={color} />;
@@ -70,8 +86,8 @@ export default function LoginScreen({navigation}: any) {
                   tabBarInactiveTintColor: "gray",
                 })}
               >
-                <Tab.Screen name="Profile" component={ProfileScreen} />
-                <Tab.Screen name="Home" component={HomeScreen} />
+                <Tab.Screen name="ProfileStack" component={ProfileStackScreen} />
+                <Tab.Screen name="Home" component={HomeScreen}/>
                 <Tab.Screen name="Notifications" component={NotifScreen} />
             </Tab.Navigator>
             </NavigationContainer>

@@ -37,16 +37,3 @@ export default function App() {
     </ApolloProvider>
   );
 }
-
-// Routing for the camera components
-const ProfileStack = createNativeStackNavigator();
-
-function ProfileStackScreen() {
-  return (
-    <ProfileStack.Navigator>
-      <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{headerShown:false}}/>
-      <ProfileStack.Screen name="CameraScreen" component={CameraScreen} options={{headerShown:false}}/>
-      <ProfileStack.Screen name="ShowPicture" component={ShowPicture} options={{headerShown:false}} />
-    </ProfileStack.Navigator>
-  );
-}
