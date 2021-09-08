@@ -29,9 +29,22 @@ function ProfileStackScreen() {
       <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{headerShown:false}}/>
       <ProfileStack.Screen name="CameraScreen" component={CameraScreen} options={{headerShown:false}}/>
       <ProfileStack.Screen name="ShowPicture" component={ShowPicture} options={{headerShown:false}} />
+      <ProfileStack.Screen name="LoginPage" component={LoginScreen} options={{headerShown:false}} />
     </ProfileStack.Navigator>
   );
 }
+
+const LoginStack = createNativeStackNavigator();
+
+function LoginStackScreen() {
+    return (
+      <LoginStack.Navigator>
+        <LoginStack.Screen name="Home" component={HomeScreen} options={{headerShown:false}}/>
+        <LoginStack.Screen name="Login" component={LoginScreen} options={{headerShown:false}}/>
+      </LoginStack.Navigator>
+    );
+  }
+  
 
 export default function LoginScreen({navigation}: any) {
   
@@ -75,7 +88,7 @@ export default function LoginScreen({navigation}: any) {
         
                     if (route.name === "Notifications") {
                       iconName = focused ? "notifications" : "notifications-outline";
-                    } else if (route.name === "Home") {
+                    } else if (route.name === "HomePage") {
                       iconName = focused ? "home" : "home-outline";
                     } else if (route.name === "ProfileStack") {
                       iconName = focused ? "person" : "person-outline";
@@ -84,10 +97,11 @@ export default function LoginScreen({navigation}: any) {
                   },
                   tabBarActiveTintColor: "#6E56EC",
                   tabBarInactiveTintColor: "gray",
+                  tabBarLabel:() => {return null}
                 })}
               >
                 <Tab.Screen name="ProfileStack" component={ProfileStackScreen} />
-                <Tab.Screen name="Home" component={HomeScreen}/>
+                <Tab.Screen name="HomePage" component={LoginStackScreen}/>
                 <Tab.Screen name="Notifications" component={NotifScreen} />
             </Tab.Navigator>
             </NavigationContainer>
@@ -117,7 +131,7 @@ export default function LoginScreen({navigation}: any) {
             onPress={async () => {
                 console.log(email);        
                 console.log(password);        
-
+                
                 const result = await loginUser({
                     variables: {
                         user: {
@@ -129,7 +143,7 @@ export default function LoginScreen({navigation}: any) {
                 if (result.data.Login) {
                     setToken(result.data.Login);
                     storeData(result.data.Login);
-                    navigation.navigate("Home");
+                    navigation.navigate("HomePage");
                 }
             }}
             >
