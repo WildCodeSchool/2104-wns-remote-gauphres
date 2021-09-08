@@ -5,7 +5,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import { buildSchema } from 'type-graphql';
-import { ApolloServer } from 'apollo-server';
+import { ApolloServer } from 'apollo-server-express';
+import { GraphQLUpload, graphqlUploadExpress } from 'graphql-upload';
 import Fixtures from 'node-mongodb-fixtures';
 import { AuthenticationError } from 'apollo-server-errors';
 import UserResolver from './resolvers/UserResolver';
@@ -64,9 +65,9 @@ async function start() {
             return req;
         },
     });
-
-    const { url } = await server.listen(5000);
-    console.log(`server ok on ${url}`);
+    app.use(graphqlUploadExpress());
+    server.applyMiddleware({ app });
+    app.listen(5000, () => console.log('Server started on localhost 5000'));
 }
 
 start();
