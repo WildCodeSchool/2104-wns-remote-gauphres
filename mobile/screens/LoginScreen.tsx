@@ -12,46 +12,49 @@ import ProfileScreen from "./profile/ProfileScreen";
 import CameraScreen from "./profile/CameraScreen";
 import ShowPicture from "./profile/ShowPicture";
 
-const Tab = createBottomTabNavigator();
-
 const LOGIN_USER = gql`
     mutation Login($user: UserLoginInput!) {
         Login(currentUser: $user)
     }
 `;
 
-// Routing for the camera components
-const ProfileStack = createNativeStackNavigator();
-
-function ProfileStackScreen() {
-  return (
-    <ProfileStack.Navigator>
-      <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{headerShown:false}}/>
-      <ProfileStack.Screen name="CameraScreen" component={CameraScreen} options={{headerShown:false}}/>
-      <ProfileStack.Screen name="ShowPicture" component={ShowPicture} options={{headerShown:false}} />
-      <ProfileStack.Screen name="LoginPage" component={LoginScreen} options={{headerShown:false}} />
-    </ProfileStack.Navigator>
-  );
-}
-
-const LoginStack = createNativeStackNavigator();
-
-function LoginStackScreen() {
-    return (
-      <LoginStack.Navigator>
-        <LoginStack.Screen name="Home" component={HomeScreen} options={{headerShown:false}}/>
-        <LoginStack.Screen name="Login" component={LoginScreen} options={{headerShown:false}}/>
-      </LoginStack.Navigator>
-    );
-  }
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
   
+function HomeTabs() {
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+    
+          if (route.name === "Notifications") {
+            iconName = focused ? "notifications" : "notifications-outline";
+          } else if (route.name === "Home") {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "Profile") {
+            iconName = focused ? "person" : "person-outline";
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "#6E56EC",
+        tabBarInactiveTintColor: "gray",
+        tabBarLabel:() => {return null}
+      })}
+    >
+    <Tab.Screen name="Profile" component={ProfileScreen} options={{headerShown:false}}/>
+    <Tab.Screen name="Home" component={HomeScreen} options={{headerShown:false}}/>
+    <Tab.Screen name="Notifications" component={NotifScreen} options={{headerShown:false}}/>
+  </Tab.Navigator>
+  )
+}
 
 export default function LoginScreen({navigation}: any) {
   
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginUser] = useMutation(LOGIN_USER);
-    const [token, setToken] = useState('');
     const [tokenBack, setTokenBack] = useState('');
 
     const storeData = async (value: string) => {
@@ -61,7 +64,6 @@ export default function LoginScreen({navigation}: any) {
             console.error(e);
         }
     };
-    console.log(token);
 
     const getData = async () => {
         try {
@@ -80,30 +82,12 @@ export default function LoginScreen({navigation}: any) {
     if (tokenBack) {
         return (
             <NavigationContainer>
-            <Tab.Navigator
-                initialRouteName="Home"
-                screenOptions={({ route }) => ({
-                  tabBarIcon: ({ focused, color, size }) => {
-                    let iconName;
-        
-                    if (route.name === "Notifications") {
-                      iconName = focused ? "notifications" : "notifications-outline";
-                    } else if (route.name === "HomePage") {
-                      iconName = focused ? "home" : "home-outline";
-                    } else if (route.name === "ProfileStack") {
-                      iconName = focused ? "person" : "person-outline";
-                    }
-                    return <Ionicons name={iconName} size={size} color={color} />;
-                  },
-                  tabBarActiveTintColor: "#6E56EC",
-                  tabBarInactiveTintColor: "gray",
-                  tabBarLabel:() => {return null}
-                })}
-              >
-                <Tab.Screen name="ProfileStack" component={ProfileStackScreen} />
-                <Tab.Screen name="HomePage" component={LoginStackScreen}/>
-                <Tab.Screen name="Notifications" component={NotifScreen} />
-            </Tab.Navigator>
+                <Stack.Navigator>
+                  <Stack.Screen name="HomePage" component={HomeTabs} options={{headerShown:false}}/>
+                  <Stack.Screen name="LoginPage" component={LoginScreen} options={{headerShown:false}}/>
+                  <Stack.Screen name="CameraScreen" component={CameraScreen} options={{headerShown:false}}/>
+                  <Stack.Screen name="ShowPicture" component={ShowPicture} options={{headerShown:false}}/>
+                </Stack.Navigator>
             </NavigationContainer>
         );
     };
@@ -129,9 +113,6 @@ export default function LoginScreen({navigation}: any) {
           <TouchableOpacity 
             style={styles.loginButton}
             onPress={async () => {
-                console.log(email);        
-                console.log(password);        
-                
                 const result = await loginUser({
                     variables: {
                         user: {
@@ -141,9 +122,9 @@ export default function LoginScreen({navigation}: any) {
                     }
                 });
                 if (result.data.Login) {
-                    setToken(result.data.Login);
-                    storeData(result.data.Login);
-                    navigation.navigate("HomePage");
+                  console.log(result.data.Login);
+                    await storeData(result.data.Login);
+                    navigation.navigate("Home");
                 }
             }}
             >
