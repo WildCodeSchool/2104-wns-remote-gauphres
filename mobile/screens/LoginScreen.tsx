@@ -20,6 +20,19 @@ const LOGIN_USER = gql`
     }
 `;
 
+type IconName = 'notifications' | 'home' | 'person';
+type OutlineIconName = 'notifications-outline' | 'home-outline' | 'person-outline';
+type AllIconNames = IconName | OutlineIconName ;
+
+const iconsByRoutes : {[key: string]: IconName} = {
+  "ProfileStack": 'person',
+  "Home": 'home',
+  "Notifications": 'notifications'
+}
+
+const iconNameByFocus = (iconName: IconName, focused: boolean): AllIconNames => 
+focused ? iconName : `${iconName}-outline`;
+
 // Routing for the camera components
 const ProfileStack = createNativeStackNavigator();
 
@@ -71,16 +84,11 @@ export default function LoginScreen({navigation}: any) {
                 initialRouteName="Home"
                 screenOptions={({ route }) => ({
                   tabBarIcon: ({ focused, color, size }) => {
-                    let iconName;
-        
-                    if (route.name === "Notifications") {
-                      iconName = focused ? "notifications" : "notifications-outline";
-                    } else if (route.name === "Home") {
-                      iconName = focused ? "home" : "home-outline";
-                    } else if (route.name === "ProfileStack") {
-                      iconName = focused ? "person" : "person-outline";
-                    }
-                    return <Ionicons name={iconName} size={size} color={color} />;
+                    return <Ionicons 
+                      name={iconNameByFocus(iconsByRoutes[route.name], focused)} 
+                      size={size} 
+                      color={color} 
+                    />;
                   },
                   tabBarActiveTintColor: "#6E56EC",
                   tabBarInactiveTintColor: "gray",
