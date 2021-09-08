@@ -27,7 +27,7 @@ function HomeTabs() {
   type AllIconNames = IconName | OutlineIconName ;
 
   const iconsByRoutes : {[key: string]: IconName} = {
-    "ProfileStack": 'person',
+    "Profile": 'person',
     "Home": 'home',
     "Notifications": 'notifications'
   }
@@ -113,7 +113,7 @@ export default function LoginScreen({navigation}: any) {
           <TextInput
             style={styles.input}
             placeholder='Mot de passe'
-            secureTextEntry={true}
+            // secureTextEntry={true}
             onChangeText={(password) => setPassword(password)}
           />
           <TouchableOpacity 
