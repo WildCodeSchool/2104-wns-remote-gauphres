@@ -1,6 +1,7 @@
 import React from "react";
 import { Pressable, Text, View, StyleSheet } from "react-native";
 import ProfileModal from "../../components/ProfileModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProfileScreen = ({ navigation }: any) => {
 
@@ -9,6 +10,11 @@ const ProfileScreen = ({ navigation }: any) => {
     username: 'John',
     email: 'john.doe@gmail.com',
     password: '1234',
+  }
+
+  const handleDisconnect = async () => {
+    await AsyncStorage.clear()
+    navigation.navigate("LoginPage");
   }
 
   return (
@@ -22,6 +28,12 @@ const ProfileScreen = ({ navigation }: any) => {
           onPress={() =>  navigation.navigate('CameraScreen')}
         >
           <Text style={styles.openCameraButtonText}>Modifier mon avatar</Text>
+        </Pressable>
+        <Pressable
+          style={styles.openCameraButton}
+          onPress={ handleDisconnect }
+        >
+          <Text style={styles.openCameraButtonText}>Deconnexion</Text>
         </Pressable>
       </View>
       <View style={styles.centeredView}>
