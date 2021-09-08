@@ -46,14 +46,18 @@ class UserResolver {
     async createUser(
         @Arg('newUser') newUser: UserCreationInput
     ): Promise<User> {
-        const user = await UserModel.create(newUser);
-        if (user) {
-            user.createdAt = new Date(Date.now());
-            user.birthDate = new Date(newUser.birthDate!);
-            user.password = bcryptjs.hashSync(newUser.password!, 10);
+        const user2 = await UserModel.findOne({ email: newUser.email });
+        if (!user2) {
+            const user = await UserModel.create(newUser);
+            if (user) {
+                user.createdAt = new Date(Date.now());
+                user.birthDate = new Date(newUser.birthDate!);
+                user.password = bcryptjs.hashSync(newUser.password!, 10);
+                await user.save();
+                return user;
+            }
         }
-        await user.save();
-        return user;
+        throw new Error('Invalid email');
     }
 
     @Mutation(() => String)
