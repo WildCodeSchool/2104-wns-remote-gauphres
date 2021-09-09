@@ -51,8 +51,8 @@ const NotifScreen = () => {
 export default NotifScreen;
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: "#EDF2F7"},
-    title: { fontFamily:'Nunito_400Regular', marginTop: 3, fontSize: 25, lineHeight: 50, fontWeight:"bold", color: "#6E56EC", textTransform: "uppercase", marginLeft: 10},
+    container: { flex: 1, backgroundColor: "#EDF2F7", marginTop: 10},
+    title: { fontFamily:'Nunito_400Regular', marginTop: 30, fontSize: 25, lineHeight: 50, fontWeight:"bold", color: "#6E56EC", textTransform: "uppercase", marginLeft: 10},
     notifBlock: {flex:2, backgroundColor: "white", margin:20, borderRadius:10, shadowRadius: 0.1, shadowOpacity: 0.1, alignItems: "center", justifyContent:"center"},
     blockTitle: { fontFamily: 'Nunito_400Regular', marginTop: 10, fontSize: 15, fontWeight:"400", marginHorizontal:20, textAlign:"center"},
     blockCount: {fontSize: 35, lineHeight: 35, marginRight: 5, fontWeight:"bold", color: "#6E56EC", textAlign:"center"},

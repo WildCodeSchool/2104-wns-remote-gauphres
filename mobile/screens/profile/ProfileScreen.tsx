@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     height: "50%",
     justifyContent: "space-evenly",
     alignItems: "center",
+    marginTop: 30,
   },
   infosContainer: {
     height: "30%",

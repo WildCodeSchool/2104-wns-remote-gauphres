@@ -17,7 +17,7 @@ const HomeScreen = () => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: "#EDF2F7", alignItems: "center", justifyContent:"space-around"},
+    container: { flex: 1, backgroundColor: "#EDF2F7", alignItems: "center", justifyContent:"space-around", marginTop: 10},
     title: { flex:1, fontSize: 35, lineHeight: 50, fontWeight:"bold", color: "#6E56EC", marginLeft: 10, textAlign:"center", marginTop:30 },
     iconContainer: { flex:2, marginVertical: 10, marginTop:65 }
     })
