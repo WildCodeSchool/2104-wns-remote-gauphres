@@ -20,20 +20,12 @@ interface NotificationPayload {
     message: Message;
 }
 
-interface Notification {
-    message: Message;
-    date: Date;
-}
-
 @Resolver(ChatRoom)
 class ChatRoomResolver {
     @Subscription({ topics: 'MESSAGES' })
-    newNotification(
-        @Root() notificationPayload: NotificationPayload
-    ): Notification {
+    messageSent(@Root() messagePayload: Message): Message {
         return {
-            ...notificationPayload,
-            date: new Date(Date.now()),
+            ...messagePayload,
         };
     }
 
@@ -62,28 +54,6 @@ class ChatRoomResolver {
         await chatRoom.save();
         return chatRoom;
     }
-
-    /* @Mutation(() => ChatRoom)
-    async createChatRoom(
-        @Arg('data') data: CreateChatRoomInput
-    ): Promise<ChatRoom> {
-        const createdAt = new Date(Date.now());
-
-        const chatRoomWithDate = { createdAt, ...data };
-        const newChatRoom = await ChatRoomModel.create(chatRoomWithDate);
-        await newChatRoom.save();
-
-        // enregistre un champ userId quand un user rejoint une chatroom
-        // quand un client récupére une chatroom => il est authentifier => on a son userID
-        // on compare aux userIds qui sont dans la liste
-        // on renvoit le user en question dans un champ graphQL "me"
-        // champ graphQL "others"
-
-        // TODO need to add the user-random-setup => createRandomChatroom
-        // enregistre un champ userId = à l'id user dans la collection user
-        // getRandomChatroom ??
-        return newChatRoom;
-    } */
 
     @Mutation(() => ChatRoom)
     async sendMessage(

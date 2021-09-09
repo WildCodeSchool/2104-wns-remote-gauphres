@@ -48,6 +48,9 @@ async function start() {
 
     const server = new ApolloServer({
         schema,
+        subscriptions: {
+            path: '/subscriptions',
+        },
         playground: true,
         // Requests interceptor
         context: ({ req }) => {
