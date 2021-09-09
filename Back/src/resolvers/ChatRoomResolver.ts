@@ -1,4 +1,13 @@
-import { Arg, Mutation, Query, Resolver } from 'type-graphql';
+import {
+    PubSub,
+    Arg,
+    Mutation,
+    Query,
+    Resolver,
+    Root,
+    Subscription,
+    Publisher,
+} from 'type-graphql';
 import {
     ChatRoom,
     ChatRoomModel,
@@ -7,8 +16,27 @@ import {
 import { CreateMessageInput, Message } from '../models/Message';
 import Validators from '../services/Validators';
 
+interface NotificationPayload {
+    message: Message;
+}
+
+interface Notification {
+    message: Message;
+    date: Date;
+}
+
 @Resolver(ChatRoom)
 class ChatRoomResolver {
+    @Subscription({ topics: 'MESSAGES' })
+    newNotification(
+        @Root() notificationPayload: NotificationPayload
+    ): Notification {
+        return {
+            ...notificationPayload,
+            date: new Date(Date.now()),
+        };
+    }
+
     @Query(() => [ChatRoom])
     async getAllChatRooms(): Promise<ChatRoom[]> {
         const chatrooms = await ChatRoomModel.find();
@@ -60,7 +88,8 @@ class ChatRoomResolver {
     @Mutation(() => ChatRoom)
     async sendMessage(
         @Arg('id') id: string,
-        @Arg('newMessage', () => CreateMessageInput) message: Message
+        @Arg('newMessage', () => CreateMessageInput) message: Message,
+        @PubSub('MESSAGES') publish: Publisher<NotificationPayload>
     ): Promise<ChatRoom> {
         if (Validators.isMessageValid(message)) {
             const createdAt = new Date(Date.now());
@@ -73,6 +102,7 @@ class ChatRoomResolver {
                     },
                 }
             );
+            await publish({ message: newMessage });
             return updatedChatRoom;
         }
         throw new Error("A message can't be empty");
