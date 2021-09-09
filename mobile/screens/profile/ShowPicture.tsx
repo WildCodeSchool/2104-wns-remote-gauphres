@@ -6,18 +6,19 @@ import { useRoute } from "@react-navigation/native";
 import noValidateButtonImg from '../../assets/noValidateButton.png';
 import validateButtonImg from '../../assets/validateButton.png';
 
-const UPDATE_PICTURE = gql`
-  mutation updateUserPicture($user: UserPictureInput) {
-    updateUserPicture(currentUser: $user)
+const UPLOAD_PICTURE = gql`
+  mutation UploadPicture($file: Upload!) {
+    uploadPicture(file: $file) {
+      success
+    }
   }
-`
+`;
 
 const ShowPicture = ({navigation}: any) => {
   const route = useRoute();
   const {screen, ...pictureUri}: any = route.params;
-  // const navigation = useNavigation();
     const [imagesURI, setImagesURI] = useState<string[]> ([]);
-    const [updatedPicture] = useMutation(UPDATE_PICTURE);
+    const [updatedPicture] = useMutation(UPLOAD_PICTURE);
     useEffect(() => {
         (async () => {
           const images = await FileSystem.readDirectoryAsync(
@@ -51,15 +52,17 @@ const ShowPicture = ({navigation}: any) => {
 
           <TouchableOpacity 
             style={styles.validateButton}
-            onPress={async (data) => {
-              await updatedPicture({
+            onPress={async () => {
+              console.log(pictureUri);
+              
+              /* await updatedPicture({
                 variables: {
                   user: {
                     email: 'user@email.com',
                     picture: pictureUri.picture,
                   },
                 },
-              })              
+              }) */
               navigation.navigate('ProfileScreen');
           }}>
             <Image style={styles.validateButton} source={validateButtonImg} />

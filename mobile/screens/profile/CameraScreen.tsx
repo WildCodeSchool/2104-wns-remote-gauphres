@@ -45,6 +45,8 @@ const CameraScreen = ({navigation}: any) => {
           const sizingImage = await ImageManipulator.manipulateAsync(pictureMetadata.uri, [
             { resize: { width: 480, height: 640} },
           ]);
+          console.log(pictureMetadata);
+          
           navigation.navigate('ShowPicture', {
             screen: 'CameraScreen',
             picture: pictureMetadata.uri,

@@ -1,4 +1,5 @@
 import { getModelForClass, Prop } from '@typegoose/typegoose';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { Field, InputType, ObjectType } from 'type-graphql';
 import { Mood, MoodInput } from './Mood';
 
@@ -125,11 +126,8 @@ export class UserHobbiesInput {
 
 @InputType()
 export class UserPictureInput {
-    @Field()
-    email?: string;
-
-    @Field()
-    picture?: string;
+    @Field(() => GraphQLUpload)
+    picture?: FileUpload;
 }
 
 @InputType()

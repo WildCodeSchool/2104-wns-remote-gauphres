@@ -9,7 +9,6 @@ import {
     UserModel,
     UserMoodInput,
     UserHobbiesInput,
-    UserPictureInput,
 } from '../models/User';
 
 @Resolver(User)
@@ -103,19 +102,6 @@ class UserResolver {
         );
 
         return updatedUserHobbies;
-    }
-
-    @Mutation(() => User)
-    async updateUserPicture(
-        @Arg('currentUser') currentUser: UserPictureInput
-    ): Promise<User> {
-        const updatedUserPicture = await UserModel.findOneAndUpdate(
-            { email: currentUser.email },
-            { avatar: currentUser.picture },
-            { new: true }
-        );
-
-        return updatedUserPicture;
     }
 }
 

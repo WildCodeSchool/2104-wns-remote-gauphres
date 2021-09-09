@@ -6,11 +6,12 @@ import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
-import { GraphQLUpload, graphqlUploadExpress } from 'graphql-upload';
+import { graphqlUploadExpress } from 'graphql-upload';
 import Fixtures from 'node-mongodb-fixtures';
 import { AuthenticationError } from 'apollo-server-errors';
 import UserResolver from './resolvers/UserResolver';
 import ChatRoomResolver from './resolvers/ChatRoomResolver';
+import PictureResolver from './resolvers/PictureResolver';
 
 const app = express();
 const moowdyJwtKey = 'this_is_the_moowdy_secret_jwt_key'; // TODO: put in env variable
@@ -44,7 +45,7 @@ async function start() {
     console.log('Fixtures finished');
 
     const schema = await buildSchema({
-        resolvers: [UserResolver, ChatRoomResolver],
+        resolvers: [UserResolver, ChatRoomResolver, PictureResolver],
     });
 
     const server = new ApolloServer({
