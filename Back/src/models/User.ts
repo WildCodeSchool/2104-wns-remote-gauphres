@@ -137,6 +137,21 @@ export class UserPictureInput {
 }
 
 @InputType()
+export class UserInput {
+    @Field()
+    email?: string;
+
+    @Field()
+    username?: string;
+}
+
+@InputType()
+export class UserEmail {
+    @Field()
+    email?: string;
+}
+
+@InputType()
 export class UserChatRoom {
     @Prop()
     @Field()

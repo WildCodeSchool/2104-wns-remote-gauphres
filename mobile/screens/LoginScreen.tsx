@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { Dispatch, useContext, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
-import { StyleSheet, TextInput, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, TextInput, View, Text, TouchableOpacity, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -11,6 +11,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import ProfileScreen from "./profile/ProfileScreen";
 import CameraScreen from "./profile/CameraScreen";
 import ShowPicture from "./profile/ShowPicture";
+import { User, UserContext } from "../contexts/UserContext";
 
 const LOGIN_USER = gql`
     mutation Login($user: UserLoginInput!) {
@@ -64,6 +65,22 @@ export default function LoginScreen({navigation}: any) {
     const [password, setPassword] = useState('');
     const [loginUser] = useMutation(LOGIN_USER);
     const [tokenBack, setTokenBack] = useState('');
+    const { token, setToken } = useContext(UserContext);
+    
+    const handleLogin = async () => {
+      const result = await loginUser({
+        variables: {
+          user: {
+            email,
+            password
+          }
+        }
+      });
+      if (result.data.Login) {
+        await storeData(result.data.Login);
+        navigation.navigate("Home");
+      }
+    }
 
     const storeData = async (value: string) => {
         try {
@@ -77,7 +94,8 @@ export default function LoginScreen({navigation}: any) {
         try {
             const value = await AsyncStorage.getItem('@storage_Key')
             if(value !== null) {
-                setTokenBack(value);
+              setTokenBack(value);
+              setToken(value);
             }
         } catch(e) {
             console.error(e);
@@ -85,21 +103,22 @@ export default function LoginScreen({navigation}: any) {
     }
 
     getData();
+
     if (tokenBack) {
-        return (
-            <NavigationContainer>
-                <Stack.Navigator>
-                  <Stack.Screen name="HomePage" component={HomeTabs} options={{headerShown:false}}/>
-                  <Stack.Screen name="LoginPage" component={LoginScreen} options={{headerShown:false}}/>
-                  <Stack.Screen name="CameraScreen" component={CameraScreen} options={{headerShown:false}}/>
-                  <Stack.Screen name="ShowPicture" component={ShowPicture} options={{headerShown:false}}/>
-                </Stack.Navigator>
-            </NavigationContainer>
-        );
+      return (
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="HomePage" component={HomeTabs} options={{headerShown:false}}/>
+            <Stack.Screen name="LoginPage" component={LoginScreen} options={{headerShown:false}}/>
+            <Stack.Screen name="CameraScreen" component={CameraScreen} options={{headerShown:false}}/>
+            <Stack.Screen name="ShowPicture" component={ShowPicture} options={{headerShown:false}}/>
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
     };
     
     return (
-     <> 
+      <> 
         <View style={styles.titlesContainer}>
           <Text style={styles.mainTitle}>!Moowdy</Text>
           <Text style={styles.secondaryTitle}>Connecte-toi</Text>
@@ -118,25 +137,12 @@ export default function LoginScreen({navigation}: any) {
           />
           <TouchableOpacity 
             style={styles.loginButton}
-            onPress={async () => {
-                const result = await loginUser({
-                    variables: {
-                        user: {
-                            email,
-                            password
-                        }
-                    }
-                });
-                if (result.data.Login) {
-                    await storeData(result.data.Login);
-                    navigation.navigate("Home");
-                }
-            }}
+            onPress={handleLogin}
             >
             <Text style={styles.textBtn}>Connexion</Text>
-          </TouchableOpacity>   
+          </TouchableOpacity> 
         </View>
-    </>
+      </>
     );
   }
   
