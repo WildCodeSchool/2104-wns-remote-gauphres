@@ -1,16 +1,12 @@
-import React from "react";
-import { Pressable, Text, View, StyleSheet } from "react-native";
+import React, { useContext } from "react";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import ProfileModal from "../../components/ProfileModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserContext } from "../../contexts/UserContext";
 
 const ProfileScreen = ({ navigation }: any) => {
 
-  // TODO Get user infos
-  const user = {
-    username: 'John',
-    email: 'john.doe@gmail.com',
-    password: '1234',
-  }
+  const { user } = useContext(UserContext);
 
   const handleDisconnect = async () => {
     await AsyncStorage.clear()
@@ -23,25 +19,25 @@ const ProfileScreen = ({ navigation }: any) => {
         <View style={{ backgroundColor: "#6E56EC", height: 140, width: 140, borderRadius: 100, justifyContent: "center", alignItems: "center"}}>
           <Text style={{ color: "#fff"}}>Avatar</Text>
         </View>
-        <Pressable
+        <TouchableOpacity
           style={styles.openCameraButton}
           onPress={() =>  navigation.navigate('CameraScreen')}
         >
-          <Text style={styles.openCameraButtonText}>Modifier mon avatar</Text>
-        </Pressable>
-        <Pressable
-          style={styles.openCameraButton}
-          onPress={ handleDisconnect }
-        >
-          <Text style={styles.openCameraButtonText}>Deconnexion</Text>
-        </Pressable>
+          <Text style={styles.buttonText}>Modifier mon avatar</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.centeredView}>
         <View style={styles.infosContainer}>
-          <Text style={styles.textInfo}>{user.username}</Text>
-          <Text style={styles.textInfo}>{user.email}</Text>
+          <Text style={styles.textInfo}>{user?.username}</Text>
+          <Text style={styles.textInfo}>{user?.email}</Text>
         </View>
         <ProfileModal user={user} />
+        <TouchableOpacity
+          style={styles.disconnectButton}
+          onPress={() =>  handleDisconnect()}
+        >
+          <Text style={styles.buttonText}>Déconnexion</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -72,10 +68,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#6E56EC",
     width: "50%",
   },
-  openCameraButtonText: {
+  buttonText: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center"
   },
+  disconnectButton: {
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+    backgroundColor: "#FF3A1F",
+    width: "50%",
+  }
 });
 export default ProfileScreen;

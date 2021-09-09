@@ -5,6 +5,7 @@ import Constants from 'expo-constants';
 import { 
   useFonts as UseNunito, Nunito_400Regular,
 } from '@expo-google-fonts/nunito';
+import { UserProvider } from "./contexts/UserContext";
 
 const { manifest } = Constants;
 
@@ -33,7 +34,9 @@ export default function App() {
 
   return (
     <ApolloProvider client={client}>
-      <LoginScreen /> 
+      <UserProvider>
+        <LoginScreen />
+      </UserProvider>
     </ApolloProvider>
   );
 }
