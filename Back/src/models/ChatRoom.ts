@@ -1,14 +1,17 @@
 import { getModelForClass, index, Prop } from '@typegoose/typegoose';
-import { Field, InputType, ObjectType } from 'type-graphql';
+import { Field, ID, InputType, ObjectType } from 'type-graphql';
 import { CreateMessageInput, Message } from './Message';
 import { UserChatRoom, UserChatRoomType } from './User';
 
-@index({ id: 'text' }, { unique: true })
+@index({ id: 1, message_id: 1 }, { unique: true })
 @ObjectType()
 export class ChatRoom {
+    @Field(() => ID)
+    readonly _id: string;
+
     @Prop()
     @Field()
-    id!: string;
+    id!: number;
 
     @Prop()
     @Field()
@@ -34,8 +37,9 @@ export const ChatRoomModel = getModelForClass(ChatRoom);
 
 @InputType()
 export class CreateChatRoomInput {
+    @Prop()
     @Field()
-    id!: string;
+    id!: number;
 
     @Field(() => Boolean)
     isActiv = true;
