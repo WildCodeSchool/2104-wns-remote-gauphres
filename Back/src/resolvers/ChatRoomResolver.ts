@@ -13,18 +13,19 @@ import {
     ChatRoomModel,
     CreateChatRoomInput,
 } from '../models/ChatRoom';
-import { CreateMessageInput, Message } from '../models/Message';
+import { CreateMessageInput, Message, Notification } from '../models/Message';
 import Validators from '../services/Validators';
 
 interface NotificationPayload {
     message: Message;
+    chatRoomId: string;
 }
 
 @Resolver(ChatRoom)
 class ChatRoomResolver {
     @Subscription({ topics: 'MESSAGES' })
-    messageSent(@Root() messagePayload: NotificationPayload): Message {
-        return messagePayload.message;
+    messageSent(@Root() messagePayload: NotificationPayload): Notification {
+        return messagePayload;
     }
 
     @Query(() => [ChatRoom])
@@ -70,7 +71,8 @@ class ChatRoomResolver {
                     },
                 }
             );
-            await publish({ message: newMessage });
+            await publish({ message: newMessage, chatRoomId: id });
+
             return updatedChatRoom;
         }
         throw new Error("A message can't be empty");
