@@ -15,11 +15,10 @@ type FormData = {
 };
 
 const UPDATE_USER = gql`
-  mutation updateUser($email: UserEmail!, $user: UserInput!) {
-    updateUser(
-      currentEmail: $email
-      currentUser: $user,
-    ) {username}
+  mutation updateUser($id: String!, $user: UserInput!) {
+    updateUser(userId: $id, currentUser: $user) {
+      email
+    }
   }
 `
 
@@ -31,13 +30,11 @@ const ProfileModal = ({ user }: ProfilModalProps) => {
   const onSubmit = async ({ email, username}: any) => {
     await updateUser({
       variables: {
+        id: user?._id,
         user: {
           email,
           username
         },
-        email: {
-          email: user?.email,
-        }
       }
     });
     setModalVisible(!modalVisible);

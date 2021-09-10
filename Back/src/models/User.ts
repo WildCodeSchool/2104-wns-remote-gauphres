@@ -65,6 +65,15 @@ export class User {
     userMood?: Mood;
 }
 
+@ObjectType()
+export class LoginUser {
+    @Field()
+    user: User;
+
+    @Field()
+    token: string;
+}
+
 export const UserModel = getModelForClass(User);
 
 @InputType()
@@ -143,12 +152,6 @@ export class UserInput {
 
     @Field()
     username?: string;
-}
-
-@InputType()
-export class UserEmail {
-    @Field()
-    email?: string;
 }
 
 @InputType()
