@@ -51,16 +51,9 @@ const ShowPicture = ({navigation}: any) => {
 
           <TouchableOpacity 
             style={styles.validateButton}
-            onPress={async (data) => {
-              await updatedPicture({
-                variables: {
-                  user: {
-                    email: 'user@email.com',
-                    picture: pictureUri.picture,
-                  },
-                },
-              })              
-              navigation.navigate('ProfileScreen');
+            onPress={async () => {
+              console.log('picture upload');
+              navigation.navigate('CameraScreen');
           }}>
             <Image style={styles.validateButton} source={validateButtonImg} />
           </TouchableOpacity>
