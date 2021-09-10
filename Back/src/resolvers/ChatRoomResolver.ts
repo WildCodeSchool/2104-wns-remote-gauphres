@@ -23,10 +23,8 @@ interface NotificationPayload {
 @Resolver(ChatRoom)
 class ChatRoomResolver {
     @Subscription({ topics: 'MESSAGES' })
-    messageSent(@Root() messagePayload: Message): Message {
-        return {
-            ...messagePayload,
-        };
+    messageSent(@Root() messagePayload: NotificationPayload): Message {
+        return messagePayload.message;
     }
 
     @Query(() => [ChatRoom])

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-console */
 import 'reflect-metadata';
 import express from 'express';
@@ -48,13 +49,16 @@ async function start() {
 
     const server = new ApolloServer({
         schema,
-        subscriptions: {
+       /*  subscriptions: {
             path: '/subscriptions',
-        },
+        }, */
+    
         playground: true,
         // Requests interceptor
         context: ({ req }) => {
-            const moowdyToken = req.headers.authorization;
+            if(req)
+            {
+                const moowdyToken = req.headers.authorization;
             if (moowdyToken) {
                 let payload;
                 try {
@@ -65,6 +69,8 @@ async function start() {
                 }
             }
             return req;
+        }
+        return null;
         },
     });
 
