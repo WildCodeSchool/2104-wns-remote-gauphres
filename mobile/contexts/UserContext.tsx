@@ -1,8 +1,4 @@
-import { gql, useLazyQuery } from '@apollo/client';
-import React, { createContext, useState, Dispatch, useEffect, FC, SetStateAction } from 'react';
-
-// La lib jsonwebtoken fait crasher l'app /!\ Idem pour expo-jwt
-// import jwt from 'jsonwebtoken';
+import React, { createContext, useState, Dispatch, FC, SetStateAction } from 'react';
 
 export type UserMood = {
   title: string;
@@ -10,6 +6,7 @@ export type UserMood = {
 };
 
 export type User = {
+  _id: string;
   username: string;
   firstname: string;
   lastname: string;
@@ -24,56 +21,58 @@ export type User = {
 export const UserContext = createContext<{
   user: User | undefined,
   setUser: Dispatch<SetStateAction<User | undefined>>
-  token: string | undefined,
-  setToken: Dispatch<SetStateAction<string | undefined>>
 }>({
   user: undefined,
   setUser: () => {},
-  token: undefined,
-  setToken: () => {}
 });
 
 
-const FIND_USER = gql`
-  query getUserByEmail($email: String!) {
-    getUserByEmail(email: $email) {
-      username
-      firstname
-      lastname
-      password
-      avatar
-      isConnected
-      email
-      birthDate
-      userMood {
-        title
-        image
-      }
-    }
-  }
-`;
+// const FIND_USER_BY_EMAIL = gql`
+//   query getUserByEmail($email: String!) {
+//     getUserByEmail(email: $email) {
+//       _id
+//       username
+//       firstname
+//       lastname
+//       password
+//       avatar
+//       isConnected
+//       email
+//       birthDate
+//       userMood {
+//         title
+//         image
+//       }
+//     }
+//   }
+// `;
+
+// const FIND_USER_BY_ID = gql`
+//   query getUserById($id: String!) {
+//     getUserById(_id: $id) {
+//       _id
+//       username
+//       firstname
+//       lastname
+//       password
+//       avatar
+//       isConnected
+//       email
+//       birthDate
+//       userMood {
+//         title
+//         image
+//       }
+//     }
+//   }
+// `;
 
 
 export const UserProvider: FC = ({ children }) => {
   const [user, setUser] = useState<User>();
-  const [token, setToken] = useState<string>();
-  const value = { user, setUser, token, setToken};
-  const [getUser, { data }] = useLazyQuery(FIND_USER);
-  const key = "moowdyJwtKey";
-
-  // if(token) {
-  //   const email = jwt.verify(token, key, {}, function(err, decoded) {
-  //     console.log('toto')
-  //   });
-  // //   getUser({ variables: { email } })
-  // }
-
-  useEffect(() => {
-    setUser(data && data.getUserByEmail)
-  }, [data]);
   
   return (
-    <UserContext.Provider value={value}>
+    <UserContext.Provider value={{ user, setUser }}>
       {children}
     </UserContext.Provider>
   );

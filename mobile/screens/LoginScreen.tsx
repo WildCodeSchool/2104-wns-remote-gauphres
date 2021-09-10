@@ -1,4 +1,4 @@
-import React, { Dispatch, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 import { StyleSheet, TextInput, View, Text, TouchableOpacity, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -13,10 +13,31 @@ import CameraScreen from "./profile/CameraScreen";
 import ShowPicture from "./profile/ShowPicture";
 import { User, UserContext } from "../contexts/UserContext";
 
+type LoginData = {
+  token: string
+  user: User
+}
+
 const LOGIN_USER = gql`
-    mutation Login($user: UserLoginInput!) {
-        Login(currentUser: $user)
+  mutation Login($user: UserLoginInput!) {
+    Login(currentUser: $user) {
+      token
+      user {
+        _id
+        username
+        firstname
+        lastname
+        avatar
+        isConnected
+        email
+        birthDate
+        userMood {
+          title
+          image
+        }
+      }
     }
+  }
 `;
 
 const Tab = createBottomTabNavigator();
@@ -61,90 +82,91 @@ function HomeTabs() {
 
 export default function LoginScreen({navigation}: any) {
   
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loginUser] = useMutation(LOGIN_USER);
-    const [tokenBack, setTokenBack] = useState('');
-    const { token, setToken } = useContext(UserContext);
-    
-    const handleLogin = async () => {
-      const result = await loginUser({
-        variables: {
-          user: {
-            email,
-            password
-          }
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginUser] = useMutation(LOGIN_USER);
+  const [tokenBack, setTokenBack] = useState('');
+  const { setUser } = useContext(UserContext);
+  
+  const handleLogin = async () => {
+    const result = await loginUser({
+      variables: {
+        user: {
+          email,
+          password
         }
-      });
-      if (result.data.Login) {
-        await storeData(result.data.Login);
-        navigation.navigate("Home");
       }
+    });
+    if (result.data.Login) {
+      await storeData(result.data.Login);
+      setUser(result.data.Login.user);
+      navigation.navigate("Home");
     }
-
-    const storeData = async (value: string) => {
-        try {
-          await AsyncStorage.setItem('@storage_Key', value)
-        } catch (e) {
-            console.error(e);
-        }
-    };
-
-    const getData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('@storage_Key')
-            if(value !== null) {
-              setTokenBack(value);
-              setToken(value);
-            }
-        } catch(e) {
-            console.error(e);
-        }
-    }
-
-    getData();
-
-    if (tokenBack) {
-      return (
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="HomePage" component={HomeTabs} options={{headerShown:false}}/>
-            <Stack.Screen name="LoginPage" component={LoginScreen} options={{headerShown:false}}/>
-            <Stack.Screen name="CameraScreen" component={CameraScreen} options={{headerShown:false}}/>
-            <Stack.Screen name="ShowPicture" component={ShowPicture} options={{headerShown:false}}/>
-          </Stack.Navigator>
-        </NavigationContainer>
-      );
-    };
-    
-    return (
-      <> 
-        <View style={styles.titlesContainer}>
-          <Text style={styles.mainTitle}>!Moowdy</Text>
-          <Text style={styles.secondaryTitle}>Connecte-toi</Text>
-        </View>
-        <View style={styles.inputsContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder='Email'
-            onChangeText={(email) => setEmail(email)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder='Mot de passe'
-            // secureTextEntry={true}
-            onChangeText={(password) => setPassword(password)}
-          />
-          <TouchableOpacity 
-            style={styles.loginButton}
-            onPress={handleLogin}
-            >
-            <Text style={styles.textBtn}>Connexion</Text>
-          </TouchableOpacity> 
-        </View>
-      </>
-    );
   }
+
+  const storeData = async ({token, user}: LoginData) => {
+      try {
+        await AsyncStorage.setItem('@storage_Key', token)
+        // await AsyncStorage.setItem('@storage_User', JSON.stringify(user)) //stockage de l'utilisateur dans le local storage ??
+      } catch (e) {
+        console.error(e);
+      }
+  };
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@storage_Key')
+      if(value !== null) {
+        setTokenBack(value);
+      }
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
+  getData();
+
+  if (tokenBack) {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="HomePage" component={HomeTabs} options={{headerShown:false}}/>
+          <Stack.Screen name="LoginPage" component={LoginScreen} options={{headerShown:false}}/>
+          <Stack.Screen name="CameraScreen" component={CameraScreen} options={{headerShown:false}}/>
+          <Stack.Screen name="ShowPicture" component={ShowPicture} options={{headerShown:false}}/>
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  };
+    
+  return (
+    <> 
+      <View style={styles.titlesContainer}>
+        <Text style={styles.mainTitle}>!Moowdy</Text>
+        <Text style={styles.secondaryTitle}>Connecte-toi</Text>
+      </View>
+      <View style={styles.inputsContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder='Email'
+          onChangeText={(email) => setEmail(email)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder='Mot de passe'
+          // secureTextEntry={true}
+          onChangeText={(password) => setPassword(password)}
+        />
+        <TouchableOpacity 
+          style={styles.loginButton}
+          onPress={handleLogin}
+          >
+          <Text style={styles.textBtn}>Connexion</Text>
+        </TouchableOpacity> 
+      </View>
+    </>
+  );
+}
   
   const styles = StyleSheet.create({
     titlesContainer: {

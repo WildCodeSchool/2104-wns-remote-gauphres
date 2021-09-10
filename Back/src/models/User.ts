@@ -1,5 +1,6 @@
 import { getModelForClass, Prop } from '@typegoose/typegoose';
-import { Field, InputType, ObjectType } from 'type-graphql';
+
+import { Field, ID, InputType, ObjectType } from 'type-graphql';
 import { Mood, MoodInput } from './Mood';
 
 @ObjectType()
@@ -7,6 +8,9 @@ export class User {
     @Prop()
     @Field()
     id?: string;
+
+    @Field(() => ID)
+    readonly _id: string;
 
     @Prop()
     @Field()
@@ -59,6 +63,15 @@ export class User {
     @Prop()
     @Field(() => Mood, { nullable: true })
     userMood?: Mood;
+}
+
+@ObjectType()
+export class LoginUser {
+    @Field()
+    user: User;
+
+    @Field()
+    token: string;
 }
 
 export const UserModel = getModelForClass(User);

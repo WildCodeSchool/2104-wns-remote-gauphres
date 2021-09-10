@@ -5,9 +5,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../../contexts/UserContext";
 
 const ProfileScreen = ({ navigation }: any) => {
-
   const { user } = useContext(UserContext);
-
+  
   const handleDisconnect = async () => {
     await AsyncStorage.clear()
     navigation.navigate("LoginPage");
@@ -48,7 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   centeredView: {
-    height: "50%",
+    height: "48%",
     justifyContent: "space-evenly",
     alignItems: "center",
     marginTop: 30,
@@ -59,7 +58,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   textInfo: {
-    
+    fontSize: 30,
+    fontWeight: "bold",
   },
   openCameraButton: {
     borderRadius: 10,
