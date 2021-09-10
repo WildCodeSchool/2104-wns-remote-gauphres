@@ -67,6 +67,7 @@ async function start() {
         },
     });
     app.use(graphqlUploadExpress());
+    await server.start();
     server.applyMiddleware({ app });
     app.listen(5000, () => console.log('Server started on localhost 5000'));
 }
