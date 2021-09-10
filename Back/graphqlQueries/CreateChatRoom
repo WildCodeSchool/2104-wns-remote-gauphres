@@ -13,7 +13,7 @@ variables:
   "id": "2",    
  "title": "L'autre chatRoom",
   "isActiv": true,
-  "users": [
+  "chatRoomUsers": [
     {
       "id": "3",
       "username": "user3",

@@ -1,0 +1,6 @@
+subscription {messageSent{
+  message {
+  id text author createdAt
+  }
+  chatRoomId
+}}

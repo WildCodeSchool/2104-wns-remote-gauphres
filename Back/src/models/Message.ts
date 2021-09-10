@@ -31,3 +31,12 @@ export class CreateMessageInput {
     @Field()
     author?: string;
 }
+
+@ObjectType()
+export class Notification {
+    @Field()
+    message?: Message;
+
+    @Field()
+    chatRoomId?: string;
+}
