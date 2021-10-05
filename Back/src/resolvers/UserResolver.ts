@@ -1,5 +1,5 @@
 import { Arg, Mutation, Query, Resolver } from 'type-graphql';
-import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server-errors';
 import {
@@ -9,6 +9,9 @@ import {
     UserModel,
     UserMoodInput,
     UserHobbiesInput,
+    UserPictureInput,
+    UserInput,
+    LoginUser,
 } from '../models/User';
 
 @Resolver(User)
@@ -23,6 +26,14 @@ class UserResolver {
     async getUserByEmail(@Arg('email') email: string): Promise<User> {
         const user = await UserModel.findOne({
             email,
+        });
+        return user;
+    }
+
+    @Query(() => User)
+    async getUserById(@Arg('_id') _id: string): Promise<User> {
+        const user = await UserModel.findOne({
+            _id,
         });
         return user;
     }
@@ -45,27 +56,34 @@ class UserResolver {
     async createUser(
         @Arg('newUser') newUser: UserCreationInput
     ): Promise<User> {
-        const user = await UserModel.create(newUser);
-        if (user) {
-            user.createdAt = new Date(Date.now());
-            user.birthDate = new Date(newUser.birthDate!);
-            user.password = bcrypt.hashSync(newUser.password!, 10);
+        const user2 = await UserModel.findOne({ email: newUser.email });
+        if (!user2) {
+            const user = await UserModel.create(newUser);
+            if (user) {
+                user.createdAt = new Date(Date.now());
+                user.birthDate = new Date(newUser.birthDate!);
+                user.password = bcryptjs.hashSync(newUser.password!, 10);
+                await user.save();
+                return user;
+            }
         }
-        await user.save();
-        return user;
+        throw new Error('Invalid email');
     }
 
-    @Mutation(() => String)
+    @Mutation(() => LoginUser)
     async Login(
         @Arg('currentUser') currentUser: UserLoginInput
-    ): Promise<string> {
+    ): Promise<LoginUser> {
         const user = await UserModel.findOne({ email: currentUser.email });
-        if (user && bcrypt.compareSync(currentUser.password!, user.password!)) {
+        if (
+            user &&
+            bcryptjs.compareSync(currentUser.password!, user.password!)
+        ) {
             const moowdyToken = jwt.sign(
                 { userEmail: user.email },
                 'moowdyJwtKey'
             );
-            return moowdyToken;
+            return { token: moowdyToken, user };
         }
         throw new AuthenticationError('Invalid credentials');
     }
@@ -81,10 +99,11 @@ class UserResolver {
                     title: currentUser.newMood?.title,
                     image: currentUser.newMood?.image,
                 },
-            }
+            },
+            { new: true }
         );
 
-        return updatedUserMood; // That return the previous mood in the playground
+        return updatedUserMood;
     }
 
     @Mutation(() => User)
@@ -93,10 +112,38 @@ class UserResolver {
     ): Promise<User> {
         const updatedUserHobbies = await UserModel.findOneAndUpdate(
             { email: currentUser.email },
-            { hobbies: currentUser.hobbies }
+            { hobbies: currentUser.hobbies },
+            { new: true }
         );
 
-        return updatedUserHobbies; // That return the previous hobbies in the playground
+        return updatedUserHobbies;
+    }
+
+    @Mutation(() => User)
+    async updateUserPicture(
+        @Arg('currentUser') currentUser: UserPictureInput
+    ): Promise<User> {
+        const updatedUserPicture = await UserModel.findOneAndUpdate(
+            { email: currentUser.email },
+            { avatar: currentUser.picture },
+            { new: true }
+        );
+
+        return updatedUserPicture;
+    }
+
+    @Mutation(() => User)
+    async updateUser(
+        @Arg('userId') userId: string,
+        @Arg('currentUser') currentUser: UserInput
+    ): Promise<User> {
+        const updatedUser = await UserModel.findOneAndUpdate(
+            { _id: userId },
+            { email: currentUser.email, username: currentUser.username },
+            { new: true }
+        );
+
+        return updatedUser;
     }
 }
 

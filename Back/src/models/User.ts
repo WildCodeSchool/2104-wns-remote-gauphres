@@ -1,16 +1,20 @@
-import { getModelForClass, Prop } from '@typegoose/typegoose';
-import { Field, InputType, ObjectType } from 'type-graphql';
+import { getModelForClass, index, Prop } from '@typegoose/typegoose';
+import { Field, ID, InputType, ObjectType } from 'type-graphql';
 import { Mood, MoodInput } from './Mood';
 
+@index({ id: 1 }, { unique: true })
 @ObjectType()
 export class User {
-    @Prop()
-    @Field()
-    id?: string;
+    @Field(() => ID)
+    readonly _id: string;
 
     @Prop()
     @Field()
-    username?: string;
+    id?: number;
+
+    @Prop()
+    @Field()
+    username!: string;
 
     @Prop()
     @Field()
@@ -40,9 +44,9 @@ export class User {
     @Field()
     isConnected?: boolean;
 
-    @Prop({ unique: true })
+    @Prop({ required: true, unique: true })
     @Field()
-    email?: string;
+    email!: string;
 
     @Prop()
     @Field()
@@ -59,6 +63,15 @@ export class User {
     @Prop()
     @Field(() => Mood, { nullable: true })
     userMood?: Mood;
+}
+
+@ObjectType()
+export class LoginUser {
+    @Field()
+    user: User;
+
+    @Field()
+    token: string;
 }
 
 export const UserModel = getModelForClass(User);
@@ -124,7 +137,26 @@ export class UserHobbiesInput {
 }
 
 @InputType()
+export class UserPictureInput {
+    @Field()
+    email?: string;
+
+    @Field()
+    picture?: string;
+}
+
+@InputType()
+export class UserInput {
+    @Field()
+    email?: string;
+
+    @Field()
+    username?: string;
+}
+
+@InputType()
 export class UserChatRoom {
+    @Prop()
     @Field()
     id?: string;
 
@@ -141,6 +173,7 @@ export class UserChatRoom {
     hobbies?: string[];
 }
 
+@index({ id: 'text' }, { unique: true })
 @ObjectType()
 export class UserChatRoomType {
     @Prop()
