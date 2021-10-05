@@ -10,6 +10,8 @@ import {
     UserMoodInput,
     UserHobbiesInput,
     UserPictureInput,
+    UserInput,
+    LoginUser,
 } from '../models/User';
 
 @Resolver(User)
@@ -24,6 +26,14 @@ class UserResolver {
     async getUserByEmail(@Arg('email') email: string): Promise<User> {
         const user = await UserModel.findOne({
             email,
+        });
+        return user;
+    }
+
+    @Query(() => User)
+    async getUserById(@Arg('_id') _id: string): Promise<User> {
+        const user = await UserModel.findOne({
+            _id,
         });
         return user;
     }
@@ -60,10 +70,10 @@ class UserResolver {
         throw new Error('Invalid email');
     }
 
-    @Mutation(() => String)
+    @Mutation(() => LoginUser)
     async Login(
         @Arg('currentUser') currentUser: UserLoginInput
-    ): Promise<string> {
+    ): Promise<LoginUser> {
         const user = await UserModel.findOne({ email: currentUser.email });
         if (
             user &&
@@ -73,7 +83,7 @@ class UserResolver {
                 { userEmail: user.email },
                 'moowdyJwtKey'
             );
-            return moowdyToken;
+            return { token: moowdyToken, user };
         }
         throw new AuthenticationError('Invalid credentials');
     }
@@ -120,6 +130,20 @@ class UserResolver {
         );
 
         return updatedUserPicture;
+    }
+
+    @Mutation(() => User)
+    async updateUser(
+        @Arg('userId') userId: string,
+        @Arg('currentUser') currentUser: UserInput
+    ): Promise<User> {
+        const updatedUser = await UserModel.findOneAndUpdate(
+            { _id: userId },
+            { email: currentUser.email, username: currentUser.username },
+            { new: true }
+        );
+
+        return updatedUser;
     }
 }
 

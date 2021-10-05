@@ -65,6 +65,15 @@ export class User {
     userMood?: Mood;
 }
 
+@ObjectType()
+export class LoginUser {
+    @Field()
+    user: User;
+
+    @Field()
+    token: string;
+}
+
 export const UserModel = getModelForClass(User);
 
 @InputType()
@@ -134,6 +143,15 @@ export class UserPictureInput {
 
     @Field()
     picture?: string;
+}
+
+@InputType()
+export class UserInput {
+    @Field()
+    email?: string;
+
+    @Field()
+    username?: string;
 }
 
 @InputType()

@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
-import { Modal, StyleSheet, View, Text, Button, Pressable, TextInput } from 'react-native';
+import { Modal, StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
+import { User } from '../contexts/UserContext';
+import { gql, useMutation } from '@apollo/client';
 
 type ProfilModalProps = {
-  user: User
-}
-
-type User = {
-    username: string;
-    email: string;
-    password: string;
+  user: User | undefined
 }
 
 type FormData = {
@@ -18,12 +14,29 @@ type FormData = {
   password: string;
 };
 
+const UPDATE_USER = gql`
+  mutation updateUser($id: String!, $user: UserInput!) {
+    updateUser(userId: $id, currentUser: $user) {
+      email
+    }
+  }
+`
+
 const ProfileModal = ({ user }: ProfilModalProps) => {
   const [modalVisible, setModalVisible] = useState(false);
   const { control, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const [updateUser] = useMutation(UPDATE_USER);
 
-  const onSubmit = async (data: any) => {
-    await console.log(data); // TODO submit mutation to update user
+  const onSubmit = async ({ email, username}: any) => {
+    await updateUser({
+      variables: {
+        id: user?._id,
+        user: {
+          email,
+          username
+        },
+      }
+    });
     setModalVisible(!modalVisible);
   };
 
@@ -36,6 +49,14 @@ const ProfileModal = ({ user }: ProfilModalProps) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <View style={styles.closeButtonView}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.buttonText}>X</Text>
+              </TouchableOpacity>
+            </View>
             <View style={styles.inputsView}>
               <Controller
                 control={control}
@@ -74,42 +95,22 @@ const ProfileModal = ({ user }: ProfilModalProps) => {
                 defaultValue={user ? user.email : ""}
               />
               {errors.email && <Text>L'email est requis</Text>}
-
-              <Controller
-                control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                
-                  <TextInput
-                    style={styles.textInput}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                  />
-                )}
-                name="password"
-                defaultValue={user ? user.password : ""}
-
-              />
-              {errors.password && <Text>Le mot de passe est requis</Text>}         
             </View>
-            <Pressable
+            <TouchableOpacity
               style={styles.saveButton}
               onPress={handleSubmit(onSubmit)}
             >
-              <Text style={styles.openModalButtonText}>Enregistrer</Text>
-            </Pressable>
+              <Text style={styles.buttonText}>Enregistrer</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
-      <Pressable
+      <TouchableOpacity
         style={styles.openModalButton}
         onPress={() => setModalVisible(true)}
       >
-        <Text style={styles.openModalButtonText}>Modifier mes infos</Text>
-      </Pressable>
+        <Text style={styles.buttonText}>Modifier mes infos</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -121,6 +122,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 22
   },
+  closeButtonView: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    width: "100%",
+  },
+  closeButton: {
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+    backgroundColor: "#6E56EC",
+    height: 35,
+    width: 35,
+    right: 0,
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -131,11 +146,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     width: 300,
-    height: 350,
+    height: 400,
     margin: 20,
     backgroundColor: "#FAC748",
     borderRadius: 20,
-    padding: 35,
+    paddingHorizontal: 35,
+    paddingBottom: 35,
+    paddingTop: 10,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -173,7 +190,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#6E56EC",
     width: "50%",
   },
-  openModalButtonText: {
+  buttonText: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center"
