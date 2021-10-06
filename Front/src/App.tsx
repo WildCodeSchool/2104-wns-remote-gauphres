@@ -1,12 +1,6 @@
 import React, { FC } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import {
-    ApolloClient,
-    InMemoryCache,
-    ApolloProvider,
-    split,
-    HttpLink,
-} from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 // import { WebSocketLink } from '@apollo/client/link/ws';
 // import { getMainDefinition } from '@apollo/client/utilities';
 import RandomChat from './components/pages/RandomChatPage/RandomChat';
@@ -50,7 +44,7 @@ import SignUpPage from './components/pages/SignUp/SignUp';
 // });
 
 const client = new ApolloClient({
-    uri: 'http://localhost:5000/graphql',
+    uri: '/graphql',
     cache: new InMemoryCache(),
 });
 
