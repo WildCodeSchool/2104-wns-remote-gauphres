@@ -49,8 +49,15 @@ import SignUpPage from './components/pages/SignUp/SignUp';
 //     cache: new InMemoryCache(),
 // });
 
+const env = process.env.NODE_ENV;
+
+const getUri = () => {
+    if (env === 'production') return '/graphql';
+    return 'http://localhost:5000/graphql';
+};
+
 const client = new ApolloClient({
-    uri: 'http://localhost:5000/graphql',
+    uri: getUri(),
     cache: new InMemoryCache(),
 });
 
