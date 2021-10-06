@@ -1,6 +1,12 @@
 import React, { FC } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import {
+    ApolloClient,
+    InMemoryCache,
+    ApolloProvider,
+    split,
+    HttpLink,
+} from '@apollo/client';
 // import { WebSocketLink } from '@apollo/client/link/ws';
 // import { getMainDefinition } from '@apollo/client/utilities';
 import RandomChat from './components/pages/RandomChatPage/RandomChat';
@@ -43,8 +49,15 @@ import SignUpPage from './components/pages/SignUp/SignUp';
 //     cache: new InMemoryCache(),
 // });
 
+const env = process.env.NODE_ENV;
+
+const getUri = () => {
+    if (env === 'production') return '/graphql';
+    return 'http://localhost:5000/graphql';
+};
+
 const client = new ApolloClient({
-    uri: '/graphql',
+    uri: getUri(),
     cache: new InMemoryCache(),
 });
 
