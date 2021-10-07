@@ -53,7 +53,7 @@ async function start() {
             path: '/subscriptions',
         }, */
     
-        playground: true,
+        playground: (process.env.NODE_ENV !== 'production'),
         // Requests interceptor
         context: ({ req }) => {
             if(req)
