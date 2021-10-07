@@ -1,5 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { FC, useState } from 'react';
+import React, {
+    ChangeEvent,
+    CSSProperties,
+    FC,
+    FormEvent,
+    useState,
+} from 'react';
 import { useForm } from 'react-hook-form';
 import {
     Checkbox,
@@ -38,14 +44,18 @@ const CREATE_USER = gql`
 
 const LOGIN = gql`
     mutation Login($currentUser: UserLoginInput!) {
-        Login(currentUser: $currentUser)
+        Login(currentUser: $currentUser) {
+            user {
+                username
+            }
+        }
     }
 `;
 
 interface EyeIconProps {
     onClick: () => void;
     show: boolean;
-    style: any;
+    style: CSSProperties;
 }
 
 interface FormValues {
