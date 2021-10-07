@@ -1,6 +1,6 @@
 {
     "id": "1",
-    "username": "string",
+    "userName": "string",
     "firstname": "string",
     "lastname": "string",
     "password": "string",

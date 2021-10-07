@@ -1,6 +1,6 @@
 query getUserById($id: String!) {
   getUserById(id: $id) {
-    username
+    userName
     firstname
     lastname
     password
