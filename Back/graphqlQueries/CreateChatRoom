@@ -1,36 +1,44 @@
-mutation createChatRoom {
-  createChatRoom(data: {
-    title: "Ma Chat Room"
-  })
+mutation createChatRoom($data: CreateChatRoomInput!) {
+  createChatRoom(newChatRoom: $data) {
+    id
+    title
+  }
+}
+
+
+variables:
+{
+  "data": 
   {
-    users {id}
-    messages {id}
-    creationDate
-    isActiv
-    title
-  }
-}
-
-mutation createChatRoom {
-  createChatRoom(
-    data: {
-      title: "Ma Chat Room"
-      users: [
-        { id: "60899d221aeef5070efe5c45", username: "NiceUser" }
-        { id: "608a60e2a2893b3d67787222", username: "BadUser" }
-      ]
+  "id": "2",    
+ "title": "L'autre chatRoom",
+  "isActiv": true,
+  "chatRoomUsers": [
+    {
+      "id": "3",
+      "username": "user3",
+      "isConnected": true,
+      "avatar": "https://resize-gulli.jnsmedia.fr/r/890,__ym__/img//var/jeunesse/storage/images/gulli/chaine-tv/dessins-animes/pokemon/pokemon/pikachu/26571681-1-fre-FR/Pikachu.jpg",
+			"hobbies": ["hobby3", "hobby4"]
+    },
+    {
+      "id": "4",
+      "username": "user4",
+      "isConnected": true,
+      "avatar": "https://resize-gulli.jnsmedia.fr/r/890,__ym__/img//var/jeunesse/storage/images/gulli/chaine-tv/dessins-animes/pokemon/pokemon/pikachu/26571681-1-fre-FR/Pikachu.jpg",
+			"hobbies": ["hobby3", "hobby4"]
     }
-  ) {
-    users {
-      id
-      username
+  ],
+  "messages": [
+    {
+      "id": 1,
+      "text": "Hello !",
+      "author": "user2"
+    },
+    {
+      "id": 2,         
+      "text": "on se connaît ?",
+      "author": "user3"
     }
-
-    messages {
-      id
-    }
-    createdAt
-    isActiv
-    title
-  }
-}
+  ]
+  }}

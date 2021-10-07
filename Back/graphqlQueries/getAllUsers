@@ -1,12 +1,16 @@
-{
-  getAllUsers {
+  {getAllUsers {
     username
     firstname
     lastname
-    chatrooms {title}
+    chatrooms 
     avatar
     isConnected
     email
     birthDate
+    hobbies
+    userMood{
+      title
+    	image
+    }
   }
-}
+  }

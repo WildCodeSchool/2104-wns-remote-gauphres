@@ -1,9 +1,17 @@
 {
-  allChatRooms {
-    users {id}
-    messages {id}
-    creationDate
-    isActiv
+  getAllChatRooms{
+    id
     title
+		chatRoomUsers {
+      username 
+      isConnected 
+      avatar
+    }
+    createdAt
+    messages {
+      text 
+      author
+    }
+    isActiv
   }
 }

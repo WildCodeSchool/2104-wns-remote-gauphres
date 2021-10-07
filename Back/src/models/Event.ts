@@ -25,11 +25,11 @@ export class Event {
     category?: string;
 
     @Prop({ type: User })
-    @Field((type) => User)
+    @Field(() => User)
     author?: User;
 
     @Prop({ type: User })
-    @Field((type) => [User])
+    @Field(() => [User])
     attendees?: User[];
 
     @Prop()

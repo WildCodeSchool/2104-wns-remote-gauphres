@@ -1,12 +1,8 @@
-import { getModelForClass, Prop } from '@typegoose/typegoose';
-import { ObjectType, Field, InputType } from 'type-graphql';
+import { Prop } from '@typegoose/typegoose';
+import { Field, InputType, ObjectType } from 'type-graphql';
 
 @ObjectType()
 export class Mood {
-    @Prop()
-    @Field()
-    id?: string;
-
     @Prop()
     @Field()
     title?: string;
@@ -14,14 +10,14 @@ export class Mood {
     @Prop()
     @Field()
     image?: string;
+
+    @Prop()
+    @Field()
+    createdAt?: Date;
 }
 
-// TODO: do we want users in mood to maybe get all users in a mood
-
-export const MoodModel = getModelForClass(Mood);
-
 @InputType()
-export class CreateMoodInput {
+export class MoodInput {
     @Field()
     title?: string;
 

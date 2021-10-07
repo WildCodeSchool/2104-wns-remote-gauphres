@@ -11,13 +11,14 @@ import {
 // import { getMainDefinition } from '@apollo/client/utilities';
 import RandomChat from './components/pages/RandomChatPage/RandomChat';
 import './App.css';
-import { Menu } from './style';
-import SideMenu from './components/SideMenu/SideMenu';
 import Dashboard from './components/pages/Dashboard/Dashboard';
 import ArticlesPage from './components/pages/Articles/Article';
 import EventsPage from './components/pages/Events/Events';
 import MembersPage from './components/pages/Members/Members';
 import { UserProvider } from './contexts/UserContext';
+import LoginPage from './components/pages/Login/Login';
+import HomePage from './components/pages/HomePage/HomePage';
+import SignUpPage from './components/pages/SignUp/SignUp';
 
 // const wsLink = new WebSocketLink({
 //     uri: 'ws://localhost:9000/subscriptions',
@@ -48,8 +49,15 @@ import { UserProvider } from './contexts/UserContext';
 //     cache: new InMemoryCache(),
 // });
 
+const env = process.env.NODE_ENV;
+
+const getUri = () => {
+    if (env === 'production') return '/graphql';
+    return 'http://localhost:5000/graphql';
+};
+
 const client = new ApolloClient({
-    uri: 'http://localhost:5000/graphql',
+    uri: getUri(),
     cache: new InMemoryCache(),
 });
 
@@ -58,20 +66,16 @@ const App: FC = () => {
         <Router>
             <ApolloProvider client={client}>
                 <UserProvider>
-                    <Menu>
-                        <SideMenu />
-                        <Switch>
-                            <Route
-                                exact
-                                path="/dashboard"
-                                component={Dashboard}
-                            />
-                            <Route path="/articles" component={ArticlesPage} />
-                            <Route path="/random-chat" component={RandomChat} />
-                            <Route path="/members" component={MembersPage} />
-                            <Route path="/events" component={EventsPage} />
-                        </Switch>
-                    </Menu>
+                    <Switch>
+                        <Route exact path="/" component={HomePage} />
+                        <Route path="/login" component={LoginPage} />
+                        <Route path="/register" component={SignUpPage} />
+                        <Route path="/dashboard" component={Dashboard} />
+                        <Route path="/articles" component={ArticlesPage} />
+                        <Route path="/random-chat" component={RandomChat} />
+                        <Route path="/members" component={MembersPage} />
+                        <Route path="/events" component={EventsPage} />
+                    </Switch>
                 </UserProvider>
             </ApolloProvider>
         </Router>

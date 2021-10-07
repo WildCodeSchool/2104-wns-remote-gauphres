@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:14.17.3-alpine
 
 RUN mkdir /app
 WORKDIR /app
@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY yarn.lock ./
 
-RUN npm i
+RUN npm ci
 
 COPY . ./
 

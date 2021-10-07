@@ -17,7 +17,7 @@ export class Article {
     description?: string;
 
     @Prop({ type: User })
-    @Field((type) => User)
+    @Field(() => User)
     author?: User;
 
     @Prop()
@@ -39,7 +39,7 @@ export class CreateArticleInput {
     @Field()
     description?: string;
 
-    @Field((type) => ArticleCreator)
+    @Field(() => ArticleCreator)
     author?: ArticleCreator;
 
     // TODO how to make certain that the linked article is recent ?

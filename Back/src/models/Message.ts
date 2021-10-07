@@ -1,34 +1,42 @@
 import { Prop } from '@typegoose/typegoose';
 import { Field, InputType, ObjectType } from 'type-graphql';
-import { MessageSender, User } from './User';
 
 @ObjectType()
 export class Message {
     @Prop()
     @Field()
-    id?: string;
+    id?: number;
 
     @Prop()
     @Field()
     text!: string;
 
-    @Prop({ type: User })
-    @Field((type) => User)
-    author?: User;
-
     @Prop()
     @Field()
+    author?: string;
+
+    @Prop()
+    @Field({ nullable: true })
     createdAt?: Date;
 }
 
 @InputType()
 export class CreateMessageInput {
     @Field()
-    text!: string;
-
-    @Field((type) => MessageSender)
-    author?: MessageSender;
+    id?: number;
 
     @Field()
-    createdAt: Date = new Date(Date.now());
+    text!: string;
+
+    @Field()
+    author?: string;
+}
+
+@ObjectType()
+export class Notification {
+    @Field()
+    message?: Message;
+
+    @Field()
+    chatRoomId?: string;
 }

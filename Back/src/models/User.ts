@@ -1,19 +1,20 @@
-import { getModelForClass, Prop, Ref } from '@typegoose/typegoose';
-import { type } from 'node:os';
-import { Field, InputType, ObjectType } from 'type-graphql';
-import { ChatRoom } from './ChatRoom';
-import { Mood } from './Mood';
-import { Hobby } from './Hobby';
+import { getModelForClass, index, Prop } from '@typegoose/typegoose';
+import { Field, ID, InputType, ObjectType } from 'type-graphql';
+import { Mood, MoodInput } from './Mood';
 
+@index({ id: 1 }, { unique: true })
 @ObjectType()
 export class User {
+    @Field(() => ID)
+    readonly _id: string;
+
     @Prop()
     @Field()
-    id?: string;
+    id?: number;
 
-    @Prop({ unique: true })
+    @Prop()
     @Field()
-    username?: string;
+    username!: string;
 
     @Prop()
     @Field()
@@ -27,13 +28,13 @@ export class User {
     @Field()
     password?: string;
 
-    @Prop({ ref: 'ChatRoom' })
-    @Field((type) => [ChatRoom])
-    chatrooms?: Ref<ChatRoom>[];
+    @Prop()
+    @Field(() => [String], { nullable: true })
+    chatrooms?: string[];
 
-    @Prop({ ref: 'Hobby' })
-    @Field(() => [Hobby])
-    hobbies?: Hobby[];
+    @Prop()
+    @Field(() => [String], { nullable: true })
+    hobbies?: string[];
 
     @Prop()
     @Field({ nullable: true })
@@ -43,9 +44,9 @@ export class User {
     @Field()
     isConnected?: boolean;
 
-    @Prop({ unique: true })
+    @Prop({ required: true, unique: true })
     @Field()
-    email?: string;
+    email!: string;
 
     @Prop()
     @Field()
@@ -53,17 +54,30 @@ export class User {
 
     @Prop()
     @Field()
+    city?: string;
+
+    @Prop()
+    @Field()
     createdAt?: Date;
 
-    @Prop({ type: Mood })
-    @Field((type) => Mood)
+    @Prop()
+    @Field(() => Mood, { nullable: true })
     userMood?: Mood;
+}
+
+@ObjectType()
+export class LoginUser {
+    @Field()
+    user: User;
+
+    @Field()
+    token: string;
 }
 
 export const UserModel = getModelForClass(User);
 
 @InputType()
-export class UserInput {
+export class UserCreationInput {
     @Field()
     username?: string;
 
@@ -79,29 +93,108 @@ export class UserInput {
     @Field()
     email?: string;
 
-    @Field({ nullable: true })
-    avatar?: string;
-
     @Field()
     birthDate?: Date;
 
+    @Field({ nullable: true })
+    city?: string;
+
+    @Field(() => [String], { nullable: true })
+    hobbies?: string[];
+
+    @Field({ nullable: true })
+    createdAt?: Date;
+
+    @Field(() => Boolean)
+    isConnected = false;
+}
+
+@InputType()
+export class UserLoginInput {
     @Field()
-    createdAt?: Date = new Date(Date.now());
+    email?: string;
 
     @Field()
-    isConnected?: boolean = false;
+    password?: string;
+}
+
+@InputType()
+export class UserMoodInput {
+    @Field()
+    email?: string;
+
+    @Field(() => MoodInput)
+    newMood?: MoodInput;
+}
+
+@InputType()
+export class UserHobbiesInput {
+    @Field()
+    email?: string;
+
+    @Field(() => [String])
+    hobbies?: string[];
+}
+
+@InputType()
+export class UserPictureInput {
+    @Field()
+    email?: string;
+
+    @Field()
+    picture?: string;
+}
+
+@InputType()
+export class UserInput {
+    @Field()
+    email?: string;
+
+    @Field()
+    username?: string;
 }
 
 @InputType()
 export class UserChatRoom {
+    @Prop()
+    @Field()
+    id?: string;
+
     @Field()
     username?: string;
 
-    @Field({ nullable: true })
+    @Field()
     avatar?: string;
 
     @Field()
     isConnected?: boolean = false;
+
+    @Field(() => [String])
+    hobbies?: string[];
+}
+
+@index({ id: 'text' }, { unique: true })
+@ObjectType()
+export class UserChatRoomType {
+    @Prop()
+    @Field()
+    id?: string;
+
+    @Prop()
+    @Field()
+    username?: string;
+
+    @Prop()
+    @Field()
+    avatar?: string;
+
+    @Prop()
+    @Field()
+    isConnected?: boolean = false;
+
+    @Prop()
+    @Field(() => [String])
+    hobbies?: string[];
 }
 
 @InputType()
@@ -117,16 +210,4 @@ export class MessageSender {
 export class ArticleCreator {
     @Field()
     username!: string;
-}
-
-@InputType()
-export class CreateMoodInputForUser {
-    @Field()
-    userId!: string;
-
-    @Field()
-    title!: string;
-
-    @Field()
-    image!: string;
 }
