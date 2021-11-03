@@ -20,7 +20,6 @@ const Dashboard: FC = () => {
             <Wrapper>
                 <MainWrapper>
                     <h1>Dashboard</h1>
-                    <h1>Dashboard</h1>
                 </MainWrapper>
                 <RightWrapper>
                     <MyMood user={user && user[0]} />

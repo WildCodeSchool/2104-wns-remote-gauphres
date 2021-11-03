@@ -49,28 +49,27 @@ async function start() {
 
     const server = new ApolloServer({
         schema,
-       /*  subscriptions: {
-            path: '/subscriptions',
-        }, */
-    
-        playground: (process.env.NODE_ENV !== 'production'),
+        /*  subscriptions: {
+             path: '/subscriptions',
+         }, */
+
+        playground: true/* (process.env.NODE_ENV !== 'production') */,
         // Requests interceptor
         context: ({ req }) => {
-            if(req)
-            {
+            if (req) {
                 const moowdyToken = req.headers.authorization;
-            if (moowdyToken) {
-                let payload;
-                try {
-                    payload = jwt.verify(moowdyToken, moowdyJwtKey);
-                    return payload;
-                } catch (err) {
-                    throw new AuthenticationError('Bad token');
+                if (moowdyToken) {
+                    let payload;
+                    try {
+                        payload = jwt.verify(moowdyToken, moowdyJwtKey);
+                        return payload;
+                    } catch (err) {
+                        throw new AuthenticationError('Bad token');
+                    }
                 }
+                return req;
             }
-            return req;
-        }
-        return null;
+            return null;
         },
     });
 
