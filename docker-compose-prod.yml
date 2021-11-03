@@ -20,6 +20,9 @@ services:
       - NODE_ENV=production  
   mongodb:
     image: mongo:4.4.9
+    volumes: 
+      - ./data:/data/db
+    restart: always
   nginx:
     image: nginx:1.21.3
     depends_on:
