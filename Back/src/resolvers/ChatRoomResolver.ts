@@ -54,14 +54,14 @@ class ChatRoomResolver {
           const chatRoom = await ChatRoomModel.create(newChatRoom);
           chatRoom.chatRoomUsers = [
              {
-                 id: user1.id,
+                 id: user1['_id'],
                  username: user1.username, 
                  isConnected: user1.isConnected,
                  avatar: user1.avatar ? user1.avatar : "https://resize-gulli.jnsmedia.fr/r/890,__ym__/img//var/jeunesse/storage/images/gulli/chaine-tv/dessins-animes/pokemon/pokemon/pikachu/26571681-1-fre-FR/Pikachu.jpg", 
                  hobbies: user1.hobbies ? user1.hobbies : []  
              }, 
              {
-                 id: user2.id , 
+                 id: user2['_id'] , 
                  username: user2.username, 
                  isConnected: user2.isConnected, 
                  avatar: user2.avatar ? user2.avatar : "https://resize-gulli.jnsmedia.fr/r/890,__ym__/img//var/jeunesse/storage/images/gulli/chaine-tv/dessins-animes/pokemon/pokemon/pikachu/26571681-1-fre-FR/Pikachu.jpg", 
