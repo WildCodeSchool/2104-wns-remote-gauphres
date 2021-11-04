@@ -82,6 +82,7 @@ class UserResolver {
             const moowdyToken = jwt.sign(
                 { userEmail: user.email },
                 'moowdyJwtKey'
+                // process.env.REACT_APP_JWT_SECRET_KEY
             );
             return moowdyToken;
         }

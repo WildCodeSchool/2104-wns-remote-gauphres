@@ -26,6 +26,14 @@ const LoginPage: FC<FormValues> = () => {
     } = useForm({ mode: 'all' });
     const [loginUser] = useMutation(LOGIN_USER);
 
+    const storeData = async (token: string) => {
+        try {
+            await localStorage.setItem('@storage_Key', token);
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
     const onSubmitForm = async (datas: FormValues) => {
         const result = await loginUser({
             variables: {
@@ -36,6 +44,7 @@ const LoginPage: FC<FormValues> = () => {
             },
         });
         if (result.data.Login) {
+            await storeData(result.data.Login);
             history.push('/dashboard');
         }
     };
