@@ -8,29 +8,24 @@ import MemberCard from '../../Chat/MemberCard/MemberCard';
 import SideMenu from '../../SideMenu/SideMenu';
 import { SideMenuContainer } from '../../../style';
 
-const chatRoomTest = '608aa75c09feab277fe800b3';
-
 const FIND_CHAT = gql`
-    query getOneChatRoom($id: String!) {
-        getOneChatRoom(_id: $id) {
+    query GetOneChatRoom($id: String!) {
+        getOneChatRoom(id: $id) {
+            id
             title
-            users {
-                userName
-                firstname
-                lastname
-                avatar
+            chatRoomUsers {
                 id
+                username
+                isConnected
+                avatar
             }
             messages {
+                id
                 text
-                author {
-                    id
-                    userName
-                }
+                author
                 createdAt
             }
             createdAt
-            isActiv
         }
     }
 `;
@@ -47,7 +42,7 @@ const RandomChat: FC = () => {
     const { user } = useContext(UserContext);
 
     // for test, chatroom id
-    const id = '608aa75c09feab277fe800b3';
+    const id = '1';
 
     const { loading, error: queryError, data } = useQuery(FIND_CHAT, {
         variables: { id },
@@ -65,7 +60,7 @@ const RandomChat: FC = () => {
                     user={user}
                     messages={chatRoomData && chatRoomData.messages}
                 />
-                <ChatForm chatId={chatRoomTest} />
+                <ChatForm chatId={id} />
             </ChatPage>
             <MemberCard />
         </SideMenuContainer>

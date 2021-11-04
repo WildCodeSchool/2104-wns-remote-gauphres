@@ -5,28 +5,19 @@ mutation createChatRoom($data: CreateChatRoomInput!) {
   }
 }
 
-et
-
+variables : 
 {
   "data": 
   {
-  "id": 2,    
- 	"title": "chatroomDeTest",
+  "id": 4,    
+ 	"title": "coucou",
   "isActiv": true,
   "chatRoomUsers": [
     {
-      "id": "613a0ab3184d6200245309be",
-      "username": "Alpha",
-      "isConnected": true,
-      "avatar": "https://resize-gulli.jnsmedia.fr/r/890,__ym__/img//var/jeunesse/storage/images/gulli/chaine-tv/dessins-animes/pokemon/pokemon/pikachu/26571681-1-fre-FR/Pikachu.jpg",
-			"hobbies": []
+      "username": "user"
     },
     {
-      "id": "613a0ac2184d6200245309c7",
-      "username": "Glou",
-      "isConnected": true,
-      "avatar": "https://resize-gulli.jnsmedia.fr/r/890,__ym__/img//var/jeunesse/storage/images/gulli/chaine-tv/dessins-animes/pokemon/pokemon/pikachu/26571681-1-fre-FR/Pikachu.jpg",
-			"hobbies": []
+      "username": "user3"
     }
   ],
   "messages": [

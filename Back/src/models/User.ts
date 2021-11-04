@@ -156,21 +156,8 @@ export class UserInput {
 
 @InputType()
 export class UserChatRoom {
-    @Prop()
-    @Field()
-    id?: string;
-
     @Field()
     username?: string;
-
-    @Field()
-    avatar?: string;
-
-    @Field()
-    isConnected?: boolean = false;
-
-    @Field(() => [String])
-    hobbies?: string[];
 }
 
 @index({ id: 'text' }, { unique: true })
