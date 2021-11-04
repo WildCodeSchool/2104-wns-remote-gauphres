@@ -70,21 +70,25 @@ class UserResolver {
         throw new Error('Invalid email');
     }
 
-    @Mutation(() => String)
+    @Mutation(() => LoginUser)
     async Login(
         @Arg('currentUser') currentUser: UserLoginInput
-    ): Promise<string> {
+    ): Promise<LoginUser> {
+        await UserModel.findOneAndUpdate(
+            { email: currentUser.email },
+            { isConnected: true }
+        );
         const user = await UserModel.findOne({ email: currentUser.email });
         if (
             user &&
             bcryptjs.compareSync(currentUser.password!, user.password!)
         ) {
-            const moowdyToken = jwt.sign(
+            const token = jwt.sign(
                 { userEmail: user.email },
                 'moowdyJwtKey'
                 // process.env.REACT_APP_JWT_SECRET_KEY
             );
-            return moowdyToken;
+            return { user, token };
         }
         throw new AuthenticationError('Invalid credentials');
     }
@@ -145,6 +149,16 @@ class UserResolver {
         );
 
         return updatedUser;
+    }
+
+    @Mutation(() => User)
+    async logout(@Arg('userId') userId: string): Promise<User> {
+        const logout = await UserModel.findOneAndUpdate(
+            { _id: userId },
+            { isConnected: false }
+        );
+
+        return logout;
     }
 }
 

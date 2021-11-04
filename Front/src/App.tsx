@@ -72,7 +72,7 @@ const App: FC = () => {
                         <Route path="/register" component={SignUpPage} />
                         <Route path="/dashboard" component={Dashboard} />
                         <Route path="/articles" component={ArticlesPage} />
-                        <Route path="/random-chat" component={RandomChat} />
+                        {/* <Route path="/random-chat" component={RandomChat} /> */}
                         <Route path="/members" component={MembersPage} />
                         <Route path="/events" component={EventsPage} />
                     </Switch>
