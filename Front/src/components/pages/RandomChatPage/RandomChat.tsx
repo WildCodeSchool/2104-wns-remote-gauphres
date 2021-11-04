@@ -11,10 +11,10 @@ import { SideMenuContainer } from '../../../style';
 const FIND_CHAT = gql`
     query GetOneChatRoom($id: String!) {
         getOneChatRoom(id: $id) {
-            id
+            _id
             title
             chatRoomUsers {
-                id
+                _id
                 username
                 isConnected
                 avatar
@@ -26,6 +26,15 @@ const FIND_CHAT = gql`
                 createdAt
             }
             createdAt
+        }
+    }
+`;
+
+const FIND_ALL_CHAT = gql`
+    query getAllChatRooms {
+        getAllChatRooms {
+            _id
+            title
         }
     }
 `;
@@ -42,11 +51,15 @@ const RandomChat: FC = () => {
     const { user } = useContext(UserContext);
 
     // for test, chatroom id
-    const id = '1';
+    const { data: chatRooms } = useQuery(FIND_ALL_CHAT);
+    // eslint-disable-next-line no-underscore-dangle
+    const testFirstChatRoomId = chatRooms.getAllChatRooms[0]._id;
+    console.log(testFirstChatRoomId);
 
     const { loading, error: queryError, data } = useQuery(FIND_CHAT, {
-        variables: { id },
+        variables: { id: testFirstChatRoomId },
     });
+
     const [chatRoomData, setChatRoomData] = useState<ChatRoomType>();
     useEffect(() => {
         setChatRoomData(data && data.getOneChatRoom);
@@ -60,7 +73,7 @@ const RandomChat: FC = () => {
                     user={user}
                     messages={chatRoomData && chatRoomData.messages}
                 />
-                <ChatForm chatId={id} />
+                <ChatForm chatId="111" />
             </ChatPage>
             <MemberCard />
         </SideMenuContainer>

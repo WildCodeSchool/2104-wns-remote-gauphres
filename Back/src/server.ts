@@ -3,6 +3,7 @@
 import 'reflect-metadata';
 import express from 'express';
 import mongoose from 'mongoose';
+import http from "http";
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import { buildSchema } from 'type-graphql';
@@ -14,6 +15,7 @@ import ChatRoomResolver from './resolvers/ChatRoomResolver';
 
 const app = express();
 const moowdyJwtKey = process.env.REACT_APP_JWT_SECRET_KEY;
+const httpServer = http.createServer(app);
 
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
@@ -47,10 +49,15 @@ async function start() {
 
     const server = new ApolloServer({
         schema,
-        /*  subscriptions: {
-             path: '/subscriptions',
-         }, */
-
+        subscriptions: {
+            path: "/subscriptions",
+            onConnect: () => {
+              console.log("Client connected for subscriptions");
+            },
+            onDisconnect: () => {
+              console.log("Client disconnected from subscriptions");
+            },
+          },
         playground: true/* (process.env.NODE_ENV !== 'production') */,
         // Requests interceptor
         context: ({ req }) => {
@@ -69,6 +76,17 @@ async function start() {
             }
             return null;
         },
+    });
+
+    server.installSubscriptionHandlers(httpServer);
+
+    httpServer.listen(process.env.PORT, () => {
+    console.log(
+      `Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`
+    );
+    console.log(
+      `Subscriptions ready at ws://localhost:${process.env.PORT}${server.subscriptionsPath}`
+    );
     });
 
     const { url } = await server.listen(5000);
