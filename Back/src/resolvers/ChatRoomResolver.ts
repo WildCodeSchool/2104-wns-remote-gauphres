@@ -39,7 +39,7 @@ class ChatRoomResolver {
     @Query(() => ChatRoom)
     async getOneChatRoom(@Arg('id') id: string): Promise<ChatRoom> {
         const chatroom = await ChatRoomModel.findOne({
-            id,
+            _id: id,
         });
         return chatroom;
     }
@@ -84,9 +84,11 @@ class ChatRoomResolver {
     ): Promise<ChatRoom> {
         if (Validators.isMessageValid(message)) {
             const createdAt = new Date(Date.now());
-            const newMessage = { createdAt, ...message };
+            const chatroom = await ChatRoomModel.findOne({_id: id});
+            const messageId = chatroom.messages.length > 0 ? (chatroom.messages.length + 1) : 1;
+            const newMessage = { id: messageId, createdAt, ...message };
             const updatedChatRoom = await ChatRoomModel.findOneAndUpdate(
-                { id },
+                { _id: id },
                 {
                     $push: {
                         messages: newMessage,

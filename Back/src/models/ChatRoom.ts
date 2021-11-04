@@ -11,10 +11,6 @@ export class ChatRoom {
 
     @Prop()
     @Field()
-    id!: string;
-
-    @Prop()
-    @Field()
     title?: string;
 
     @Prop({ type: () => [UserChatRoomType] })
