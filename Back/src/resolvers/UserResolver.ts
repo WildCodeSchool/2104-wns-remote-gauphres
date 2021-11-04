@@ -70,10 +70,10 @@ class UserResolver {
         throw new Error('Invalid email');
     }
 
-    @Mutation(() => LoginUser)
+    @Mutation(() => String)
     async Login(
         @Arg('currentUser') currentUser: UserLoginInput
-    ): Promise<LoginUser> {
+    ): Promise<string> {
         const user = await UserModel.findOne({ email: currentUser.email });
         if (
             user &&
@@ -83,7 +83,7 @@ class UserResolver {
                 { userEmail: user.email },
                 'moowdyJwtKey'
             );
-            return { token: moowdyToken, user };
+            return moowdyToken;
         }
         throw new AuthenticationError('Invalid credentials');
     }

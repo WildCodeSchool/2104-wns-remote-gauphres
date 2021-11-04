@@ -5,40 +5,30 @@ mutation createChatRoom($data: CreateChatRoomInput!) {
   }
 }
 
+et
 
-variables:
 {
   "data": 
   {
-  "id": "2",    
- "title": "L'autre chatRoom",
+  "id": 2,    
+ 	"title": "chatroomDeTest",
   "isActiv": true,
   "chatRoomUsers": [
     {
-      "id": "3",
-      "username": "user3",
+      "id": "613a0ab3184d6200245309be",
+      "username": "Alpha",
       "isConnected": true,
       "avatar": "https://resize-gulli.jnsmedia.fr/r/890,__ym__/img//var/jeunesse/storage/images/gulli/chaine-tv/dessins-animes/pokemon/pokemon/pikachu/26571681-1-fre-FR/Pikachu.jpg",
-			"hobbies": ["hobby3", "hobby4"]
+			"hobbies": []
     },
     {
-      "id": "4",
-      "username": "user4",
+      "id": "613a0ac2184d6200245309c7",
+      "username": "Glou",
       "isConnected": true,
       "avatar": "https://resize-gulli.jnsmedia.fr/r/890,__ym__/img//var/jeunesse/storage/images/gulli/chaine-tv/dessins-animes/pokemon/pokemon/pikachu/26571681-1-fre-FR/Pikachu.jpg",
-			"hobbies": ["hobby3", "hobby4"]
+			"hobbies": []
     }
   ],
   "messages": [
-    {
-      "id": 1,
-      "text": "Hello !",
-      "author": "user2"
-    },
-    {
-      "id": 2,         
-      "text": "on se connaît ?",
-      "author": "user3"
-    }
   ]
   }}

@@ -14,5 +14,5 @@ query getUserByEmail($email: String!) {
   }
 }
 
-variables:
-{ "email": "user@email.com"}
+et
+{ "email": "user3@email.com"}
