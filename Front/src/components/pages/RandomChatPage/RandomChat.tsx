@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { FC, useContext, Dispatch, useEffect, useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { ChatView, Message } from '../../Chat/ChatView/ChatView';
@@ -52,8 +53,8 @@ const RandomChat: FC = () => {
 
     // for test, chatroom id
     const { data: chatRooms } = useQuery(FIND_ALL_CHAT);
-    // eslint-disable-next-line no-underscore-dangle
-    const testFirstChatRoomId = chatRooms.getAllChatRooms[0]._id;
+    console.log(chatRooms);
+    const testFirstChatRoomId = chatRooms?.getAllChatRooms[0]?._id;
     console.log(testFirstChatRoomId);
 
     const { loading, error: queryError, data } = useQuery(FIND_CHAT, {
