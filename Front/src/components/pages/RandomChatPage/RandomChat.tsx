@@ -15,7 +15,7 @@ const FIND_CHAT = gql`
             _id
             title
             chatRoomUsers {
-                _id
+                id
                 username
                 isConnected
                 avatar
@@ -60,11 +60,13 @@ const RandomChat: FC = () => {
     const { loading, error: queryError, data } = useQuery(FIND_CHAT, {
         variables: { id: testFirstChatRoomId },
     });
+    console.log('data:', data);
 
     const [chatRoomData, setChatRoomData] = useState<ChatRoomType>();
     useEffect(() => {
         setChatRoomData(data && data.getOneChatRoom);
     }, [data]);
+    console.log('chatRoomData:', chatRoomData);
 
     return (
         <SideMenuContainer>
@@ -74,7 +76,7 @@ const RandomChat: FC = () => {
                     user={user}
                     messages={chatRoomData && chatRoomData.messages}
                 />
-                <ChatForm chatId="111" />
+                <ChatForm chatId={testFirstChatRoomId} />
             </ChatPage>
             <MemberCard />
         </SideMenuContainer>
