@@ -6,9 +6,11 @@ import {
     ApolloProvider,
     split,
     HttpLink,
+    createHttpLink,
 } from '@apollo/client';
 // import { WebSocketLink } from '@apollo/client/link/ws';
 // import { getMainDefinition } from '@apollo/client/utilities';
+import { setContext } from '@apollo/client/link/context';
 import RandomChat from './components/pages/RandomChatPage/RandomChat';
 import './App.css';
 import Dashboard from './components/pages/Dashboard/Dashboard';
@@ -56,7 +58,18 @@ const getUri = () => {
     return 'http://localhost:5000/graphql';
 };
 
+const authLink = setContext((_, { headers }) => {
+    const token = localStorage.getItem('@storage_Key');
+    return {
+        headers: {
+            ...headers,
+            authorization: token || '',
+        },
+    };
+});
+
 const client = new ApolloClient({
+    link: authLink.concat(createHttpLink({ uri: getUri() })),
     uri: getUri(),
     cache: new InMemoryCache(),
 });
@@ -72,7 +85,7 @@ const App: FC = () => {
                         <Route path="/register" component={SignUpPage} />
                         <Route path="/dashboard" component={Dashboard} />
                         <Route path="/articles" component={ArticlesPage} />
-                        {/* <Route path="/random-chat" component={RandomChat} /> */}
+                        <Route path="/random-chat" component={RandomChat} />
                         <Route path="/members" component={MembersPage} />
                         <Route path="/events" component={EventsPage} />
                     </Switch>
