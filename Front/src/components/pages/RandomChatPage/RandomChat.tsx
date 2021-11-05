@@ -67,6 +67,7 @@ const RandomChat: FC = () => {
 
     // for test, chatroom id
     const { data: chatRooms } = useQuery(FIND_ALL_CHAT);
+    //àremplacer par chatroom via user en décembre 
     const testFirstChatRoomId = chatRooms?.getAllChatRooms[0]?._id;
     const { loading, error: queryError, data, subscribeToMore } = useQuery(
         FIND_CHAT,
