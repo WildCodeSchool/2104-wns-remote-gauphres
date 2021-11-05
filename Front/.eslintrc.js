@@ -34,5 +34,7 @@ module.exports = {
                 endOfLine: 'auto',
             },
         ],
+        "no-underscore-dangle":  ["error", { "allow": ["_id"] }],
+
     },
 };

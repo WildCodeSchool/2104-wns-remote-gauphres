@@ -13,9 +13,7 @@ import UserResolver from './resolvers/UserResolver';
 import ChatRoomResolver from './resolvers/ChatRoomResolver';
 
 const app = express();
-const moowdyJwtKey = 'this_is_the_moowdy_secret_jwt_key'; // TODO: put in env variable
-
-// require('dotenv').config(); => FOR ENV FILE THAT WE DON'T HAVE FOR NOW
+const moowdyJwtKey = process.env.REACT_APP_JWT_SECRET_KEY;
 
 // Middlewares
 app.use(express.urlencoded({ extended: true }));

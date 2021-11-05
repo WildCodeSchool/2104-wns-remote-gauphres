@@ -74,16 +74,20 @@ class UserResolver {
     async Login(
         @Arg('currentUser') currentUser: UserLoginInput
     ): Promise<LoginUser> {
+        await UserModel.findOneAndUpdate(
+            { email: currentUser.email },
+            { isConnected: true }
+        );
         const user = await UserModel.findOne({ email: currentUser.email });
         if (
             user &&
             bcryptjs.compareSync(currentUser.password!, user.password!)
         ) {
-            const moowdyToken = jwt.sign(
+            const token = jwt.sign(
                 { userEmail: user.email },
-                'moowdyJwtKey'
+                process.env.REACT_APP_JWT_SECRET_KEY
             );
-            return { token: moowdyToken, user };
+            return { user, token };
         }
         throw new AuthenticationError('Invalid credentials');
     }
@@ -144,6 +148,16 @@ class UserResolver {
         );
 
         return updatedUser;
+    }
+
+    @Mutation(() => User)
+    async logout(@Arg('userId') userId: string): Promise<User> {
+        const logout = await UserModel.findOneAndUpdate(
+            { _id: userId },
+            { isConnected: false }
+        );
+
+        return logout;
     }
 }
 

@@ -1,4 +1,5 @@
   {getAllUsers {
+    _id
     username
     firstname
     lastname
@@ -6,6 +7,7 @@
     avatar
     isConnected
     email
+    password
     birthDate
     hobbies
     userMood{

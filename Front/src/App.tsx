@@ -6,9 +6,11 @@ import {
     ApolloProvider,
     split,
     HttpLink,
+    createHttpLink,
 } from '@apollo/client';
 // import { WebSocketLink } from '@apollo/client/link/ws';
 // import { getMainDefinition } from '@apollo/client/utilities';
+import { setContext } from '@apollo/client/link/context';
 import RandomChat from './components/pages/RandomChatPage/RandomChat';
 import './App.css';
 import Dashboard from './components/pages/Dashboard/Dashboard';
@@ -56,7 +58,18 @@ const getUri = () => {
     return 'http://localhost:5000/graphql';
 };
 
+const authLink = setContext((_, { headers }) => {
+    const token = localStorage.getItem('@storage_Key');
+    return {
+        headers: {
+            ...headers,
+            authorization: token || '',
+        },
+    };
+});
+
 const client = new ApolloClient({
+    link: authLink.concat(createHttpLink({ uri: getUri() })),
     uri: getUri(),
     cache: new InMemoryCache(),
 });

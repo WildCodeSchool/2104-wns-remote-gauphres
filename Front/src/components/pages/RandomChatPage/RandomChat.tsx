@@ -44,9 +44,7 @@ type ChatRoomType = {
 };
 
 const RandomChat: FC = () => {
-    const user = useContext<[User | undefined, Dispatch<User>] | null>(
-        UserContext
-    );
+    const { user } = useContext(UserContext);
 
     // for test, chatroom id
     const id = '608aa75c09feab277fe800b3';
@@ -64,7 +62,7 @@ const RandomChat: FC = () => {
             <SideMenu />
             <ChatPage>
                 <ChatView
-                    user={user && user[0]}
+                    user={user}
                     messages={chatRoomData && chatRoomData.messages}
                 />
                 <ChatForm chatId={chatRoomTest} />

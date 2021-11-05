@@ -14,8 +14,7 @@ query getUserByUsername($username: String!) {
   }
 }
 
-
-
-variables: {
-    "username": "User"
+et
+{
+    "username": "user4"
 }

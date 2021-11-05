@@ -7,9 +7,7 @@ import { MainWrapper, RightWrapper, Wrapper } from './style';
 // import MyMatch from '../../DailyWindow/MyMatch';
 
 const Dashboard: FC = () => {
-    const user = useContext<[User | undefined, Dispatch<User>] | null>(
-        UserContext
-    );
+    const { user } = useContext(UserContext);
 
     // for test, mood id
     const id = '6096bf9fab2e797b569f4183';
@@ -22,7 +20,7 @@ const Dashboard: FC = () => {
                     <h1>Dashboard</h1>
                 </MainWrapper>
                 <RightWrapper>
-                    <MyMood user={user && user[0]} />
+                    <MyMood user={user} />
                     {/* <MyMatch /> */}
                 </RightWrapper>
             </Wrapper>

@@ -1,11 +1,13 @@
 mutation createUser {
-  createUser(data: {
-    username: "NewKindUser",
-    firstname: "pouet",
-    lastname: "pouat",
-    password: "userPassword",
-    email: "newEmail@email.com",
-    birthDate: "2012-11-24"
+  createUser(newUser: {
+
+    username: "Glou",
+    firstname: "glouF",
+    lastname: "glouL",
+    password: "pwd",
+    email: "glou@email.com",
+    birthDate: "2012-11-24",
+    isConnected: true,
   })
   {
     username

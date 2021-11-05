@@ -4,7 +4,7 @@ import { User } from '../../../contexts/UserContext';
 
 export type Message = {
     text: string;
-    author: User;
+    author: string;
     createdAt: string;
 };
 
@@ -22,7 +22,7 @@ export const ChatView: FC<ChatViewProps> = ({
             <Container>
                 {messages &&
                     messages.map((message) => {
-                        const isMe = message.author.userName === user?.userName;
+                        const isMe = message.author === user?.username;
                         return (
                             <BubbleMessage isMe={isMe}>
                                 {message.text}
