@@ -40,6 +40,20 @@ const FIND_ALL_CHAT = gql`
     }
 `;
 
+const SUBSCRIPTION_MESSAGE = gql`
+    subscription {
+        messageSent {
+            message {
+                id
+                text
+                author
+                createdAt
+            }
+            chatRoomId
+        }
+    }
+`;
+
 type ChatRoomType = {
     createdAt: string;
     isActiv: boolean;
@@ -53,20 +67,37 @@ const RandomChat: FC = () => {
 
     // for test, chatroom id
     const { data: chatRooms } = useQuery(FIND_ALL_CHAT);
-    console.log(chatRooms);
     const testFirstChatRoomId = chatRooms?.getAllChatRooms[0]?._id;
-    console.log(testFirstChatRoomId);
-
-    const { loading, error: queryError, data } = useQuery(FIND_CHAT, {
-        variables: { id: testFirstChatRoomId },
-    });
-    console.log('data:', data);
+    const { loading, error: queryError, data, subscribeToMore } = useQuery(
+        FIND_CHAT,
+        {
+            variables: { id: testFirstChatRoomId },
+        }
+    );
 
     const [chatRoomData, setChatRoomData] = useState<ChatRoomType>();
     useEffect(() => {
         setChatRoomData(data && data.getOneChatRoom);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
+
+    useEffect(() => {
+        subscribeToMore({
+            document: SUBSCRIPTION_MESSAGE,
+            updateQuery: (prev, { subscriptionData }) => {
+                if (!subscriptionData.data) return prev;
+                const newMessage = subscriptionData.data.messageSent;
+
+                return {
+                    getOneChatRoom: [...prev.getOneChatRoom, newMessage],
+                };
+            },
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     console.log('chatRoomData:', chatRoomData);
+    // TODO : AJOUTER CONTEXTE pour username
 
     return (
         <SideMenuContainer>
@@ -76,7 +107,7 @@ const RandomChat: FC = () => {
                     user={user}
                     messages={chatRoomData && chatRoomData.messages}
                 />
-                <ChatForm chatId={testFirstChatRoomId} />
+                <ChatForm chatId={testFirstChatRoomId} username="user" />
             </ChatPage>
             <MemberCard />
         </SideMenuContainer>

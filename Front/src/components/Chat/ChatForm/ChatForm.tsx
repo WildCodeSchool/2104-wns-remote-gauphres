@@ -4,20 +4,19 @@ import { Container, Form, FormInput, FormButton } from './style';
 
 const CREATE_MESSAGE = gql`
     mutation sendMessage($id: String!, $newMessage: CreateMessageInput!) {
-        sendMessage(_id: $id, newMessage: $newMessage) {
+        sendMessage(id: $id, newMessage: $newMessage) {
             messages {
                 text
+                author
                 createdAt
             }
-            createdAt
-            isActiv
-            title
         }
     }
 `;
 
 type ChatFormProps = {
     chatId: string;
+    username: string; // récupérer l'USER du context
 };
 
 const isMessageValid = (message: string): boolean => {
@@ -27,7 +26,7 @@ const isMessageValid = (message: string): boolean => {
     return true;
 };
 
-const ChatForm: FC<ChatFormProps> = ({ chatId }: ChatFormProps) => {
+const ChatForm: FC<ChatFormProps> = ({ chatId, username }: ChatFormProps) => {
     const [message, setMessage] = useState('');
     const [createMessage, { data }] = useMutation(CREATE_MESSAGE);
 
@@ -41,10 +40,7 @@ const ChatForm: FC<ChatFormProps> = ({ chatId }: ChatFormProps) => {
                             variables: {
                                 id: chatId,
                                 newMessage: {
-                                    author: {
-                                        id: '60899d221aeef5070efe5c45',
-                                        userName: 'NiceUser',
-                                    },
+                                    author: username,
                                     text: message,
                                 },
                             },
