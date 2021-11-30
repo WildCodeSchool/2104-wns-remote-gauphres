@@ -71,6 +71,7 @@ const client = new ApolloClient({
 });
 
 const App: FC = () => {
+    const isAuthenticated = localStorage.getItem('@storage_Key');
     return (
         <Router>
             <ApolloProvider client={client}>
@@ -79,11 +80,27 @@ const App: FC = () => {
                         <Route exact path="/" component={HomePage} />
                         <Route path="/login" component={LoginPage} />
                         <Route path="/register" component={SignUpPage} />
-                        <Route path="/dashboard" component={Dashboard} />
-                        <Route path="/articles" component={ArticlesPage} />
-                        <Route path="/random-chat" component={RandomChat} />
-                        <Route path="/members" component={MembersPage} />
-                        <Route path="/events" component={EventsPage} />
+                        {isAuthenticated && (
+                            <>
+                                <Route
+                                    path="/dashboard"
+                                    component={Dashboard}
+                                />
+                                <Route
+                                    path="/articles"
+                                    component={ArticlesPage}
+                                />
+                                <Route
+                                    path="/random-chat"
+                                    component={RandomChat}
+                                />
+                                <Route
+                                    path="/members"
+                                    component={MembersPage}
+                                />
+                                <Route path="/events" component={EventsPage} />
+                            </>
+                        )}
                     </Switch>
                 </UserProvider>
             </ApolloProvider>
