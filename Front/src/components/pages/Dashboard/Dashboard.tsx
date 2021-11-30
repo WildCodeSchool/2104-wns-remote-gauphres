@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { User, UserContext } from '../../../contexts/UserContext';
 import { SideMenuContainer } from '../../../style';
 import MyMood from '../../DailyWindow/MyMood/MyMood';
@@ -8,9 +8,6 @@ import { MainWrapper, RightWrapper, Wrapper } from './style';
 
 const Dashboard: FC = () => {
     const { user } = useContext(UserContext);
-
-    // for test, mood id
-    const id = '6096bf9fab2e797b569f4183';
 
     return (
         <SideMenuContainer>

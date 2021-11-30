@@ -7,6 +7,7 @@ import {
     split,
     HttpLink,
     createHttpLink,
+    ApolloLink,
 } from '@apollo/client';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
@@ -29,13 +30,23 @@ const wsLink = new WebSocketLink({
     },
 });
 
+const authLink = setContext((_, { headers }) => {
+    const token = localStorage.getItem('@storage_Key');
+    return {
+        headers: {
+            ...headers,
+            authorization: token || '',
+        },
+    };
+});
+
 const httpLink = new HttpLink({
     uri: 'http://localhost:5000/graphql',
     credentials: 'include',
 });
 
 // à rajouter l.68 dans le client en décembre 21
-const link = split(
+const subscriptionLink = split(
     ({ query }) => {
         const definition = getMainDefinition(query);
         return (
@@ -54,18 +65,11 @@ const getUri = () => {
     return 'http://localhost:5000/graphql';
 };
 
-const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem('@storage_Key');
-    return {
-        headers: {
-            ...headers,
-            authorization: token || '',
-        },
-    };
-});
-
 const client = new ApolloClient({
-    link: authLink.concat(createHttpLink({ uri: getUri() })),
+    link: ApolloLink.from([
+        authLink.concat(createHttpLink({ uri: getUri() })),
+        subscriptionLink,
+    ]),
     uri: getUri(),
     cache: new InMemoryCache(),
 });

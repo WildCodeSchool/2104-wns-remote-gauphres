@@ -13,6 +13,7 @@ import {
     UserInput,
     LoginUser,
 } from '../models/User';
+import ChatRoomResolver from './ChatRoomResolver';
 
 @Resolver(User)
 class UserResolver {

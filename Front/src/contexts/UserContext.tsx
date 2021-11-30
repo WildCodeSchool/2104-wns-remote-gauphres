@@ -19,7 +19,7 @@ export type User = {
     birthDate: string;
     userMood?: UserMood;
     hobbies: string[];
-    chatrooms: string[];
+    chatrooms: string;
     city: string;
 } | null;
 

@@ -64,15 +64,18 @@ type ChatRoomType = {
 
 const RandomChat: FC = () => {
     const { user } = useContext(UserContext);
+    console.log(user);
+
+    if (!user) {
+        throw new Error("Pas d'user valide");
+    }
 
     // for test, chatroom id
     const { data: chatRooms } = useQuery(FIND_ALL_CHAT);
-    // àremplacer par chatroom via user en décembre
-    const testFirstChatRoomId = chatRooms?.getAllChatRooms[0]?._id;
     const { loading, error: queryError, data, subscribeToMore } = useQuery(
         FIND_CHAT,
         {
-            variables: { id: testFirstChatRoomId },
+            variables: user.chatrooms,
         }
     );
 
@@ -108,7 +111,12 @@ const RandomChat: FC = () => {
                     user={user}
                     messages={chatRoomData && chatRoomData.messages}
                 />
-                <ChatForm chatId={testFirstChatRoomId} username="user" />
+                {user && (
+                    <ChatForm
+                        chatId={user.chatrooms}
+                        username={user.username}
+                    />
+                )}
             </ChatPage>
             <MemberCard />
         </SideMenuContainer>
