@@ -8,8 +8,8 @@ import {
     HttpLink,
     createHttpLink,
 } from '@apollo/client';
-// import { WebSocketLink } from '@apollo/client/link/ws';
-// import { getMainDefinition } from '@apollo/client/utilities';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { getMainDefinition } from '@apollo/client/utilities';
 import { setContext } from '@apollo/client/link/context';
 import RandomChat from './components/pages/RandomChatPage/RandomChat';
 import './App.css';
@@ -22,34 +22,30 @@ import LoginPage from './components/pages/Login/Login';
 import HomePage from './components/pages/HomePage/HomePage';
 import SignUpPage from './components/pages/SignUp/SignUp';
 
-// const wsLink = new WebSocketLink({
-//     uri: 'ws://localhost:9000/subscriptions',
-//     options: {
-//         reconnect: true,
-//     },
-// });
+const wsLink = new WebSocketLink({
+    uri: 'ws://localhost:5000/subscriptions',
+    options: {
+        reconnect: true,
+    },
+});
 
-// const httpLink = new HttpLink({
-//     uri: 'http://localhost:5000/graphql',
-//     credentials: 'include',
-// });
+const httpLink = new HttpLink({
+    uri: 'http://localhost:5000/graphql',
+    credentials: 'include',
+});
 
-// const link = split(
-//     ({ query }) => {
-//         const definition = getMainDefinition(query);
-//         return (
-//             definition.kind === 'OperationDefinition' &&
-//             definition.operation === 'subscription'
-//         );
-//     },
-//     // wsLink,
-//     httpLink
-// );
-
-// const client = new ApolloClient({
-//     link,
-//     cache: new InMemoryCache(),
-// });
+// à rajouter l.68 dans le client en décembre 21
+const link = split(
+    ({ query }) => {
+        const definition = getMainDefinition(query);
+        return (
+            definition.kind === 'OperationDefinition' &&
+            definition.operation === 'subscription'
+        );
+    },
+    wsLink,
+    httpLink
+);
 
 const env = process.env.NODE_ENV;
 

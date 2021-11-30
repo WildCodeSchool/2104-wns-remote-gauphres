@@ -11,10 +11,6 @@ export class ChatRoom {
 
     @Prop()
     @Field()
-    id!: string;
-
-    @Prop()
-    @Field()
     title?: string;
 
     @Prop({ type: () => [UserChatRoomType] })
@@ -37,9 +33,6 @@ export const ChatRoomModel = getModelForClass(ChatRoom);
 
 @InputType()
 export class CreateChatRoomInput {
-    @Field()
-    id!: number;
-
     @Field(() => Boolean)
     isActiv = true;
 

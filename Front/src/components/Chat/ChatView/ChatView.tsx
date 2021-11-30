@@ -1,8 +1,10 @@
 import React, { FC } from 'react';
+import { gql } from '@apollo/client';
 import { Container, BubbleMessage } from './style';
 import { User } from '../../../contexts/UserContext';
 
 export type Message = {
+    id: number;
     text: string;
     author: string;
     createdAt: string;
