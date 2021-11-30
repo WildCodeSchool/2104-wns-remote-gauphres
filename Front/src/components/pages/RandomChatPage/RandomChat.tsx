@@ -31,15 +31,6 @@ const FIND_CHAT = gql`
     }
 `;
 
-const FIND_ALL_CHAT = gql`
-    query getAllChatRooms {
-        getAllChatRooms {
-            _id
-            title
-        }
-    }
-`;
-
 const SUBSCRIPTION_MESSAGE = gql`
     subscription {
         messageSent {
@@ -57,40 +48,38 @@ const SUBSCRIPTION_MESSAGE = gql`
 type ChatRoomType = {
     createdAt: string;
     isActiv: boolean;
-    messages: Message[] | undefined;
+    messages: Message[] | [];
     users: User[];
     title: string;
 };
 
 const RandomChat: FC = () => {
     const { user } = useContext(UserContext);
-    console.log(user);
 
     if (!user) {
-        throw new Error("Pas d'user valide");
+        throw new Error('invalid user');
     }
 
-    // for test, chatroom id
-    const { data: chatRooms } = useQuery(FIND_ALL_CHAT);
     const { loading, error: queryError, data, subscribeToMore } = useQuery(
         FIND_CHAT,
         {
-            variables: user.chatrooms,
+            variables: { id: user.chatrooms },
         }
     );
 
-    const [chatRoomData, setChatRoomData] = useState<ChatRoomType>();
-    useEffect(() => {
-        setChatRoomData(data && data.getOneChatRoom);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data]);
+    // useEffect(() => {
+    //     setChatRoomData(data && data.getOneChatRoom);
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [data]);
 
     useEffect(() => {
+        console.log('coucou');
         subscribeToMore({
             document: SUBSCRIPTION_MESSAGE,
             updateQuery: (prev, { subscriptionData }) => {
+                console.log('subddata:', subscriptionData);
                 if (!subscriptionData.data) return prev;
-                const newMessage = subscriptionData.data.messageSent;
+                const newMessage = subscriptionData.data.messageSent.message;
 
                 return {
                     getOneChatRoom: [...prev.getOneChatRoom, newMessage],
@@ -100,8 +89,7 @@ const RandomChat: FC = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    console.log('chatRoomData:', chatRoomData);
-    // TODO : AJOUTER CONTEXTE pour username
+    console.log('data:', data && data.getOneChatRoom);
 
     return (
         <SideMenuContainer>
@@ -109,7 +97,7 @@ const RandomChat: FC = () => {
             <ChatPage>
                 <ChatView
                     user={user}
-                    messages={chatRoomData && chatRoomData.messages}
+                    messages={data ? data.getOneChatRoom.messages : []}
                 />
                 {user && (
                     <ChatForm

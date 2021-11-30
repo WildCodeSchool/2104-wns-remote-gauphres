@@ -52,6 +52,7 @@ const LOGIN_USER = gql`
                 #     image
                 # }
                 hobbies
+                chatrooms
             }
         }
     }
