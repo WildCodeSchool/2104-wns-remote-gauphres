@@ -14,7 +14,7 @@ import {
     ChatRoomModel,
     CreateChatRoomInput,
 } from '../models/ChatRoom';
-import { CreateMessageInput, Message, Notification } from '../models/Message';
+import { CreateMessageInput, Message, MessageCreated, Notification } from '../models/Message';
 import { UserModel } from '../models/User';
 import Validators from '../services/Validators';
 
@@ -87,18 +87,18 @@ class ChatRoomResolver {
         throw new Error('Invalid newChatRoom');
     }
 
-    @Mutation(() => ChatRoom)
+    @Mutation(() => Boolean)
     async sendMessage(
         @Arg('id') id: string,
         @Arg('newMessage', () => CreateMessageInput) message: Message,
         @PubSub('MESSAGES') publish: Publisher<NotificationPayload>
-    ): Promise<ChatRoom> {
+    ): Promise<boolean> {
         if (Validators.isMessageValid(message)) {
             const createdAt = new Date(Date.now());
             const chatroom = await ChatRoomModel.findOne({ _id: id });
             const messageId = chatroom.messages.length > 0 ? (chatroom.messages.length + 1) : 1;
             const newMessage = { id: messageId, createdAt, ...message };
-            const updatedChatRoom = await ChatRoomModel.findOneAndUpdate(
+            await ChatRoomModel.findOneAndUpdate(
                 { _id: id },
                 {
                     $push: {
@@ -108,7 +108,7 @@ class ChatRoomResolver {
             );
             await publish({ message: newMessage, chatRoomId: id });
 
-            return updatedChatRoom;
+            return true;
         }
         throw new Error("A message can't be empty");
     }
