@@ -14,7 +14,7 @@ import UserResolver from './resolvers/UserResolver';
 import ChatRoomResolver from './resolvers/ChatRoomResolver';
 
 const app = express();
-const moowdyJwtKey = process.env.REACT_APP_JWT_SECRET_KEY;
+const moowdyJwtKey = process.env.JWT_KEY;
 const httpServer = http.createServer(app);
 
 // Middlewares

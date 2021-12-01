@@ -1,5 +1,10 @@
 import React, { FC } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+    BrowserRouter as Router,
+    Redirect,
+    Route,
+    Switch,
+} from 'react-router-dom';
 import {
     ApolloClient,
     InMemoryCache,
@@ -25,9 +30,36 @@ import LoginPage from './components/pages/Login/Login';
 import HomePage from './components/pages/HomePage/HomePage';
 import SignUpPage from './components/pages/SignUp/SignUp';
 
+type PrivateRouteProps = {
+    children: React.ReactNode;
+    path: string;
+};
+
 const App: FC<{ client: ApolloClient<NormalizedCacheObject> }> = ({
     client,
 }) => {
+
+  const PrivateRoute = ({ children, path }: PrivateRouteProps) => {
+      const isAuthenticated = localStorage.getItem('@storage_Key');
+      return (
+          <Route
+              path={path}
+              render={({ location }) =>
+                  isAuthenticated ? (
+                      children
+                  ) : (
+                      <Redirect
+                          to={{
+                              pathname: '/login',
+                              state: { from: location },
+                          }}
+                      />
+                  )
+              }
+          />
+      );
+  };
+
     return (
         <Router>
             <ApolloProvider client={client}>
@@ -36,11 +68,21 @@ const App: FC<{ client: ApolloClient<NormalizedCacheObject> }> = ({
                         <Route exact path="/" component={HomePage} />
                         <Route path="/login" component={LoginPage} />
                         <Route path="/register" component={SignUpPage} />
-                        <Route path="/dashboard" component={Dashboard} />
-                        <Route path="/articles" component={ArticlesPage} />
-                        <Route path="/random-chat" component={RandomChat} />
-                        <Route path="/members" component={MembersPage} />
-                        <Route path="/events" component={EventsPage} />
+                        <PrivateRoute path="/dashboard">
+                            <Dashboard />
+                        </PrivateRoute>
+                        <PrivateRoute path="/articles">
+                            <ArticlesPage />
+                        </PrivateRoute>
+                        <PrivateRoute path="/random-chat">
+                            <RandomChat />
+                        </PrivateRoute>
+                        <PrivateRoute path="/members">
+                            <MembersPage />
+                        </PrivateRoute>
+                        <PrivateRoute path="/events">
+                            <EventsPage />
+                        </PrivateRoute>
                     </Switch>
                 </UserProvider>
             </ApolloProvider>

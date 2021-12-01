@@ -73,7 +73,7 @@ export const UserProvider: FC = ({ children }) => {
                 console.log(err);
             }
         }
-    }, [data, history]);
+    }, [data, history, user]);
 
     const login = (userCredentials: UserCredentials) => {
         try {

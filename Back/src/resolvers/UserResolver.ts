@@ -86,7 +86,7 @@ class UserResolver {
         ) {
             const token = jwt.sign(
                 { userEmail: user.email },
-                process.env.REACT_APP_JWT_SECRET_KEY
+                process.env.JWT_KEY
             );
             return { user, token };
         }
