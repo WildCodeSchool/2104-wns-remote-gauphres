@@ -48,6 +48,7 @@ async function start() {
     });
 
     const server = new ApolloServer({
+        cors:{origin:'*', credentials: true},
         schema,
         subscriptions: {
             path: "/subscriptions",

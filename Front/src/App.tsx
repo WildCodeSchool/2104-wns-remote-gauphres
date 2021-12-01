@@ -40,13 +40,12 @@ const authLink = setContext((_, { headers }) => {
     };
 });
 
-const httpLink = new HttpLink({
+const httpLink = createHttpLink({
     uri: 'http://localhost:5000/graphql',
-    credentials: 'include',
 });
 
 // à rajouter l.68 dans le client en décembre 21
-const subscriptionLink = split(
+const splitLink = split(
     ({ query }) => {
         const definition = getMainDefinition(query);
         return (
@@ -55,7 +54,7 @@ const subscriptionLink = split(
         );
     },
     wsLink,
-    httpLink
+    authLink.concat(httpLink)
 );
 
 const env = process.env.NODE_ENV;
@@ -66,11 +65,7 @@ const getUri = () => {
 };
 
 const client = new ApolloClient({
-    link: ApolloLink.from([
-        authLink.concat(createHttpLink({ uri: getUri() })),
-        subscriptionLink,
-    ]),
-    uri: getUri(),
+    link: splitLink,
     cache: new InMemoryCache(),
 });
 

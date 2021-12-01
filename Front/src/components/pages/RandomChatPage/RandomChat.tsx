@@ -32,7 +32,7 @@ const FIND_CHAT = gql`
 `;
 
 const SUBSCRIPTION_MESSAGE = gql`
-    subscription {
+    subscription onMessageSent {
         messageSent {
             message {
                 id
@@ -60,12 +60,9 @@ const RandomChat: FC = () => {
         throw new Error('invalid user');
     }
 
-    const { loading, error: queryError, data, subscribeToMore } = useQuery(
-        FIND_CHAT,
-        {
-            variables: { id: user.chatrooms },
-        }
-    );
+    const { loading, error, data, subscribeToMore } = useQuery(FIND_CHAT, {
+        variables: { id: user.chatrooms },
+    });
 
     // useEffect(() => {
     //     setChatRoomData(data && data.getOneChatRoom);
@@ -80,14 +77,15 @@ const RandomChat: FC = () => {
                 console.log('subddata:', subscriptionData);
                 if (!subscriptionData.data) return prev;
                 const newMessage = subscriptionData.data.messageSent.message;
+                console.log(prev, newMessage);
 
                 return {
-                    getOneChatRoom: [...prev.getOneChatRoom, newMessage],
+                    getOneChatRoom[messages]: [...prev.getOneChatRoom.messages, newMessage],
                 };
             },
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [subscribeToMore]);
 
     console.log('data:', data && data.getOneChatRoom);
 
