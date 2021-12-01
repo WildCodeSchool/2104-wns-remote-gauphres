@@ -70,24 +70,21 @@ const RandomChat: FC = () => {
     // }, [data]);
 
     useEffect(() => {
-        console.log('coucou');
         subscribeToMore({
             document: SUBSCRIPTION_MESSAGE,
             updateQuery: (prev, { subscriptionData }) => {
-                console.log('subddata:', subscriptionData);
                 if (!subscriptionData.data) return prev;
                 const newMessage = subscriptionData.data.messageSent.message;
-                console.log(prev, newMessage);
-
                 return {
-                    getOneChatRoom[messages]: [...prev.getOneChatRoom.messages, newMessage],
+                    getOneChatRoom: [
+                        ...prev.getOneChatRoom.messages,
+                        newMessage,
+                    ],
                 };
             },
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [subscribeToMore]);
-
-    console.log('data:', data && data.getOneChatRoom);
 
     return (
         <SideMenuContainer>

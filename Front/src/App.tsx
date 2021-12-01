@@ -23,6 +23,13 @@ import LoginPage from './components/pages/Login/Login';
 import HomePage from './components/pages/HomePage/HomePage';
 import SignUpPage from './components/pages/SignUp/SignUp';
 
+const env = process.env.NODE_ENV;
+
+const getUri = () => {
+    if (env === 'production') return '/graphql';
+    return 'http://localhost:5000/graphql';
+};
+
 const wsLink = new WebSocketLink({
     uri: 'ws://localhost:5000/subscriptions',
     options: {
@@ -41,7 +48,7 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const httpLink = createHttpLink({
-    uri: 'http://localhost:5000/graphql',
+    uri: getUri(),
 });
 
 // à rajouter l.68 dans le client en décembre 21
@@ -56,13 +63,6 @@ const splitLink = split(
     wsLink,
     authLink.concat(httpLink)
 );
-
-const env = process.env.NODE_ENV;
-
-const getUri = () => {
-    if (env === 'production') return '/graphql';
-    return 'http://localhost:5000/graphql';
-};
 
 const client = new ApolloClient({
     link: splitLink,
