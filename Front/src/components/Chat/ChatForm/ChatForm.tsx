@@ -45,6 +45,7 @@ const ChatForm: FC<ChatFormProps> = ({ chatId, username }: ChatFormProps) => {
                                 },
                             },
                         });
+                        setMessage('');
                     } else {
                         // TODO change this to a real error message
                         alert('You cannot send empty message');

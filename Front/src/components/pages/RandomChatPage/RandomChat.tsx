@@ -64,11 +64,6 @@ const RandomChat: FC = () => {
         variables: { id: user.chatrooms },
     });
 
-    // useEffect(() => {
-    //     setChatRoomData(data && data.getOneChatRoom);
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [data]);
-
     useEffect(() => {
         subscribeToMore({
             document: SUBSCRIPTION_MESSAGE,
@@ -83,7 +78,6 @@ const RandomChat: FC = () => {
                 };
             },
         });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [subscribeToMore]);
 
     return (

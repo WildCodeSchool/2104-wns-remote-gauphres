@@ -8,10 +8,12 @@ import {
     HttpLink,
     createHttpLink,
     ApolloLink,
+    NormalizedCacheObject,
 } from '@apollo/client';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { setContext } from '@apollo/client/link/context';
+import { JsxElement } from 'typescript';
 import RandomChat from './components/pages/RandomChatPage/RandomChat';
 import './App.css';
 import Dashboard from './components/pages/Dashboard/Dashboard';
@@ -23,53 +25,9 @@ import LoginPage from './components/pages/Login/Login';
 import HomePage from './components/pages/HomePage/HomePage';
 import SignUpPage from './components/pages/SignUp/SignUp';
 
-const env = process.env.NODE_ENV;
-
-const getUri = () => {
-    if (env === 'production') return '/graphql';
-    return 'http://localhost:5000/graphql';
-};
-
-const wsLink = new WebSocketLink({
-    uri: 'ws://localhost:5000/subscriptions',
-    options: {
-        reconnect: true,
-    },
-});
-
-const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem('@storage_Key');
-    return {
-        headers: {
-            ...headers,
-            authorization: token || '',
-        },
-    };
-});
-
-const httpLink = createHttpLink({
-    uri: getUri(),
-});
-
-// à rajouter l.68 dans le client en décembre 21
-const splitLink = split(
-    ({ query }) => {
-        const definition = getMainDefinition(query);
-        return (
-            definition.kind === 'OperationDefinition' &&
-            definition.operation === 'subscription'
-        );
-    },
-    wsLink,
-    authLink.concat(httpLink)
-);
-
-const client = new ApolloClient({
-    link: splitLink,
-    cache: new InMemoryCache(),
-});
-
-const App: FC = () => {
+const App: FC<{ client: ApolloClient<NormalizedCacheObject> }> = ({
+    client,
+}) => {
     return (
         <Router>
             <ApolloProvider client={client}>
