@@ -11,8 +11,8 @@ export type Message = {
 };
 
 type ChatViewProps = {
-    messages: Message[] | undefined;
-    user: User | null | undefined;
+    messages: Message[] | [];
+    user: User;
 };
 
 export const ChatView: FC<ChatViewProps> = ({
@@ -22,11 +22,12 @@ export const ChatView: FC<ChatViewProps> = ({
     return (
         <>
             <Container>
-                {messages &&
+                {messages.length > 0 &&
+                    user !== null &&
                     messages.map((message) => {
-                        const isMe = message.author === user?.username;
+                        const isMe = message.author === user.username;
                         return (
-                            <BubbleMessage isMe={isMe}>
+                            <BubbleMessage isMe={isMe} key={message.id}>
                                 {message.text}
                             </BubbleMessage>
                         );

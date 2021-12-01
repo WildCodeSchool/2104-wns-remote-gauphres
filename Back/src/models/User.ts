@@ -29,8 +29,8 @@ export class User {
     password?: string;
 
     @Prop()
-    @Field(() => [String], { nullable: true })
-    chatrooms?: string[];
+    @Field(() => String, { nullable: true })
+    chatrooms?: string;
 
     @Prop()
     @Field(() => [String], { nullable: true })

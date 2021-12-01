@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { User, UserContext } from '../../../contexts/UserContext';
 import { SideMenuContainer } from '../../../style';
 import MyMood from '../../DailyWindow/MyMood/MyMood';
