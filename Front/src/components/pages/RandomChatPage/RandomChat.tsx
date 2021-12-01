@@ -76,10 +76,10 @@ const RandomChat: FC = () => {
                 if (!subscriptionData.data) return prev;
                 const newMessage = subscriptionData.data.messageSent.message;
                 return {
-                    getOneChatRoom: [
-                        ...prev.getOneChatRoom.messages,
-                        newMessage,
-                    ],
+                    getOneChatRoom: {
+                        ...prev.getOneChatRoom,
+                        messages: [...prev.getOneChatRoom.messages, newMessage],
+                    },
                 };
             },
         });
