@@ -9,8 +9,8 @@ import { MainWrapper, RightWrapper, Wrapper } from './style';
 const Dashboard: FC = () => {
     const { user } = useContext(UserContext);
 
-    // for test, mood id
-    const id = '6096bf9fab2e797b569f4183';
+    // TODO : for test, mood id => to delete
+    // const id = '6096bf9fab2e797b569f4183';
 
     return (
         <SideMenuContainer>
