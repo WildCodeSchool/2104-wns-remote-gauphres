@@ -37,5 +37,7 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - web-client-build:/web-client-build
       - ./logs:/var/log/nginx
+  query-redis-srv:
+    image: redis
 volumes:
   web-client-build:
