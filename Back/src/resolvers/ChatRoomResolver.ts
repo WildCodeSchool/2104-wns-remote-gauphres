@@ -1,20 +1,21 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable prettier/prettier */
 import {
-    PubSub,
     Arg,
     Mutation,
     Query,
     Resolver,
     Root,
     Subscription,
-    Publisher,
+    PubSub,
+    PubSubEngine,
 } from 'type-graphql';
 import {
     ChatRoom,
     ChatRoomModel,
     CreateChatRoomInput,
 } from '../models/ChatRoom';
-import { CreateMessageInput, Message, MessageCreated, Notification } from '../models/Message';
+import { CreateMessageInput, Message, Notification } from '../models/Message';
 import { UserModel } from '../models/User';
 import Validators from '../services/Validators';
 
@@ -24,10 +25,10 @@ interface NotificationPayload {
 }
 
 @Resolver(ChatRoom)
-class ChatRoomResolver {
+export default class ChatRoomResolver {
     @Subscription({ topics: 'MESSAGES' })
     messageSent(@Root() messagePayload: NotificationPayload): Notification {
-        return messagePayload;
+        return {...messagePayload, message: { ...messagePayload.message, createdAt: new Date() }  };
     }
 
     @Query(() => [ChatRoom])
@@ -54,14 +55,14 @@ class ChatRoomResolver {
             const chatRoom = await ChatRoomModel.create(newChatRoom);
             chatRoom.chatRoomUsers = [
                 {
-                    id: user1['_id'],
+                    id: user1._id,
                     username: user1.username,
                     isConnected: user1.isConnected,
                     avatar: user1.avatar ? user1.avatar : "https://resize-gulli.jnsmedia.fr/r/890,__ym__/img//var/jeunesse/storage/images/gulli/chaine-tv/dessins-animes/pokemon/pokemon/pikachu/26571681-1-fre-FR/Pikachu.jpg",
                     hobbies: user1.hobbies ? user1.hobbies : []
                 },
                 {
-                    id: user2['_id'],
+                    id: user2._id,
                     username: user2.username,
                     isConnected: user2.isConnected,
                     avatar: user2.avatar ? user2.avatar : "https://resize-gulli.jnsmedia.fr/r/890,__ym__/img//var/jeunesse/storage/images/gulli/chaine-tv/dessins-animes/pokemon/pokemon/pikachu/26571681-1-fre-FR/Pikachu.jpg",
@@ -72,14 +73,14 @@ class ChatRoomResolver {
             chatRoom.isActiv = true;
 
             await chatRoom.save();
-            const savedId = chatRoom['_id'];
+            const savedId = chatRoom._id;
 
             await UserModel.findOneAndUpdate(
-                { _id: user1['_id'] },
+                { _id: user1._id },
                 { chatrooms: savedId }
             )
             await UserModel.findOneAndUpdate(
-                { _id: user2['_id'] },
+                { _id: user2._id },
                 { chatrooms: savedId }
             )
             return chatRoom;
@@ -91,10 +92,10 @@ class ChatRoomResolver {
     async sendMessage(
         @Arg('id') id: string,
         @Arg('newMessage', () => CreateMessageInput) message: Message,
-        @PubSub('MESSAGES') publish: Publisher<NotificationPayload>
+        @PubSub() pubSub: PubSubEngine
     ): Promise<boolean> {
         if (Validators.isMessageValid(message)) {
-            const createdAt = new Date(Date.now());
+            const createdAt = new Date();
             const chatroom = await ChatRoomModel.findOne({ _id: id });
             const messageId = chatroom.messages.length > 0 ? (chatroom.messages.length + 1) : 1;
             const newMessage = { id: messageId, createdAt, ...message };
@@ -106,12 +107,10 @@ class ChatRoomResolver {
                     },
                 }
             );
-            await publish({ message: newMessage, chatRoomId: id });
+            await pubSub.publish('MESSAGES', { message: newMessage, chatRoomId: id });
 
             return true;
         }
         throw new Error("A message can't be empty");
     }
 }
-
-export default ChatRoomResolver;
