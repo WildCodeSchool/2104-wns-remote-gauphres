@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { gql } from '@apollo/client';
 import { Container, BubbleMessage } from './style';
 import { User } from '../../../contexts/UserContext';
 

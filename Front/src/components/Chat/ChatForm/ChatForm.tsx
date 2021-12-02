@@ -10,7 +10,7 @@ const CREATE_MESSAGE = gql`
 
 type ChatFormProps = {
     chatId: string;
-    username: string; // récupérer l'USER du context
+    username: string;
 };
 
 const isMessageValid = (message: string): boolean => {

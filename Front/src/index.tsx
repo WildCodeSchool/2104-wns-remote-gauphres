@@ -40,7 +40,6 @@ const httpLink = createHttpLink({
     uri: getUri(),
 });
 
-// à rajouter l.68 dans le client en décembre 21
 const splitLink = split(
     ({ query }) => {
         const definition = getMainDefinition(query);

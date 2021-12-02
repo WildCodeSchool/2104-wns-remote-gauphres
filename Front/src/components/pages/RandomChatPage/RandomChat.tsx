@@ -1,9 +1,8 @@
-/* eslint-disable no-underscore-dangle */
-import React, { FC, useContext, Dispatch, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
-import { ChatView, Message } from '../../Chat/ChatView/ChatView';
+import { ChatView } from '../../Chat/ChatView/ChatView';
 import ChatForm from '../../Chat/ChatForm/ChatForm';
-import { UserContext, User } from '../../../contexts/UserContext';
+import { UserContext } from '../../../contexts/UserContext';
 import { ChatPage } from './style';
 import MemberCard from '../../Chat/MemberCard/MemberCard';
 import SideMenu from '../../SideMenu/SideMenu';
@@ -44,14 +43,6 @@ const SUBSCRIPTION_MESSAGE = gql`
         }
     }
 `;
-
-type ChatRoomType = {
-    createdAt: string;
-    isActiv: boolean;
-    messages: Message[] | [];
-    users: User[];
-    title: string;
-};
 
 const RandomChat: FC = () => {
     const { user } = useContext(UserContext);

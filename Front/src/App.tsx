@@ -7,18 +7,10 @@ import {
 } from 'react-router-dom';
 import {
     ApolloClient,
-    InMemoryCache,
     ApolloProvider,
-    split,
-    HttpLink,
-    createHttpLink,
-    ApolloLink,
     NormalizedCacheObject,
 } from '@apollo/client';
-import { WebSocketLink } from '@apollo/client/link/ws';
-import { getMainDefinition } from '@apollo/client/utilities';
-import { setContext } from '@apollo/client/link/context';
-import { JsxElement } from 'typescript';
+
 import RandomChat from './components/pages/RandomChatPage/RandomChat';
 import './App.css';
 import Dashboard from './components/pages/Dashboard/Dashboard';
@@ -38,27 +30,26 @@ type PrivateRouteProps = {
 const App: FC<{ client: ApolloClient<NormalizedCacheObject> }> = ({
     client,
 }) => {
-
-  const PrivateRoute = ({ children, path }: PrivateRouteProps) => {
-      const isAuthenticated = localStorage.getItem('@storage_Key');
-      return (
-          <Route
-              path={path}
-              render={({ location }) =>
-                  isAuthenticated ? (
-                      children
-                  ) : (
-                      <Redirect
-                          to={{
-                              pathname: '/login',
-                              state: { from: location },
-                          }}
-                      />
-                  )
-              }
-          />
-      );
-  };
+    const PrivateRoute = ({ children, path }: PrivateRouteProps) => {
+        const isAuthenticated = localStorage.getItem('@storage_Key');
+        return (
+            <Route
+                path={path}
+                render={({ location }) =>
+                    isAuthenticated ? (
+                        children
+                    ) : (
+                        <Redirect
+                            to={{
+                                pathname: '/login',
+                                state: { from: location },
+                            }}
+                        />
+                    )
+                }
+            />
+        );
+    };
 
     return (
         <Router>
