@@ -5,12 +5,12 @@ const SmallCard = styled.div`
     background-color: ${colors.darkPurple};
     color: ${colors.yellow};
     font-weight: 700;
-    width: 100px;
+    width: 15%;
     height: 100px;
     border-radius: 2em;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: end;
     align-item: center;
     font-family: ${fonts.text};
     margin: 2em 0 0 2em;
