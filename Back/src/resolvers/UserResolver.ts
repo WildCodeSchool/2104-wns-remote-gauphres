@@ -1,4 +1,13 @@
-import { Arg, Mutation, Query, Resolver } from 'type-graphql';
+import {
+    Arg,
+    Mutation,
+    PubSub,
+    PubSubEngine,
+    Query,
+    Resolver,
+    Root,
+    Subscription,
+} from 'type-graphql';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server-errors';
@@ -12,11 +21,24 @@ import {
     UserPictureInput,
     UserInput,
     LoginUser,
+    UserStatusChange,
 } from '../models/User';
-import ChatRoomResolver from './ChatRoomResolver';
+
+type UserStatusPayload = {
+    userId: string;
+    chatroomId: string;
+    newStatus: boolean;
+};
 
 @Resolver(User)
 class UserResolver {
+    @Subscription({ topics: 'USERSTATUS' })
+    userStatusChanged(
+        @Root() userStatusPayload: UserStatusPayload
+    ): UserStatusChange {
+        return userStatusPayload;
+    }
+
     @Query(() => [User])
     async getAllUsers(): Promise<User[]> {
         const users = await UserModel.find();
@@ -73,13 +95,23 @@ class UserResolver {
 
     @Mutation(() => LoginUser)
     async Login(
-        @Arg('currentUser') currentUser: UserLoginInput
+        @Arg('currentUser') currentUser: UserLoginInput,
+        @PubSub() pubSub: PubSubEngine
     ): Promise<LoginUser> {
         await UserModel.findOneAndUpdate(
             { email: currentUser.email },
             { isConnected: true }
         );
         const user = await UserModel.findOne({ email: currentUser.email });
+        if (user.chatrooms) {
+            await pubSub.publish('USERSTATUS', {
+                // eslint-disable-next-line no-underscore-dangle
+                userId: user._id,
+                chatroomId: user.chatrooms,
+                newStatus: true,
+            });
+        }
+
         if (
             user &&
             bcryptjs.compareSync(currentUser.password!, user.password!)
@@ -152,11 +184,21 @@ class UserResolver {
     }
 
     @Mutation(() => User)
-    async logout(@Arg('userId') userId: string): Promise<User> {
+    async logout(
+        @Arg('userId') userId: string,
+        @PubSub() pubSub: PubSubEngine
+    ): Promise<User> {
         const logout = await UserModel.findOneAndUpdate(
             { _id: userId },
             { isConnected: false }
         );
+        if (logout.chatrooms) {
+            await pubSub.publish('USERSTATUS', {
+                userId,
+                chatroomId: logout.chatrooms,
+                newStatus: false,
+            });
+        }
 
         return logout;
     }

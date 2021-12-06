@@ -122,16 +122,15 @@ export default class ChatRoomResolver {
     ): Promise<ChatRoom> {
         const chatroomToUpdate = await ChatRoomModel.findOne({_id: chatroomId})
         const {chatRoomUsers} = chatroomToUpdate; 
-        console.log('chatRoomUsers: ', chatRoomUsers)
         const usersUpdated = chatRoomUsers.map(user => {
-            console.log('user: ', user.username);
             if (user.id === userId) {
                 const userUpdated = {username: user.username, hobbies: user.hobbies, avatar: user.avatar, id: user.id, isConnected: newStatus};
+                
                 return userUpdated;
             };
+
             return user;
         });
-        console.log('usersUpdated:', usersUpdated);
         const result = await ChatRoomModel.findOneAndUpdate(
             { _id: chatroomId },
             { chatRoomUsers: usersUpdated }

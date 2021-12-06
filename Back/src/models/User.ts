@@ -198,3 +198,15 @@ export class ArticleCreator {
     @Field()
     username!: string;
 }
+
+@ObjectType()
+export class UserStatusChange {
+    @Field()
+    userId: string;
+
+    @Field()
+    chatroomId: string;
+
+    @Field()
+    newStatus: boolean;
+}
