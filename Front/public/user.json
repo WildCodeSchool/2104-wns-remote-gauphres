@@ -1,14 +1,18 @@
 {
-    "id": "1",
-    "userName": "string",
+    "_id": "1",
+    "username": "string",
     "firstname": "string",
     "lastname": "string",
     "password": "string",
     "avatar": "string",
     "isConnected": true,
-    "email": "string",
+    "email": "user@email.com",
     "birthDate": "string",
     "city": "string",
+    "hobbies": [
+        "string"
+    ],
+    "chatroom": "string",
     "userMood": {
         "title": "test_title",
         "image": "test_image"
