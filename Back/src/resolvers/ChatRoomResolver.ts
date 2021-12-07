@@ -16,7 +16,7 @@ import {
     CreateChatRoomInput,
 } from '../models/ChatRoom';
 import { CreateMessageInput, Message, Notification } from '../models/Message';
-import { UserChatRoomType, UserModel } from '../models/User';
+import { UserModel } from '../models/User';
 import Validators from '../services/Validators';
 
 interface NotificationPayload {
@@ -26,7 +26,7 @@ interface NotificationPayload {
 
 @Resolver(ChatRoom)
 export default class ChatRoomResolver {
-    @Subscription({ topics: 'MESSAGES' })
+    @Subscription({ topics: 'MESSAGES'})
     messageSent(@Root() messagePayload: NotificationPayload): Notification {
         return {...messagePayload, message: { ...messagePayload.message, createdAt: new Date() }  };
     }
@@ -112,31 +112,5 @@ export default class ChatRoomResolver {
             return true;
         }
         throw new Error("A message can't be empty");
-    }
-
-    @Mutation(() => ChatRoom)
-    async updateChatRoomWithUserStatus(
-        @Arg('userId') userId: string,
-        @Arg('chatroomId') chatroomId: string,
-        @Arg('newStatus') newStatus: boolean,
-    ): Promise<ChatRoom> {
-        const chatroomToUpdate = await ChatRoomModel.findOne({_id: chatroomId})
-        const {chatRoomUsers} = chatroomToUpdate; 
-        const usersUpdated = chatRoomUsers.map(user => {
-            if (user.id === userId) {
-                const userUpdated = {username: user.username, hobbies: user.hobbies, avatar: user.avatar, id: user.id, isConnected: newStatus};
-                
-                return userUpdated;
-            };
-
-            return user;
-        });
-        const result = await ChatRoomModel.findOneAndUpdate(
-            { _id: chatroomId },
-            { chatRoomUsers: usersUpdated }
-            );
-        if (!result) throw new Error("chatroom not updated");
-
-        return result;
     }
 }

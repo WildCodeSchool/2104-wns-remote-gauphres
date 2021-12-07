@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import {
     Arg,
     Mutation,
@@ -23,10 +24,10 @@ import {
     LoginUser,
     UserStatusChange,
 } from '../models/User';
+import { ChatRoomModel } from '../models/ChatRoom';
 
-type UserStatusPayload = {
+export type UserStatusPayload = {
     userId: string;
-    chatroomId: string;
     newStatus: boolean;
 };
 
@@ -104,13 +105,36 @@ class UserResolver {
         );
         const user = await UserModel.findOne({ email: currentUser.email });
         if (user.chatrooms) {
-            await pubSub.publish('USERSTATUS', {
-                // eslint-disable-next-line no-underscore-dangle
-                userId: user._id,
-                chatroomId: user.chatrooms,
-                newStatus: true,
+            const chatroomToUpdate = await ChatRoomModel.findOne({
+                _id: user.chatrooms,
             });
+            const { chatRoomUsers } = chatroomToUpdate;
+            const usersUpdated = chatRoomUsers.map((chatroomUser) => {
+                if (chatroomUser.id === user._id.toString()) {
+                    const chatroomUserUpdated = {
+                        username: chatroomUser.username,
+                        hobbies: chatroomUser.hobbies,
+                        avatar: chatroomUser.avatar,
+                        id: chatroomUser.id,
+                        isConnected: true,
+                    };
+
+                    return chatroomUserUpdated;
+                }
+
+                return chatroomUser;
+            });
+            const result = await ChatRoomModel.findOneAndUpdate(
+                { _id: user.chatrooms },
+                { chatRoomUsers: usersUpdated },
+                { new: true }
+            );
+            if (!result) throw new Error('chatroom not updated');
         }
+        await pubSub.publish('USERSTATUS', {
+            userId: user._id,
+            newStatus: true,
+        });
 
         if (
             user &&
@@ -193,12 +217,37 @@ class UserResolver {
             { isConnected: false }
         );
         if (logout.chatrooms) {
-            await pubSub.publish('USERSTATUS', {
-                userId,
-                chatroomId: logout.chatrooms,
-                newStatus: false,
-            });
+            if (logout.chatrooms) {
+                const chatroomToUpdate = await ChatRoomModel.findOne({
+                    _id: logout.chatrooms,
+                });
+                const { chatRoomUsers } = chatroomToUpdate;
+                const usersUpdated = chatRoomUsers.map((chatroomUser) => {
+                    if (chatroomUser.id === logout._id.toString()) {
+                        const chatroomUserUpdated = {
+                            username: chatroomUser.username,
+                            hobbies: chatroomUser.hobbies,
+                            avatar: chatroomUser.avatar,
+                            id: chatroomUser.id,
+                            isConnected: false,
+                        };
+                        return chatroomUserUpdated;
+                    }
+
+                    return chatroomUser;
+                });
+                const result = await ChatRoomModel.findOneAndUpdate(
+                    { _id: logout.chatrooms },
+                    { chatRoomUsers: usersUpdated },
+                    { new: true }
+                );
+                if (!result) throw new Error('chatroom not updated');
+            }
         }
+        await pubSub.publish('USERSTATUS', {
+            userId,
+            newStatus: false,
+        });
 
         return logout;
     }

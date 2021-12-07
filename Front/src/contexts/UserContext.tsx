@@ -1,5 +1,5 @@
-import { gql, useMutation, useQuery } from '@apollo/client';
-import React, { createContext, useState, Dispatch, useEffect, FC } from 'react';
+import { gql, useMutation } from '@apollo/client';
+import React, { createContext, useState, useEffect, FC } from 'react';
 import { useHistory } from 'react-router-dom';
 
 export type UserMood = {

@@ -205,8 +205,5 @@ export class UserStatusChange {
     userId: string;
 
     @Field()
-    chatroomId: string;
-
-    @Field()
     newStatus: boolean;
 }
