@@ -36,7 +36,7 @@ type Sign = {
 };
 
 type UserBirthDate = {
-    userDate: string;
+    userDate: string | undefined;
 };
 
 // LOGIC
@@ -85,12 +85,15 @@ const findZodiacSign = (day: number, month: string) => {
 };
 
 const getDayOfBirthFromString = (date: UserBirthDate) => {
-    const day = date.userDate.substring(8, 10);
-    return parseInt(day, 10);
+    const day = date.userDate?.substring(8, 10);
+    if (day) {
+        return parseInt(day, 10);
+    }
+    return 0;
 };
 
 const getMonthOfBirthFromString = (date: UserBirthDate) => {
-    const month = date.userDate.substring(5, 7);
+    const month = date.userDate?.substring(5, 7);
     switch (month) {
         case '01':
             return 'january';
