@@ -4,7 +4,7 @@ import { ChatView } from '../../Chat/ChatView/ChatView';
 import ChatForm from '../../Chat/ChatForm/ChatForm';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { ChatPage } from './style';
-import MemberCard from '../../Chat/MemberCard/MemberCard';
+import { MemberCard } from '../../Chat/MemberCard/MemberCard';
 import SideMenu from '../../SideMenu/SideMenu';
 import { SideMenuContainer } from '../../../style';
 
@@ -18,6 +18,7 @@ const FIND_CHAT = gql`
                 username
                 isConnected
                 avatar
+                hobbies
             }
             messages {
                 id
@@ -53,12 +54,68 @@ const SUBSCRIPTION_MESSAGE = gql`
     }
 `;
 
+const FIND_USER = gql`
+    query getUserById($id: String!) {
+        getUserById(_id: $id) {
+            _id
+            username
+            firstname
+            lastname
+            avatar
+            isConnected
+            birthDate
+            userMood {
+                title
+                image
+            }
+            hobbies
+        }
+    }
+`;
+
+type ChatRoomUser = {
+    id: string;
+    username: string;
+    isConnected: boolean;
+    avatar: string;
+    hobbies: string[];
+};
+
+const GetOtherUser = (id: string) => {
+    const { loading, data: otherUserData } = useQuery(FIND_USER, {
+        variables: { id },
+    });
+    if (!id) return null;
+    if (!loading && otherUserData) {
+        const { getUserById: user } = otherUserData;
+        return user;
+    }
+    return null;
+};
+
 const RandomChat: FC = () => {
     const { user } = useContext(AuthContext);
     const { data, subscribeToMore } = useQuery(FIND_CHAT, {
         variables: { id: user?.chatrooms },
     });
 
+    let otherUser: ChatRoomUser = {
+        id: '',
+        username: '',
+        isConnected: false,
+        avatar: '',
+        hobbies: [],
+    };
+
+    if (!loading && data) {
+        if (data.getOneChatRoom.chatRoomUsers.length > 0) {
+            otherUser = data.getOneChatRoom.chatRoomUsers.find(
+                (oneUser: ChatRoomUser) => oneUser.id !== user._id
+            );
+        }
+    }
+
+    // console.log(GetOtherUser(otherUser.id));
     useEffect(() => {
         subscribeToMore({
             document: SUBSCRIPTION_MESSAGE,
@@ -75,6 +132,8 @@ const RandomChat: FC = () => {
         });
     }, [subscribeToMore]);
 
+    const checkOtherUser = GetOtherUser(otherUser.id);
+
     return (
         <SideMenuContainer>
             <SideMenu />
@@ -90,7 +149,7 @@ const RandomChat: FC = () => {
                     />
                 )}
             </ChatPage>
-            <MemberCard />
+            {checkOtherUser && <MemberCard user={checkOtherUser} />}
         </SideMenuContainer>
     );
 };
