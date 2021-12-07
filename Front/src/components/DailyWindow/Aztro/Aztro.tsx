@@ -28,6 +28,17 @@ const Body = styled.div`
     justify-content: space-between;
 `;
 
+// TYPES
+type Sign = {
+    mood: string;
+    description: string;
+    current_date: string;
+};
+
+type ReceivedDate = {
+    userDate: string;
+};
+
 // LOGIC
 const findZodiacSign = (day: number, month: string) => {
     let astroSign = '';
@@ -73,14 +84,12 @@ const findZodiacSign = (day: number, month: string) => {
     return astroSign;
 };
 
-const getDayOfBirthFromString = (date: any) => {
-    // Corriger any
+const getDayOfBirthFromString = (date: ReceivedDate) => {
     const day = date.userDate.substring(8, 10);
     return parseInt(day, 10);
 };
 
-const getMonthOfBirthFromString = (date: any) => {
-    // Corriger any
+const getMonthOfBirthFromString = (date: ReceivedDate) => {
     const month = date.userDate.substring(5, 7);
     switch (month) {
         case '01':
@@ -112,18 +121,10 @@ const getMonthOfBirthFromString = (date: any) => {
     }
 };
 
-// TYPES
-type Sign = {
-    mood: string;
-    description: string;
-    current_date: string;
-};
-
 // TODO: Ajout du content-loader pour l'attente du chargement des data
 
 // COMPONENT
-const Aztro = (userDate: any) => {
-    // Corriger any
+const Aztro = (userDate: ReceivedDate) => {
     const [aztroSign, setAztroSign] = useState<Sign>();
     const day = getDayOfBirthFromString(userDate);
     const month = getMonthOfBirthFromString(userDate);
