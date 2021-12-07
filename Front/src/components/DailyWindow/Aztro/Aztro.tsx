@@ -35,7 +35,7 @@ type Sign = {
     current_date: string;
 };
 
-type ReceivedDate = {
+type UserBirthDate = {
     userDate: string;
 };
 
@@ -84,12 +84,12 @@ const findZodiacSign = (day: number, month: string) => {
     return astroSign;
 };
 
-const getDayOfBirthFromString = (date: ReceivedDate) => {
+const getDayOfBirthFromString = (date: UserBirthDate) => {
     const day = date.userDate.substring(8, 10);
     return parseInt(day, 10);
 };
 
-const getMonthOfBirthFromString = (date: ReceivedDate) => {
+const getMonthOfBirthFromString = (date: UserBirthDate) => {
     const month = date.userDate.substring(5, 7);
     switch (month) {
         case '01':
@@ -124,7 +124,7 @@ const getMonthOfBirthFromString = (date: ReceivedDate) => {
 // TODO: Ajout du content-loader pour l'attente du chargement des data
 
 // COMPONENT
-const Aztro = (userDate: ReceivedDate) => {
+const Aztro = (userDate: UserBirthDate) => {
     const [aztroSign, setAztroSign] = useState<Sign>();
     const day = getDayOfBirthFromString(userDate);
     const month = getMonthOfBirthFromString(userDate);
