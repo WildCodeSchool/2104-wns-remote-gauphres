@@ -1,4 +1,14 @@
-import { Arg, Mutation, Query, Resolver } from 'type-graphql';
+/* eslint-disable no-underscore-dangle */
+import {
+    Arg,
+    Mutation,
+    PubSub,
+    PubSubEngine,
+    Query,
+    Resolver,
+    Root,
+    Subscription,
+} from 'type-graphql';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server-errors';
@@ -12,11 +22,24 @@ import {
     UserPictureInput,
     UserInput,
     LoginUser,
+    UserStatusChange,
 } from '../models/User';
-import ChatRoomResolver from './ChatRoomResolver';
+import { ChatRoomModel } from '../models/ChatRoom';
+
+export type UserStatusPayload = {
+    userId: string;
+    newStatus: boolean;
+};
 
 @Resolver(User)
 class UserResolver {
+    @Subscription({ topics: 'USERSTATUS' })
+    userStatusChanged(
+        @Root() userStatusPayload: UserStatusPayload
+    ): UserStatusChange {
+        return userStatusPayload;
+    }
+
     @Query(() => [User])
     async getAllUsers(): Promise<User[]> {
         const users = await UserModel.find();
@@ -73,13 +96,46 @@ class UserResolver {
 
     @Mutation(() => LoginUser)
     async Login(
-        @Arg('currentUser') currentUser: UserLoginInput
+        @Arg('currentUser') currentUser: UserLoginInput,
+        @PubSub() pubSub: PubSubEngine
     ): Promise<LoginUser> {
         await UserModel.findOneAndUpdate(
             { email: currentUser.email },
             { isConnected: true }
         );
         const user = await UserModel.findOne({ email: currentUser.email });
+        if (user.chatrooms) {
+            const chatroomToUpdate = await ChatRoomModel.findOne({
+                _id: user.chatrooms,
+            });
+            const { chatRoomUsers } = chatroomToUpdate;
+            const usersUpdated = chatRoomUsers.map((chatroomUser) => {
+                if (chatroomUser.id === user._id.toString()) {
+                    const chatroomUserUpdated = {
+                        username: chatroomUser.username,
+                        hobbies: chatroomUser.hobbies,
+                        avatar: chatroomUser.avatar,
+                        id: chatroomUser.id,
+                        isConnected: true,
+                    };
+
+                    return chatroomUserUpdated;
+                }
+
+                return chatroomUser;
+            });
+            const result = await ChatRoomModel.findOneAndUpdate(
+                { _id: user.chatrooms },
+                { chatRoomUsers: usersUpdated },
+                { new: true }
+            );
+            if (!result) throw new Error('chatroom not updated');
+        }
+        await pubSub.publish('USERSTATUS', {
+            userId: user._id,
+            newStatus: true,
+        });
+
         if (
             user &&
             bcryptjs.compareSync(currentUser.password!, user.password!)
@@ -152,11 +208,46 @@ class UserResolver {
     }
 
     @Mutation(() => User)
-    async logout(@Arg('userId') userId: string): Promise<User> {
+    async logout(
+        @Arg('userId') userId: string,
+        @PubSub() pubSub: PubSubEngine
+    ): Promise<User> {
         const logout = await UserModel.findOneAndUpdate(
             { _id: userId },
             { isConnected: false }
         );
+        if (logout.chatrooms) {
+            if (logout.chatrooms) {
+                const chatroomToUpdate = await ChatRoomModel.findOne({
+                    _id: logout.chatrooms,
+                });
+                const { chatRoomUsers } = chatroomToUpdate;
+                const usersUpdated = chatRoomUsers.map((chatroomUser) => {
+                    if (chatroomUser.id === logout._id.toString()) {
+                        const chatroomUserUpdated = {
+                            username: chatroomUser.username,
+                            hobbies: chatroomUser.hobbies,
+                            avatar: chatroomUser.avatar,
+                            id: chatroomUser.id,
+                            isConnected: false,
+                        };
+                        return chatroomUserUpdated;
+                    }
+
+                    return chatroomUser;
+                });
+                const result = await ChatRoomModel.findOneAndUpdate(
+                    { _id: logout.chatrooms },
+                    { chatRoomUsers: usersUpdated },
+                    { new: true }
+                );
+                if (!result) throw new Error('chatroom not updated');
+            }
+        }
+        await pubSub.publish('USERSTATUS', {
+            userId,
+            newStatus: false,
+        });
 
         return logout;
     }

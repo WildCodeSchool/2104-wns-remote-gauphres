@@ -26,7 +26,7 @@ interface NotificationPayload {
 
 @Resolver(ChatRoom)
 export default class ChatRoomResolver {
-    @Subscription({ topics: 'MESSAGES' })
+    @Subscription({ topics: 'MESSAGES'})
     messageSent(@Root() messagePayload: NotificationPayload): Notification {
         return {...messagePayload, message: { ...messagePayload.message, createdAt: new Date() }  };
     }
