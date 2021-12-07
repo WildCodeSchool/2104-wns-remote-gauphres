@@ -10,9 +10,8 @@ export const Article = styled.div`
     justify-content: center;
     align-item: center;
     font-family: ${fonts.title};
-    margin: 2em 0 0 1em;
+    margin: auto;
     padding: 2em;
-    height: 100%;
     text-align: center;
     box-shadow: 2px 3px 3px gray;
 `;
