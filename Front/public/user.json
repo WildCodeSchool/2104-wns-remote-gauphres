@@ -8,6 +8,7 @@
     "isConnected": true,
     "email": "string",
     "birthDate": "string",
+    "city": "string",
     "userMood": {
         "title": "test_title",
         "image": "test_image"

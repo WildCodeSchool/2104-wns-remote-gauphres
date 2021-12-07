@@ -40,6 +40,7 @@ const MyMood: FC<MoodProps> = ({ user }: MoodProps) => {
             <p data-testid="myMood-title">Ton mood</p>
             <MoodImage
                 id="main-mood"
+                data-testid="myMood-image"
                 src={`/images/moods/${
                     moodDatas !== null ? moodDatas?.image : 'default.png'
                 }`}
@@ -48,18 +49,21 @@ const MyMood: FC<MoodProps> = ({ user }: MoodProps) => {
             <p data-testid="myMood-title">Change-le ici</p>
             <MiniImages>
                 <MiniImage
+                    data-testid="myMood-image"
                     type="image"
                     src="/images/moods/happy.png"
                     alt={user?.userMood?.title}
                     onClick={() => OnChangeMood('happy')}
                 />
                 <MiniImage
+                    data-testid="myMood-image"
                     type="image"
                     src="/images/moods/neutral.png"
                     alt={user?.userMood?.title}
                     onClick={() => OnChangeMood('neutral')}
                 />
                 <MiniImage
+                    data-testid="myMood-image"
                     type="image"
                     src="/images/moods/sad.png"
                     alt={user?.userMood?.title}
