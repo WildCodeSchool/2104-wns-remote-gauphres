@@ -3,6 +3,7 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../../contexts/UserContext';
 import { SideMenuContainer } from '../../../style';
+import Aztro from '../../DailyWindow/Aztro/Aztro';
 import MyMood from '../../DailyWindow/MyMood/MyMood';
 import RandomWord from '../../DailyWindow/RandomWord/RandomWord';
 import SideMenu from '../../SideMenu/SideMenu';
@@ -31,10 +32,11 @@ const Dashboard: FC = () => {
             <Wrapper>
                 <MainWrapper>
                     <h1>Dashboard</h1>
+                    <RandomWord randomWord={randomWord} />
+                    <Aztro userDate={user?.birthDate} />
                 </MainWrapper>
                 <RightWrapper>
                     <MyMood user={user} />
-                    <RandomWord randomWord={randomWord} />
                     {/* <MyMatch /> */}
                 </RightWrapper>
             </Wrapper>
