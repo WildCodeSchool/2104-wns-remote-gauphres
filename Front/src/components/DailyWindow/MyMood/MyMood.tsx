@@ -2,18 +2,12 @@ import React, { FC, useState, useContext } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { User, UserContext } from '../../../contexts/UserContext';
 import { SmallCard, MoodImage, MiniImages, MiniImage } from '../moodStyle';
-// import { MoodInput } from '../../../../../Back/src/models/Mood';
 
-// const UPDATE_USER_MOOD = gql`
-//     mutation updateUserMood {
-//         updateUserMood(
-//             currentUser: {
-//                 email: user.email,
-//                 newMood : moodDatas
-//             }
-//         )
-//     }
-// `;
+const UPDATE_USER_MOOD = gql`
+    mutation updateUserMood($email: String!, $newMood: MoodInput!) {
+        updateUserMood(currentUser: { email: $email, newMood: $newMood })
+    }
+`;
 
 type MoodProps = {
     user: User | undefined | null;
@@ -22,14 +16,23 @@ type MoodProps = {
 const MyMood: FC<MoodProps> = ({ user }: MoodProps) => {
     const { user: userFromContext } = useContext(UserContext);
     const [moodDatas, setMoodDatas] = useState(userFromContext?.userMood);
+    const [updateMood] = useMutation(UPDATE_USER_MOOD);
 
-    const OnChangeMood = (mood: string) => {
+    const OnChangeMood = async (mood: string) => {
         setMoodDatas({
             title: mood,
             image: `${mood}.png`,
         });
-        console.log('moodDatas', moodDatas);
-        // const [updateMood] = useMutation(UPDATE_USER_MOOD);
+
+        await updateMood({
+            variables: {
+                email: userFromContext?.email,
+                newMood: {
+                    title: mood,
+                    image: `${mood}.png`,
+                },
+            },
+        });
     };
 
     return (
