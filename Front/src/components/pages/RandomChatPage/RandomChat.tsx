@@ -1,5 +1,5 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { ChatView } from '../../Chat/ChatView/ChatView';
 import ChatForm from '../../Chat/ChatForm/ChatForm';
 import { AuthContext } from '../../../contexts/AuthContext';
@@ -8,6 +8,27 @@ import { MemberCard } from '../../Chat/MemberCard/MemberCard';
 import SideMenu from '../../SideMenu/SideMenu';
 import { SideMenuContainer } from '../../../style';
 import Button from '../../Button/Button';
+
+const CREATE_CHATROOM = gql`
+    mutation createChatRoom($data: CreateChatRoomInput!) {
+        createChatRoom(newChatRoom: $data) {
+            _id
+            title
+            chatRoomUsers {
+                username
+            }
+        }
+    }
+`;
+
+const FIND_RANDOM_USER = gql`
+    query findUserForRandomChatRoom {
+        findUserForRandomChatRoom {
+            _id
+            username
+        }
+    }
+`;
 
 const FIND_CHAT = gql`
     query GetOneChatRoom($id: String!) {
@@ -96,8 +117,15 @@ const GetOtherUser = (id: string) => {
 
 const RandomChat: FC = () => {
     const { user } = useContext(AuthContext);
-    const { data, subscribeToMore } = useQuery(FIND_CHAT, {
-        variables: { id: user?.chatrooms },
+    const [createChatRoom] = useMutation(CREATE_CHATROOM);
+    const { data: randomUserForChatRoom } = useQuery(FIND_RANDOM_USER);
+
+    if (!user) {
+        throw new Error('invalid user');
+    }
+
+    const { loading, error, data, subscribeToMore } = useQuery(FIND_CHAT, {
+        variables: { id: user.chatrooms },
     });
 
     let otherUser: ChatRoomUser = {
@@ -116,9 +144,27 @@ const RandomChat: FC = () => {
         }
     }
 
-    // console.log(GetOtherUser(otherUser.id));
-    const joinChatroom = () => {
-        alert('toto');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const joinChatRoom = async (
+        currentUsernameData: string,
+        randomUsernameData: string
+    ) => {
+        await createChatRoom({
+            variables: {
+                data: {
+                    title: `Chatroom de ${currentUsernameData} et ${randomUsernameData}`,
+                    chatRoomUsers: [
+                        {
+                            username: currentUsernameData,
+                        },
+                        {
+                            username: randomUsernameData,
+                        },
+                    ],
+                    messages: [],
+                },
+            },
+        });
     };
 
     useEffect(() => {
@@ -139,22 +185,6 @@ const RandomChat: FC = () => {
 
     const checkOtherUser = GetOtherUser(otherUser.id);
 
-    return (
-        <SideMenuContainer>
-            <SideMenu />
-            <ChatPage>
-                <ChatView
-                    user={user}
-                    messages={data ? data.getOneChatRoom.messages : []}
-                />
-                {user && (
-                    <ChatForm
-                        chatId={user.chatrooms}
-                        username={user.username}
-                    />
-                )}
-            </ChatPage>
-            {checkOtherUser && <MemberCard user={checkOtherUser} />}
     if (user.chatrooms != null) {
         return (
             <SideMenuContainer>
@@ -171,7 +201,7 @@ const RandomChat: FC = () => {
                         />
                     )}
                 </ChatPage>
-                <MemberCard />
+                {checkOtherUser && <MemberCard user={checkOtherUser} />}
             </SideMenuContainer>
         );
     }
@@ -186,11 +216,19 @@ const RandomChat: FC = () => {
                     width: '70%',
                 }}
             >
-                <Button color="primary" onClick={joinChatroom}>
+                <Button
+                    color="primary"
+                    onClick={() =>
+                        joinChatRoom(
+                            user.username,
+                            randomUserForChatRoom.findUserForRandomChatRoom
+                                .username
+                        )
+                    }
+                >
                     Rejoindre une chatroom
                 </Button>
             </span>
-            <MemberCard />
         </SideMenuContainer>
     );
 };

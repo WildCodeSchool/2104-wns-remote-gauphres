@@ -76,6 +76,16 @@ class UserResolver {
         return users;
     }
 
+    @Query(() => User)
+    async findUserForRandomChatRoom(): Promise<User> {
+        const allDbUsers = await this.getAllUsers();
+
+        const allUsersWhithoutChatroom = allDbUsers.filter(
+            (user) => !user.chatrooms
+        );
+        return allUsersWhithoutChatroom[0];
+    }
+
     @Mutation(() => User)
     async createUser(
         @Arg('newUser') newUser: UserCreationInput
