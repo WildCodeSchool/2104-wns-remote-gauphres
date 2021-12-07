@@ -63,7 +63,10 @@ export const MemberCard = ({ user }: MemberCardProps): ReactElement => {
                 <Moment format=" DD/MM">{user.birthDate}</Moment>
             </Birthday>
             {user.hobbies.length === 1 ? (
-                <Hobby>Sa passion: {user.hobbies} </Hobby>
+                <Hobby>
+                    Sa passion: <br />
+                    {user.hobbies}{' '}
+                </Hobby>
             ) : (
                 ''
             )}
