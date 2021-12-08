@@ -15,7 +15,7 @@ type AllUsersType = {
 };
 
 const AllUsers: FC = () => {
-    const { loading, error: queryError, data } = useQuery(GET_ALL_USERS);
+    const { data } = useQuery(GET_ALL_USERS);
 
     const [allUsers, setAllUsers] = useState<AllUsersType>();
 

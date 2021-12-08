@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import React, { FC, useContext } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import SideMenu from '../../SideMenu/SideMenu';

@@ -1,5 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../../contexts/AuthContext';
+import React, { FC, useEffect, useState } from 'react';
 import { SideMenuContainer } from '../../../style';
 import Aztro from '../../DailyWindow/Aztro/Aztro';
 import MyMood from '../../DailyWindow/MyMood/MyMood';

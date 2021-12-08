@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/destructuring-assignment */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AuthContext } from '../../../contexts/AuthContext';
 
@@ -124,7 +124,7 @@ const getMonthOfBirthFromString = (date: string | undefined) => {
 // TODO: Ajout du content-loader pour l'attente du chargement des data
 
 // COMPONENT
-const Aztro = () => {
+const Aztro: FC = () => {
     const { user, refetch } = useContext(AuthContext);
     const [aztroSign, setAztroSign] = useState<Sign>();
     const day = getDayOfBirthFromString(user?.birthDate);

@@ -1,11 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, {
-    ChangeEvent,
-    CSSProperties,
-    FC,
-    FormEvent,
-    useState,
-} from 'react';
+import React, { CSSProperties, FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
     Checkbox,

@@ -1,5 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 
 const BoxStyle = styled.div`
@@ -26,9 +26,7 @@ const Body = styled.div`
     justify-content: space-between;
 `;
 
-// Ajout du content-loader pour l'attente du chargement des data
-
-const RandomWord = ({ randomWord }: any) => {
+const RandomWord: FC = ({ randomWord }: any) => {
     return (
         <BoxStyle>
             <Header>
