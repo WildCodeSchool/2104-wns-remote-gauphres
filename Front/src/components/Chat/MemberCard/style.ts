@@ -11,6 +11,7 @@ export const Article = styled.div`
     align-item: center;
     font-family: ${fonts.title};
     margin: auto;
+    margin-top: 2em;
     padding: 2em;
     text-align: center;
     box-shadow: 2px 3px 3px gray;
@@ -61,32 +62,6 @@ export const Mood = styled.img`
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    background-color: #f4511e;
-`;
-
-export const Mood = styled.img`
-    border-radius: 7px 7px 0 0;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin: auto;
-    margin-top: 1.5em;
-`;
-
-export const Birthday = styled.div`
-    font-size: 1.2em;
-`;
-
-export const Hobby = styled.div`
-    font-size: 1.5em;
-    margin-top: 1em;
-`;
-
-export const BirthdayCake = styled.img`
-    width: 30px;
-    display: block;
     margin: auto;
     margin-top: 1.5em;
 `;

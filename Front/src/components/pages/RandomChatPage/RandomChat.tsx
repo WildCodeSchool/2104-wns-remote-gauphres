@@ -116,7 +116,7 @@ const GetOtherUser = (id: string) => {
 };
 
 const RandomChat: FC = () => {
-    const { user } = useContext(AuthContext);
+    const { user, refetch } = useContext(AuthContext);
     const [createChatRoom] = useMutation(CREATE_CHATROOM);
     const { data: randomUserForChatRoom } = useQuery(FIND_RANDOM_USER);
 
@@ -165,6 +165,7 @@ const RandomChat: FC = () => {
                 },
             },
         });
+        refetch();
     };
 
     useEffect(() => {
