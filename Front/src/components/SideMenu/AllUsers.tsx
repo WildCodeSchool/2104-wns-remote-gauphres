@@ -14,6 +14,13 @@ type AllUsersType = {
     length: number;
 };
 
+// eslint-disable-next-line consistent-return
+const numberOfUsersToMet = (numberOfAllPeople: number | undefined) => {
+    if (numberOfAllPeople) {
+        return numberOfAllPeople - 1;
+    }
+};
+
 const AllUsers: FC = () => {
     const { loading, error: queryError, data } = useQuery(GET_ALL_USERS);
 
@@ -25,7 +32,7 @@ const AllUsers: FC = () => {
 
     return (
         <div>
-            <p>{allUsers?.length} personnes à rencontrer</p>
+            <p>{numberOfUsersToMet(allUsers?.length)} personnes à rencontrer</p>
         </div>
     );
 };
