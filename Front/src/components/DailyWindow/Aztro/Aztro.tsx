@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/destructuring-assignment */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 // STYLES
 const BoxStyle = styled.div`
@@ -33,10 +34,6 @@ type Sign = {
     mood: string;
     description: string;
     current_date: string;
-};
-
-type UserBirthDate = {
-    userDate: string | undefined;
 };
 
 // LOGIC
@@ -84,16 +81,16 @@ const findZodiacSign = (day: number, month: string) => {
     return astroSign;
 };
 
-const getDayOfBirthFromString = (date: UserBirthDate) => {
-    const day = date.userDate?.substring(8, 10);
+const getDayOfBirthFromString = (date: string | undefined) => {
+    const day = date?.substring(8, 10);
     if (day) {
         return parseInt(day, 10);
     }
     return 0;
 };
 
-const getMonthOfBirthFromString = (date: UserBirthDate) => {
-    const month = date.userDate?.substring(5, 7);
+const getMonthOfBirthFromString = (date: string | undefined) => {
+    const month = date?.substring(5, 7);
     switch (month) {
         case '01':
             return 'january';
@@ -127,10 +124,11 @@ const getMonthOfBirthFromString = (date: UserBirthDate) => {
 // TODO: Ajout du content-loader pour l'attente du chargement des data
 
 // COMPONENT
-const Aztro = (userDate: UserBirthDate) => {
+const Aztro = () => {
+    const { user, refetch } = useContext(AuthContext);
     const [aztroSign, setAztroSign] = useState<Sign>();
-    const day = getDayOfBirthFromString(userDate);
-    const month = getMonthOfBirthFromString(userDate);
+    const day = getDayOfBirthFromString(user?.birthDate);
+    const month = getMonthOfBirthFromString(user?.birthDate);
 
     const fetchAztro = async () => {
         const response = await fetch(
@@ -153,7 +151,8 @@ const Aztro = (userDate: UserBirthDate) => {
 
     useEffect(() => {
         fetchAztro();
-    }, []);
+        refetch();
+    }, [user]);
 
     return (
         <BoxStyle>

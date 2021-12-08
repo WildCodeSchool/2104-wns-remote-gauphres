@@ -6,11 +6,9 @@ import MyMood from '../../DailyWindow/MyMood/MyMood';
 import RandomWord from '../../DailyWindow/RandomWord/RandomWord';
 import SideMenu from '../../SideMenu/SideMenu';
 import { MainWrapper, RightWrapper, Wrapper } from './style';
-// import MyMatch from '../../DailyWindow/MyMatch';
 
 const Dashboard: FC = () => {
     const [randomWord, setRandomWord] = useState();
-    const { user } = useContext(AuthContext);
 
     const fetchData = async () => {
         const response = await fetch(
@@ -31,10 +29,10 @@ const Dashboard: FC = () => {
                 <MainWrapper>
                     <h1>Dashboard</h1>
                     <RandomWord randomWord={randomWord} />
-                    <Aztro userDate={user?.birthDate} />
+                    <Aztro />
                 </MainWrapper>
                 <RightWrapper>
-                    <MyMood user={user} />
+                    <MyMood />
                     {/* <MyMatch /> */}
                 </RightWrapper>
             </Wrapper>

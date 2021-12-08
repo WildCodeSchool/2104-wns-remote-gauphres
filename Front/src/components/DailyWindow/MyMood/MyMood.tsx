@@ -1,4 +1,4 @@
-import React, { FC, useState, useContext } from 'react';
+import React, { FC, useState, useContext, useEffect } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { SmallCard, MoodImage, MiniImages, MiniImage } from '../moodStyle';
 import { AuthContext } from '../../../contexts/AuthContext';
@@ -10,13 +10,9 @@ const UPDATE_USER_MOOD = gql`
     }
 `;
 
-type MoodProps = {
-    user: User | undefined | null;
-};
-
-const MyMood: FC<MoodProps> = ({ user }: MoodProps) => {
-    const { user: userFromContext, refetch } = useContext(AuthContext);
-    const [moodDatas, setMoodDatas] = useState(userFromContext?.userMood);
+const MyMood: FC = () => {
+    const { user, refetch } = useContext(AuthContext);
+    const [moodDatas, setMoodDatas] = useState(user?.userMood);
     const [updateMood] = useMutation(UPDATE_USER_MOOD);
 
     const OnChangeMood = async (mood: string) => {
@@ -27,7 +23,7 @@ const MyMood: FC<MoodProps> = ({ user }: MoodProps) => {
 
         await updateMood({
             variables: {
-                email: userFromContext?.email,
+                email: user?.email,
                 newMood: {
                     title: mood,
                     image: `${mood}.png`,
@@ -36,6 +32,14 @@ const MyMood: FC<MoodProps> = ({ user }: MoodProps) => {
         });
         refetch();
     };
+
+    useEffect(() => {
+        setMoodDatas(user?.userMood);
+    }, [user]);
+
+    if (!user || !moodDatas) {
+        <p>Loading</p>;
+    }
 
     return (
         <SmallCard>
