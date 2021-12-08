@@ -149,11 +149,11 @@ class UserResolver {
         throw new AuthenticationError('Invalid credentials');
     }
 
-    @Mutation(() => User)
+    @Mutation(() => Boolean)
     async updateUserMood(
         @Arg('currentUser') currentUser: UserMoodInput
-    ): Promise<User> {
-        const updatedUserMood = await UserModel.findOneAndUpdate(
+    ): Promise<boolean> {
+        await UserModel.findOneAndUpdate(
             { email: currentUser.email },
             {
                 userMood: {
@@ -164,7 +164,7 @@ class UserResolver {
             { new: true }
         );
 
-        return updatedUserMood;
+        return true;
     }
 
     @Mutation(() => User)

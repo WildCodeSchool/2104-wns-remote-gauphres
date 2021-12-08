@@ -47,10 +47,10 @@ const LOGIN_USER = gql`
                 isConnected
                 email
                 birthDate
-                # userMood {
-                #     title
-                #     image
-                # }
+                userMood {
+                    title
+                    image
+                }
                 hobbies
                 chatrooms
             }
