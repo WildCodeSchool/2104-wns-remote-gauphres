@@ -1,31 +1,20 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import { gql, useMutation } from '@apollo/client';
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { Title, Container, Form, TextInput, Input } from './style';
 import Button from '../../Button/Button';
-import { UserContext } from '../../../contexts/UserContext';
+import useLogin from '../../../hooks/useLogin';
 
-type FormValues = {
-    email: string;
-    password: string;
-};
-
-const LoginPage: FC<FormValues> = () => {
-    const { login } = useContext(UserContext);
+const LoginPage: FC = () => {
+    const { login } = useLogin();
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm({ mode: 'all' });
 
-    const onSubmitForm = async (datas: FormValues) => {
-        login(datas);
-    };
-
     return (
         <Container>
-            <Form onSubmit={handleSubmit(onSubmitForm)}>
+            <Form onSubmit={handleSubmit(login)}>
                 <Title>Connecte toi !</Title>
                 <Input>
                     <TextInput

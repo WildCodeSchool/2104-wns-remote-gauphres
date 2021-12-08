@@ -27,7 +27,7 @@ const wsLink = new WebSocketLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem('@storage_Key');
+    const token = localStorage.getItem('jwtToken');
     return {
         headers: {
             ...headers,

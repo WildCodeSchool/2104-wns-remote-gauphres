@@ -1,7 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-param-reassign */
 import React, { FC, useContext, useEffect, useState } from 'react';
-import { UserContext } from '../../../contexts/UserContext';
+import { AuthContext } from '../../../contexts/AuthContext';
 import { SideMenuContainer } from '../../../style';
 import Aztro from '../../DailyWindow/Aztro/Aztro';
 import MyMood from '../../DailyWindow/MyMood/MyMood';
@@ -11,8 +9,8 @@ import { MainWrapper, RightWrapper, Wrapper } from './style';
 // import MyMatch from '../../DailyWindow/MyMatch';
 
 const Dashboard: FC = () => {
-    const { user } = useContext(UserContext);
     const [randomWord, setRandomWord] = useState();
+    const { user } = useContext(AuthContext);
 
     const fetchData = async () => {
         const response = await fetch(
