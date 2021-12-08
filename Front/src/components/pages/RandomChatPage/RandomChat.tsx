@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { ChatView } from '../../Chat/ChatView/ChatView';
 import ChatForm from '../../Chat/ChatForm/ChatForm';
@@ -7,6 +7,7 @@ import { ChatPage } from './style';
 import { MemberCard } from '../../Chat/MemberCard/MemberCard';
 import SideMenu from '../../SideMenu/SideMenu';
 import { SideMenuContainer } from '../../../style';
+import Button from '../../Button/Button';
 
 const FIND_CHAT = gql`
     query GetOneChatRoom($id: String!) {
@@ -116,6 +117,10 @@ const RandomChat: FC = () => {
     }
 
     // console.log(GetOtherUser(otherUser.id));
+    const joinChatroom = () => {
+        alert('toto');
+    };
+
     useEffect(() => {
         subscribeToMore({
             document: SUBSCRIPTION_MESSAGE,
@@ -150,6 +155,42 @@ const RandomChat: FC = () => {
                 )}
             </ChatPage>
             {checkOtherUser && <MemberCard user={checkOtherUser} />}
+    if (user.chatrooms != null) {
+        return (
+            <SideMenuContainer>
+                <SideMenu />
+                <ChatPage>
+                    <ChatView
+                        user={user}
+                        messages={data ? data.getOneChatRoom.messages : []}
+                    />
+                    {user && (
+                        <ChatForm
+                            chatId={user.chatrooms}
+                            username={user.username}
+                        />
+                    )}
+                </ChatPage>
+                <MemberCard />
+            </SideMenuContainer>
+        );
+    }
+    return (
+        <SideMenuContainer>
+            <SideMenu />
+            <span
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '70%',
+                }}
+            >
+                <Button color="primary" onClick={joinChatroom}>
+                    Rejoindre une chatroom
+                </Button>
+            </span>
+            <MemberCard />
         </SideMenuContainer>
     );
 };
