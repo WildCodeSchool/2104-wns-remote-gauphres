@@ -120,12 +120,8 @@ const RandomChat: FC = () => {
     const [createChatRoom] = useMutation(CREATE_CHATROOM);
     const { data: randomUserForChatRoom } = useQuery(FIND_RANDOM_USER);
 
-    if (!user) {
-        throw new Error('invalid user');
-    }
-
     const { loading, error, data, subscribeToMore } = useQuery(FIND_CHAT, {
-        variables: { id: user.chatrooms },
+        variables: { id: user?.chatrooms },
     });
 
     let otherUser: ChatRoomUser = {
@@ -139,14 +135,14 @@ const RandomChat: FC = () => {
     if (!loading && data) {
         if (data.getOneChatRoom.chatRoomUsers.length > 0) {
             otherUser = data.getOneChatRoom.chatRoomUsers.find(
-                (oneUser: ChatRoomUser) => oneUser.id !== user._id
+                (oneUser: ChatRoomUser) => oneUser.id !== user?._id
             );
         }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const joinChatRoom = async (
-        currentUsernameData: string,
+        currentUsernameData: string | undefined,
         randomUsernameData: string
     ) => {
         await createChatRoom({
@@ -186,7 +182,7 @@ const RandomChat: FC = () => {
 
     const checkOtherUser = GetOtherUser(otherUser.id);
 
-    if (user.chatrooms != null) {
+    if (user?.chatrooms != null) {
         return (
             <SideMenuContainer>
                 <SideMenu />
@@ -221,7 +217,7 @@ const RandomChat: FC = () => {
                     color="primary"
                     onClick={() =>
                         joinChatRoom(
-                            user.username,
+                            user?.username,
                             randomUserForChatRoom.findUserForRandomChatRoom
                                 .username
                         )
