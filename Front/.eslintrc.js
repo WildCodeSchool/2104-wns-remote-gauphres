@@ -35,6 +35,7 @@ module.exports = {
             },
         ],
         "no-underscore-dangle":  ["error", { "allow": ["_id"] }],
-
+        "react/jsx-props-no-spreading": "off",
+        "no-console": "off",
     },
 };

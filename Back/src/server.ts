@@ -10,19 +10,30 @@ import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server';
 import Fixtures from 'node-mongodb-fixtures';
 import { AuthenticationError } from 'apollo-server-errors';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
 import UserResolver from './resolvers/UserResolver';
 import ChatRoomResolver from './resolvers/ChatRoomResolver';
 
 const app = express();
-const moowdyJwtKey = process.env.REACT_APP_JWT_SECRET_KEY;
+const moowdyJwtKey = process.env.JWT_KEY;
 const httpServer = http.createServer(app);
+const redisOptions = {
+    host: 'query-redis-srv',
+    port: 6379,
+};
+export const pubSub = new RedisPubSub({
+    connection: redisOptions,
+});
 
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
+
+
 async function start() {
+
     // Connect to Mongo docker image
     const uri = `mongodb://mongodb:27017/moowdyDb`;
     mongoose.connect(uri, {
@@ -45,9 +56,11 @@ async function start() {
 
     const schema = await buildSchema({
         resolvers: [UserResolver, ChatRoomResolver],
+        pubSub,
     });
 
     const server = new ApolloServer({
+        cors:{origin:'*', credentials: true},
         schema,
         subscriptions: {
             path: "/subscriptions",
@@ -94,3 +107,5 @@ async function start() {
 }
 
 start();
+
+export default pubSub;

@@ -1,13 +1,34 @@
-/* eslint-disable no-underscore-dangle */
-import React, { FC, useContext, Dispatch, useEffect, useState } from 'react';
-import { gql, useQuery } from '@apollo/client';
-import { ChatView, Message } from '../../Chat/ChatView/ChatView';
+import React, { FC, useContext, useEffect, useState } from 'react';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import { ChatView } from '../../Chat/ChatView/ChatView';
 import ChatForm from '../../Chat/ChatForm/ChatForm';
-import { UserContext, User } from '../../../contexts/UserContext';
+import { AuthContext } from '../../../contexts/AuthContext';
 import { ChatPage } from './style';
-import MemberCard from '../../Chat/MemberCard/MemberCard';
+import { MemberCard } from '../../Chat/MemberCard/MemberCard';
 import SideMenu from '../../SideMenu/SideMenu';
 import { SideMenuContainer } from '../../../style';
+import Button from '../../Button/Button';
+
+const CREATE_CHATROOM = gql`
+    mutation createChatRoom($data: CreateChatRoomInput!) {
+        createChatRoom(newChatRoom: $data) {
+            _id
+            title
+            chatRoomUsers {
+                username
+            }
+        }
+    }
+`;
+
+const FIND_RANDOM_USER = gql`
+    query findUserForRandomChatRoom {
+        findUserForRandomChatRoom {
+            _id
+            username
+        }
+    }
+`;
 
 const FIND_CHAT = gql`
     query GetOneChatRoom($id: String!) {
@@ -19,6 +40,7 @@ const FIND_CHAT = gql`
                 username
                 isConnected
                 avatar
+                hobbies
             }
             messages {
                 id
@@ -31,17 +53,17 @@ const FIND_CHAT = gql`
     }
 `;
 
-const FIND_ALL_CHAT = gql`
-    query getAllChatRooms {
-        getAllChatRooms {
-            _id
-            title
+const SUBSCRIPTION_USERSTATUS = gql`
+    subscription onUserStatusChanged {
+        userStatusChanged {
+            userId
+            newStatus
         }
     }
 `;
 
 const SUBSCRIPTION_MESSAGE = gql`
-    subscription {
+    subscription onMessageSent {
         messageSent {
             message {
                 id
@@ -54,63 +76,156 @@ const SUBSCRIPTION_MESSAGE = gql`
     }
 `;
 
-type ChatRoomType = {
-    createdAt: string;
-    isActiv: boolean;
-    messages: Message[] | undefined;
-    users: User[];
-    title: string;
+const FIND_USER = gql`
+    query getUserById($id: String!) {
+        getUserById(_id: $id) {
+            _id
+            username
+            firstname
+            lastname
+            avatar
+            isConnected
+            birthDate
+            userMood {
+                title
+                image
+            }
+            hobbies
+        }
+    }
+`;
+
+type ChatRoomUser = {
+    id: string;
+    username: string;
+    isConnected: boolean;
+    avatar: string;
+    hobbies: string[];
+};
+
+const GetOtherUser = (id: string) => {
+    const { loading, data: otherUserData } = useQuery(FIND_USER, {
+        variables: { id },
+    });
+    if (!id) return null;
+    if (!loading && otherUserData) {
+        const { getUserById: user } = otherUserData;
+        return user;
+    }
+    return null;
 };
 
 const RandomChat: FC = () => {
-    const { user } = useContext(UserContext);
+    const { user, refetch } = useContext(AuthContext);
+    const [createChatRoom] = useMutation(CREATE_CHATROOM);
+    const { data: randomUserForChatRoom } = useQuery(FIND_RANDOM_USER);
 
-    // for test, chatroom id
-    const { data: chatRooms } = useQuery(FIND_ALL_CHAT);
-    // àremplacer par chatroom via user en décembre
-    const testFirstChatRoomId = chatRooms?.getAllChatRooms[0]?._id;
-    const { loading, error: queryError, data, subscribeToMore } = useQuery(
-        FIND_CHAT,
-        {
-            variables: { id: testFirstChatRoomId },
+    const { loading, error, data, subscribeToMore } = useQuery(FIND_CHAT, {
+        variables: { id: user?.chatrooms },
+    });
+
+    let otherUser: ChatRoomUser = {
+        id: '',
+        username: '',
+        isConnected: false,
+        avatar: '',
+        hobbies: [],
+    };
+
+    if (!loading && data) {
+        if (data.getOneChatRoom.chatRoomUsers.length > 0) {
+            otherUser = data.getOneChatRoom.chatRoomUsers.find(
+                (oneUser: ChatRoomUser) => oneUser.id !== user?._id
+            );
         }
-    );
+    }
 
-    const [chatRoomData, setChatRoomData] = useState<ChatRoomType>();
-    useEffect(() => {
-        setChatRoomData(data && data.getOneChatRoom);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const joinChatRoom = async (
+        currentUsernameData: string | undefined,
+        randomUsernameData: string
+    ) => {
+        await createChatRoom({
+            variables: {
+                data: {
+                    title: `Chatroom de ${currentUsernameData} et ${randomUsernameData}`,
+                    chatRoomUsers: [
+                        {
+                            username: currentUsernameData,
+                        },
+                        {
+                            username: randomUsernameData,
+                        },
+                    ],
+                    messages: [],
+                },
+            },
+        });
+        refetch();
+    };
 
     useEffect(() => {
         subscribeToMore({
             document: SUBSCRIPTION_MESSAGE,
             updateQuery: (prev, { subscriptionData }) => {
                 if (!subscriptionData.data) return prev;
-                const newMessage = subscriptionData.data.messageSent;
-
+                const newMessage = subscriptionData.data.messageSent.message;
                 return {
-                    getOneChatRoom: [...prev.getOneChatRoom, newMessage],
+                    getOneChatRoom: {
+                        ...prev.getOneChatRoom,
+                        messages: [...prev.getOneChatRoom.messages, newMessage],
+                    },
                 };
             },
         });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [subscribeToMore]);
 
-    console.log('chatRoomData:', chatRoomData);
-    // TODO : AJOUTER CONTEXTE pour username
+    const checkOtherUser = GetOtherUser(otherUser.id);
 
+    if (user?.chatrooms != null) {
+        return (
+            <SideMenuContainer>
+                <SideMenu />
+                <ChatPage>
+                    <ChatView
+                        user={user}
+                        messages={data ? data.getOneChatRoom.messages : []}
+                    />
+                    {user && (
+                        <ChatForm
+                            chatId={user.chatrooms}
+                            username={user.username}
+                        />
+                    )}
+                </ChatPage>
+                {checkOtherUser && <MemberCard user={checkOtherUser} />}
+            </SideMenuContainer>
+        );
+    }
     return (
         <SideMenuContainer>
             <SideMenu />
-            <ChatPage>
-                <ChatView
-                    user={user}
-                    messages={chatRoomData && chatRoomData.messages}
-                />
-                <ChatForm chatId={testFirstChatRoomId} username="user" />
-            </ChatPage>
-            <MemberCard />
+            <span
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '70%',
+                }}
+            >
+                <Button
+                    color="primary"
+                    onClick={() =>
+                        joinChatRoom(
+                            user?.username,
+                            randomUserForChatRoom.findUserForRandomChatRoom
+                                .username
+                        )
+                    }
+                >
+                    Rejoindre une chatroom
+                </Button>
+            </span>
         </SideMenuContainer>
     );
 };

@@ -29,3 +29,5 @@ services:
     volumes:
       - ./data:/data/db
     restart: always
+  query-redis-srv:
+    image: redis

@@ -4,19 +4,13 @@ import { Container, Form, FormInput, FormButton } from './style';
 
 const CREATE_MESSAGE = gql`
     mutation sendMessage($id: String!, $newMessage: CreateMessageInput!) {
-        sendMessage(id: $id, newMessage: $newMessage) {
-            messages {
-                text
-                author
-                createdAt
-            }
-        }
+        sendMessage(id: $id, newMessage: $newMessage)
     }
 `;
 
 type ChatFormProps = {
     chatId: string;
-    username: string; // récupérer l'USER du context
+    username: string;
 };
 
 const isMessageValid = (message: string): boolean => {
@@ -45,6 +39,7 @@ const ChatForm: FC<ChatFormProps> = ({ chatId, username }: ChatFormProps) => {
                                 },
                             },
                         });
+                        setMessage('');
                     } else {
                         // TODO change this to a real error message
                         alert('You cannot send empty message');

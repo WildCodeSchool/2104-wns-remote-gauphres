@@ -10,7 +10,8 @@ import { MenuContainer, UsersConnectedContainer } from './style';
 import  UserConnected from './UserConnected';
 import  AllUsers from './AllUsers';
 import Button from '../Button/Button';
-import { UserContext } from '../../contexts/UserContext';
+import { AuthContext } from '../../contexts/AuthContext';
+import { ActionKind } from '../../types/authContextTypes';
 
 const LOGOUT = gql`
   mutation logout($id: String!) {
@@ -19,20 +20,22 @@ const LOGOUT = gql`
     }
   }
 `
-
 const SideMenu: FC = () => {
-    const { user } = useContext(UserContext);
+    const { user, dispatch } = useContext(AuthContext);
     const history = useHistory();
     const [logout] = useMutation(LOGOUT);
 
     const handleDisconnect = async () => {
+      if (user) {
         await logout({
             variables: {
-              id: user?._id,
+              id: user._id,
             }
           });
-        localStorage.clear();
+        localStorage.removeItem('jwtToken');
+        dispatch({ type: ActionKind.Logout, payload: user });
         history.push('/login');
+      }
     }
     
     return (

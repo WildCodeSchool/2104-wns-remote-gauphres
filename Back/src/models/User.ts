@@ -29,8 +29,8 @@ export class User {
     password?: string;
 
     @Prop()
-    @Field(() => [String], { nullable: true })
-    chatrooms?: string[];
+    @Field(() => String, { nullable: true })
+    chatrooms?: string;
 
     @Prop()
     @Field(() => [String], { nullable: true })
@@ -197,4 +197,13 @@ export class MessageSender {
 export class ArticleCreator {
     @Field()
     username!: string;
+}
+
+@ObjectType()
+export class UserStatusChange {
+    @Field()
+    userId: string;
+
+    @Field()
+    newStatus: boolean;
 }
