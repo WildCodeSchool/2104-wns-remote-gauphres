@@ -31,6 +31,15 @@ const FIND_CHAT = gql`
     }
 `;
 
+const SUBSCRIPTION_USERSTATUS = gql`
+    subscription onUserStatusChanged {
+        userStatusChanged {
+            userId
+            newStatus
+        }
+    }
+`;
+
 const SUBSCRIPTION_MESSAGE = gql`
     subscription onMessageSent {
         messageSent {
