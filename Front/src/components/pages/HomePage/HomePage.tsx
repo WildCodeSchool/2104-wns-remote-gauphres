@@ -16,7 +16,7 @@ const HomePage: FC = () => {
         <HomePageContainer>
             <PictureContent>
                 <HomePageTitle>
-                    <h1>MOOWDY!</h1>
+                    <h1 data-testid="homepage-title">MOOWDY!</h1>
                     <h2>Se rencontrer</h2>
                 </HomePageTitle>
                 <HomepageButtonsContainer>
