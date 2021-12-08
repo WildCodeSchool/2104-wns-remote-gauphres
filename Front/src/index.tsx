@@ -14,13 +14,18 @@ import reportWebVitals from './reportWebVitals';
 
 const env = process.env.NODE_ENV;
 
-const getUri = () => {
+const getGraphqlUri = () => {
     if (env === 'production') return '/graphql';
     return 'http://localhost:5000/graphql';
 };
 
+const getSubscriptionsUri = () => {
+    if (env === 'production') return '/subscriptions';
+    return 'ws://localhost:5000/subscriptions';
+};
+
 const wsLink = new WebSocketLink({
-    uri: 'ws://localhost:5000/subscriptions',
+    uri: getSubscriptionsUri(),
     options: {
         reconnect: true,
     },
@@ -37,7 +42,7 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const httpLink = createHttpLink({
-    uri: getUri(),
+    uri: getGraphqlUri(),
 });
 
 const splitLink = split(
