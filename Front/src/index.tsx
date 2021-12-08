@@ -21,7 +21,7 @@ const getGraphqlUri = () => {
 
 const getSubscriptionsUri = () => {
     if (env === 'production') return '/subscriptions';
-    return 'ws://localhost:5000/subscriptions';
+    return 'w://localhost:5000/subscriptions';
 };
 
 const wsLink = new WebSocketLink({
