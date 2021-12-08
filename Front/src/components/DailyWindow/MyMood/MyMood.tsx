@@ -1,7 +1,8 @@
 import React, { FC, useState, useContext } from 'react';
 import { gql, useMutation } from '@apollo/client';
-import { User, UserContext } from '../../../contexts/UserContext';
 import { SmallCard, MoodImage, MiniImages, MiniImage } from '../moodStyle';
+import { AuthContext } from '../../../contexts/AuthContext';
+import { User } from '../../../types/authContextTypes';
 
 const UPDATE_USER_MOOD = gql`
     mutation updateUserMood($email: String!, $newMood: MoodInput!) {
@@ -14,7 +15,7 @@ type MoodProps = {
 };
 
 const MyMood: FC<MoodProps> = ({ user }: MoodProps) => {
-    const { user: userFromContext } = useContext(UserContext);
+    const { user: userFromContext, refetch } = useContext(AuthContext);
     const [moodDatas, setMoodDatas] = useState(userFromContext?.userMood);
     const [updateMood] = useMutation(UPDATE_USER_MOOD);
 
@@ -33,6 +34,7 @@ const MyMood: FC<MoodProps> = ({ user }: MoodProps) => {
                 },
             },
         });
+        refetch();
     };
 
     return (

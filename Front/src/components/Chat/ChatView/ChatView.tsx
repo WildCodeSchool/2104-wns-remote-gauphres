@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
+import { User } from '../../../types/authContextTypes';
 import { Container, BubbleMessage } from './style';
-import { User } from '../../../contexts/UserContext';
 
 export type Message = {
     id: number;
@@ -11,7 +11,7 @@ export type Message = {
 
 type ChatViewProps = {
     messages: Message[] | [];
-    user: User;
+    user: User | null;
 };
 
 export const ChatView: FC<ChatViewProps> = ({

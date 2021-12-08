@@ -17,10 +17,10 @@ import Dashboard from './components/pages/Dashboard/Dashboard';
 import ArticlesPage from './components/pages/Articles/Article';
 import EventsPage from './components/pages/Events/Events';
 import MembersPage from './components/pages/Members/Members';
-import { UserProvider } from './contexts/UserContext';
 import LoginPage from './components/pages/Login/Login';
 import HomePage from './components/pages/HomePage/HomePage';
 import SignUpPage from './components/pages/SignUp/SignUp';
+import { AuthProvider } from './contexts/AuthContext';
 
 type PrivateRouteProps = {
     children: React.ReactNode;
@@ -31,7 +31,7 @@ const App: FC<{ client: ApolloClient<NormalizedCacheObject> }> = ({
     client,
 }) => {
     const PrivateRoute = ({ children, path }: PrivateRouteProps) => {
-        const isAuthenticated = localStorage.getItem('@storage_Key');
+        const isAuthenticated = localStorage.getItem('jwtToken');
         return (
             <Route
                 path={path}
@@ -54,7 +54,7 @@ const App: FC<{ client: ApolloClient<NormalizedCacheObject> }> = ({
     return (
         <Router>
             <ApolloProvider client={client}>
-                <UserProvider>
+                <AuthProvider>
                     <Switch>
                         <Route exact path="/" component={HomePage} />
                         <Route path="/login" component={LoginPage} />
@@ -75,7 +75,7 @@ const App: FC<{ client: ApolloClient<NormalizedCacheObject> }> = ({
                             <EventsPage />
                         </PrivateRoute>
                     </Switch>
-                </UserProvider>
+                </AuthProvider>
             </ApolloProvider>
         </Router>
     );

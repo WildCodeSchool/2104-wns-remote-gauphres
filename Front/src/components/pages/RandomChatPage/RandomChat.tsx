@@ -2,7 +2,7 @@ import React, { FC, useContext, useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { ChatView } from '../../Chat/ChatView/ChatView';
 import ChatForm from '../../Chat/ChatForm/ChatForm';
-import { UserContext } from '../../../contexts/UserContext';
+import { AuthContext } from '../../../contexts/AuthContext';
 import { ChatPage } from './style';
 import MemberCard from '../../Chat/MemberCard/MemberCard';
 import SideMenu from '../../SideMenu/SideMenu';
@@ -54,14 +54,9 @@ const SUBSCRIPTION_MESSAGE = gql`
 `;
 
 const RandomChat: FC = () => {
-    const { user } = useContext(UserContext);
-
-    if (!user) {
-        throw new Error('invalid user');
-    }
-
-    const { loading, error, data, subscribeToMore } = useQuery(FIND_CHAT, {
-        variables: { id: user.chatrooms },
+    const { user } = useContext(AuthContext);
+    const { data, subscribeToMore } = useQuery(FIND_CHAT, {
+        variables: { id: user?.chatrooms },
     });
 
     useEffect(() => {
