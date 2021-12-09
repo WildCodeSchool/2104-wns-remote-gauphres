@@ -52,6 +52,7 @@ export const Link = styled(BaseLink)`
     font-family: ${fonts.text}!important;
     font-weight: 600 !important;
     text-decoration: none;
+    width: 100%;
     color: #00000;
 `;
 
