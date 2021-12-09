@@ -82,9 +82,15 @@ export const MemberCard = ({ user }: MemberCardProps): ReactElement => {
             )}
 
             {user.userMood ? (
-                <Mood src={user.userMood.image} alt={user.userMood.title} />
+                <Mood
+                    src={`/images/moods/${user.userMood.image}`}
+                    alt={user.userMood.title}
+                />
             ) : (
-                <Mood src={emptyData.moodIcone} alt={emptyData.moodTitle} />
+                <Mood
+                    src="/images/moods/default.png"
+                    alt={emptyData.moodTitle}
+                />
             )}
         </Article>
     );

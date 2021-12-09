@@ -145,22 +145,28 @@ const RandomChat: FC = () => {
         currentUsernameData: string | undefined,
         randomUsernameData: string
     ) => {
-        await createChatRoom({
-            variables: {
-                data: {
-                    title: `Chatroom de ${currentUsernameData} et ${randomUsernameData}`,
-                    chatRoomUsers: [
-                        {
-                            username: currentUsernameData,
-                        },
-                        {
-                            username: randomUsernameData,
-                        },
-                    ],
-                    messages: [],
+        if (currentUsernameData !== randomUsernameData) {
+            await createChatRoom({
+                variables: {
+                    data: {
+                        title: `Chatroom de ${currentUsernameData} et ${randomUsernameData}`,
+                        chatRoomUsers: [
+                            {
+                                username: currentUsernameData,
+                            },
+                            {
+                                username: randomUsernameData,
+                            },
+                        ],
+                        messages: [],
+                    },
                 },
-            },
-        });
+            });
+        } else {
+            alert(
+                "Aucun utilisateur n'est actuellement disponible pour échanger. Veuillez ré-essayer plus tard ;)"
+            );
+        }
         refetch();
     };
 
