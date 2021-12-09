@@ -21,7 +21,7 @@ const getGraphqlUri = () => {
 
 const getSubscriptionsUri = () => {
     if (env === 'production')
-        return 'ws://staging.les-gauphres.wns.wilders.dev//subscriptions';
+        return 'wss://staging.les-gauphres.wns.wilders.dev/subscriptions';
     return 'ws://localhost:5000/subscriptions';
 };
 
