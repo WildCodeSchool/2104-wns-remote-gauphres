@@ -9,23 +9,24 @@ const GET_ALL_USERS = gql`
     }
 `;
 
-type AllUsersType = {
+type User = {
     username: string;
-    length: number;
 };
 
 const AllUsers: FC = () => {
-    const { loading, error: queryError, data } = useQuery(GET_ALL_USERS);
+    const { loading, data } = useQuery(GET_ALL_USERS);
 
-    const [allUsers, setAllUsers] = useState<AllUsersType>();
+    const [allUsers, setAllUsers] = useState<User[]>();
 
     useEffect(() => {
         setAllUsers(data && data.getAllUsers);
     }, [data]);
 
+    if (!allUsers || loading) return null;
+
     return (
         <div>
-            <p>{allUsers?.length} personnes à rencontrer</p>
+            <p>{allUsers.length - 1} personnes à rencontrer</p>
         </div>
     );
 };
