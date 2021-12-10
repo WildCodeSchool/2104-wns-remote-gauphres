@@ -47,6 +47,7 @@ const ChatForm: FC<ChatFormProps> = ({ chatId, username }: ChatFormProps) => {
                 }}
             >
                 <FormInput
+                    autoComplete="off"
                     type="text"
                     name="text"
                     value={message}
