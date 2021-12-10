@@ -3,13 +3,13 @@ import React, { FC } from 'react';
 import SideMenu from '../../SideMenu/SideMenu';
 import { SideMenuContainer } from '../../../style';
 
-const ArticlesPage: FC = () => {
+const ProfilePage: FC = () => {
     return (
         <SideMenuContainer>
             <SideMenu />
-            <div>ArticlePage</div>
+            <div>ProfilePage</div>
         </SideMenuContainer>
     );
 };
 
-export default ArticlesPage;
+export default ProfilePage;
