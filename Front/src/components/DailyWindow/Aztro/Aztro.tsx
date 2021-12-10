@@ -6,6 +6,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { AuthContext } from '../../../contexts/AuthContext';
+import ApiCard from '../../shared/Card/ApiCard';
 
 // STYLES
 const BoxStyle = styled.div`
@@ -159,6 +160,23 @@ const Aztro = () => {
 
     return (
         <>
+            <ApiCard
+                title="Your Daily Aztro sign !"
+                subtitle={findZodiacSign(day, month)}
+            >
+                <p>
+                    <span style={{ fontWeight: 'bold' }}>Day :</span>{' '}
+                    {aztroSign?.current_date}
+                </p>
+                <p>
+                    <span style={{ fontWeight: 'bold' }}>Description :</span>{' '}
+                    {aztroSign?.description}
+                </p>
+                <p>
+                    <span style={{ fontWeight: 'bold' }}>Mood :</span>{' '}
+                    {aztroSign?.mood}
+                </p>
+            </ApiCard>
             <BoxStyle>
                 <Header>
                     <h2>Your Daily Aztro sign !</h2>
