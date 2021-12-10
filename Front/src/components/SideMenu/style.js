@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import { colors, fonts } from '../style/theme';
 
 // eslint-disable-next-line import/prefer-default-export
+export const MainDivSideMenu = styled.div`
+    padding: 0 10px 0 10px;
+`;
+
 export const MenuContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -20,9 +24,14 @@ export const MenuContainer = styled.div`
 export const UsersConnectedContainer = styled.div`
     background-color: ${colors.white};
     font-family: ${fonts.title};
-    position: absolute;
     bottom: 3em;
     left: 2em;
     padding: 1em;
     text-align: center;
+`;
+
+export const LogoutButtonContainer = styled.div`
+    margin-top: 100%;
+    width: 5%;
+    color: black;
 `;
