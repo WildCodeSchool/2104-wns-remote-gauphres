@@ -47,6 +47,9 @@ export const HomepageButtonsContainer = styled.nav`
 `;
 
 export const Link = styled(BaseLink)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 1.25em;
     font-family: ${fonts.text}!important;
     font-weight: 600 !important;
