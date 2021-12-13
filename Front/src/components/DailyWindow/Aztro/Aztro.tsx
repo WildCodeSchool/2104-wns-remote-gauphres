@@ -2,9 +2,6 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import { AuthContext } from '../../../contexts/AuthContext';
 import ApiCard from '../../shared/Card/ApiCard';
 
@@ -159,88 +156,23 @@ const Aztro = () => {
     }, [user]);
 
     return (
-        <>
-            <ApiCard
-                title="Your Daily Aztro sign !"
-                subtitle={findZodiacSign(day, month)}
-            >
-                <p>
-                    <span style={{ fontWeight: 'bold' }}>Day :</span>{' '}
-                    {aztroSign?.current_date}
-                </p>
-                <p>
-                    <span style={{ fontWeight: 'bold' }}>Description :</span>{' '}
-                    {aztroSign?.description}
-                </p>
-                <p>
-                    <span style={{ fontWeight: 'bold' }}>Mood :</span>{' '}
-                    {aztroSign?.mood}
-                </p>
-            </ApiCard>
-            <BoxStyle>
-                <Header>
-                    <h2>Your Daily Aztro sign !</h2>
-                    <h3>{`- ${findZodiacSign(day, month)} - `}</h3>
-                </Header>
-                <Body>
-                    <p>
-                        <span style={{ fontWeight: 'bold' }}>Day :</span>{' '}
-                        {aztroSign?.current_date}
-                    </p>
-                    <p>
-                        <span style={{ fontWeight: 'bold' }}>
-                            Description :
-                        </span>{' '}
-                        {aztroSign?.description}
-                    </p>
-                    <p>
-                        <span style={{ fontWeight: 'bold' }}>Mood :</span>{' '}
-                        {aztroSign?.mood}
-                    </p>
-                </Body>
-            </BoxStyle>
-
-            <Card sx={{ minWidth: 175 }}>
-                <CardContent>
-                    <Typography
-                        sx={{ fontSize: 14 }}
-                        color="text.secondary"
-                        gutterBottom
-                    >
-                        Word of the Day
-                    </Typography>
-                    <Typography variant="h5" component="div">
-                        Your Daily Aztro sign !
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                        {findZodiacSign(day, month)}
-                    </Typography>
-                    <Typography variant="body2">
-                        <span style={{ fontWeight: 'bold' }}>Day :</span>{' '}
-                        {aztroSign?.current_date}
-                        <br />
-                        <span style={{ fontWeight: 'bold' }}>
-                            Description :
-                        </span>{' '}
-                        {aztroSign?.description}
-                    </Typography>
-                    <p>
-                        <span style={{ fontWeight: 'bold' }}>Day :</span>{' '}
-                        {aztroSign?.current_date}
-                    </p>
-                    <p>
-                        <span style={{ fontWeight: 'bold' }}>
-                            Description :
-                        </span>{' '}
-                        {aztroSign?.description}
-                    </p>
-                    <p>
-                        <span style={{ fontWeight: 'bold' }}>Mood :</span>{' '}
-                        {aztroSign?.mood}
-                    </p>
-                </CardContent>
-            </Card>
-        </>
+        <ApiCard
+            title="Your Daily Aztro sign !"
+            subtitle={findZodiacSign(day, month)}
+        >
+            <p>
+                <span style={{ fontWeight: 'bold' }}>Day :</span>{' '}
+                {aztroSign?.current_date}
+            </p>
+            <p>
+                <span style={{ fontWeight: 'bold' }}>Description :</span>{' '}
+                {aztroSign?.description}
+            </p>
+            <p>
+                <span style={{ fontWeight: 'bold' }}>Mood :</span>{' '}
+                {aztroSign?.mood}
+            </p>
+        </ApiCard>
     );
 };
 

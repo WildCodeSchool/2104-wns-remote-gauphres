@@ -1,5 +1,4 @@
-import React, { ReactNode, useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import React, { ReactNode } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -12,11 +11,37 @@ interface Props {
 }
 
 const ApiCard = ({ title, subtitle, children }: Props) => (
-    <Card sx={{ minWidth: 100 }}>
+    <Card
+        sx={{
+            minWidth: 310,
+            maxWidth: 350,
+            m: 2,
+            p: 1,
+            boxShadow: 3,
+            borderRadius: 8,
+        }}
+    >
         <CardContent>
+            <Typography
+                variant="h2"
+                component="div"
+                sx={{
+                    fontFamily: fonts.title,
+                    color: colors.darkPurple,
+                    fontWeight: 'bold',
+                }}
+            >
+                {title}
+            </Typography>
+
             {subtitle && (
                 <Typography
-                    sx={{ fontSize: 14, fontFamily: fonts.text }}
+                    sx={{
+                        fontSize: 14,
+                        fontFamily: fonts.text,
+                        color: colors.darkPurple,
+                        fontWeight: 'bold',
+                    }}
                     color="text.secondary"
                     gutterBottom
                 >
@@ -24,11 +49,17 @@ const ApiCard = ({ title, subtitle, children }: Props) => (
                 </Typography>
             )}
 
-            <Typography variant="h5" component="div">
-                {title}
+            <Typography
+                variant="body2"
+                sx={{
+                    fontSize: 14,
+                    fontFamily: fonts.text,
+                    color: colors.darkPurple,
+                    fontWeight: 'bold',
+                }}
+            >
+                {children}
             </Typography>
-
-            <Typography variant="body2">{children}</Typography>
         </CardContent>
     </Card>
 );
