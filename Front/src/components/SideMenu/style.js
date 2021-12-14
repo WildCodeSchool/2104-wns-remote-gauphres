@@ -37,6 +37,7 @@ export const LogoutButtonContainer = styled.div`
 `;
 
 export const LogoutButton = styled.button`
+    font-family: ${fonts.title};
     background-color: #eb3d34;
     width: 60%;
     padding: 15px;
