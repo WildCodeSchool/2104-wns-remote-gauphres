@@ -13,6 +13,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const env = process.env.NODE_ENV;
+const subscriptionUrl = process.env.REACT_APP_SUB_URL;
 
 const getGraphqlUri = () => {
     if (env === 'production') return '/graphql';
@@ -20,8 +21,9 @@ const getGraphqlUri = () => {
 };
 
 const getSubscriptionsUri = () => {
-    if (env === 'production')
-        return 'wss://staging.les-gauphres.wns.wilders.dev/subscriptions';
+    if (env === 'production') {
+        return `wss://${subscriptionUrl}/subscriptions`;
+    }
     return 'ws://localhost:5000/subscriptions';
 };
 
