@@ -1,11 +1,18 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../../contexts/AuthContext';
 import { SideMenuContainer } from '../../../style';
 import Aztro from '../../DailyWindow/Aztro/Aztro';
+import Caturday from '../../DailyWindow/Caturday/Caturday';
+import FromTheSky from '../../DailyWindow/FromTheSky/FromTheSky';
 import MyMood from '../../DailyWindow/MyMood/MyMood';
 import RandomWord from '../../DailyWindow/RandomWord/RandomWord';
 import SideMenu from '../../SideMenu/SideMenu';
-import { MainWrapper, RightWrapper, Wrapper } from './style';
+import {
+    ApiCardsContainer,
+    DashboardTitle,
+    MainWrapper,
+    RightWrapper,
+    Wrapper,
+} from './style';
 
 const Dashboard: FC = () => {
     const [randomWord, setRandomWord] = useState();
@@ -27,9 +34,15 @@ const Dashboard: FC = () => {
             <SideMenu />
             <Wrapper>
                 <MainWrapper>
-                    <h1>Dashboard</h1>
-                    <RandomWord randomWord={randomWord} />
-                    <Aztro />
+                    <DashboardTitle>Dashboard</DashboardTitle>
+                    <ApiCardsContainer>
+                        <Caturday />
+                        <Aztro />
+                    </ApiCardsContainer>
+                    <ApiCardsContainer>
+                        <RandomWord randomWord={randomWord} />
+                        <FromTheSky />
+                    </ApiCardsContainer>
                 </MainWrapper>
                 <RightWrapper>
                     <MyMood />
