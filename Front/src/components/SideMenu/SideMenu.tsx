@@ -6,7 +6,7 @@ import { IoPersonAddSharp } from 'react-icons/io5';
 import { AiOutlineWechat } from 'react-icons/ai';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { BiCoffeeTogo } from 'react-icons/bi';
-import { LogoutButtonContainer, MainDivSideMenu, MenuContainer, UsersConnectedContainer } from './style';
+import { LogoutButtonContainer, MainDivSideMenu, MenuContainer, UsersConnectedContainer, LogoutButton} from './style';
 import  UserConnected from './UserConnected';
 import  AllUsers from './AllUsers';
 import Button from '../Button/Button';
@@ -51,7 +51,7 @@ const SideMenu: FC = () => {
             <UserConnected />
         </UsersConnectedContainer>
         <LogoutButtonContainer>
-          <Button color='secondary' onClick={handleDisconnect}>Déconnexion</Button>
+          <LogoutButton onClick={handleDisconnect}>Déconnexion</LogoutButton>
         </LogoutButtonContainer>
       </MainDivSideMenu>
     );

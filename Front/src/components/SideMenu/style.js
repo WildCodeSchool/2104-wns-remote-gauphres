@@ -4,6 +4,7 @@ import { colors, fonts } from '../style/theme';
 // eslint-disable-next-line import/prefer-default-export
 export const MainDivSideMenu = styled.div`
     padding: 0 10px 0 10px;
+    min-width: 15rem;
 `;
 
 export const MenuContainer = styled.div`
@@ -32,6 +33,16 @@ export const UsersConnectedContainer = styled.div`
 
 export const LogoutButtonContainer = styled.div`
     margin-top: 100%;
-    width: 5%;
-    color: black;
+    text-align: center;
+`;
+
+export const LogoutButton = styled.button`
+    background-color: #eb3d34;
+    width: 60%;
+    padding: 15px;
+    border-radius: 20px;
+    border: none;
+    font-size: 15px;
+    color: white;
+    bottom: 0;
 `;
