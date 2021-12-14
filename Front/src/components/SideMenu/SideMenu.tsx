@@ -6,7 +6,7 @@ import { IoPersonAddSharp } from 'react-icons/io5';
 import { AiOutlineWechat } from 'react-icons/ai';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { BiCoffeeTogo } from 'react-icons/bi';
-import { MenuContainer, UsersConnectedContainer } from './style';
+import { LogoutButtonContainer, MainDivSideMenu, MenuContainer, UsersConnectedContainer, LogoutButton} from './style';
 import  UserConnected from './UserConnected';
 import  AllUsers from './AllUsers';
 import Button from '../Button/Button';
@@ -39,20 +39,21 @@ const SideMenu: FC = () => {
     }
     
     return (
-        <div>
+      <MainDivSideMenu>
         <MenuContainer>  
             <NavLink to="/dashboard" activeStyle={{color: "purple"}}><BiCoffeeTogo /> Dashboard</NavLink>            
             <NavLink to="/random-chat" activeStyle={{color: "purple"}}><AiOutlineWechat /> Chat match</NavLink>
             <NavLink to="/members" activeStyle={{color: "purple"}}><IoPersonAddSharp /> Membres</NavLink>
             <NavLink to="/profile" activeStyle={{color: "purple"}}><BsFillPersonFill /> Profile</NavLink>
-
         </MenuContainer>
-        <Button color='secondary' onClick={handleDisconnect}>Déconnexion</Button>
         <UsersConnectedContainer>
             <AllUsers />
             <UserConnected />
         </UsersConnectedContainer>
-    </div>
+        <LogoutButtonContainer>
+          <LogoutButton onClick={handleDisconnect}>Déconnexion</LogoutButton>
+        </LogoutButtonContainer>
+      </MainDivSideMenu>
     );
 };
 
