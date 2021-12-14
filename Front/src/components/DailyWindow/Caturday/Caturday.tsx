@@ -17,7 +17,6 @@ const Caturday = () => {
         );
         const data = await catResponse.json();
         setCaturdayImage(data[0].url);
-        console.log('caturday:', data[0]);
     };
 
     useEffect(() => {

@@ -12,7 +12,6 @@ const FromTheSky = () => {
         );
         const data = await nasaResponse.json();
         setNasaImage(data.url);
-        console.log('nasaImage:', data.url);
     };
 
     useEffect(() => {

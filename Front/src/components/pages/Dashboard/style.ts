@@ -30,8 +30,9 @@ export const DashboardTitle = styled.div`
 export const ApiCardsContainer = styled.div`
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
     @media (max-width: 1224px) {
         flex-direction: column;
     }
-    margin: 1.5em;
+    margin: 1.5em 1.5em 0 1.5em;
 `;
