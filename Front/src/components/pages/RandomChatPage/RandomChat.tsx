@@ -1,5 +1,7 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { gql, useMutation, useQuery } from '@apollo/client';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import { ChatView } from '../../Chat/ChatView/ChatView';
 import ChatForm from '../../Chat/ChatForm/ChatForm';
 import { AuthContext } from '../../../contexts/AuthContext';
@@ -188,6 +190,24 @@ const RandomChat: FC = () => {
 
     const checkOtherUser = GetOtherUser(otherUser.id);
 
+    if (loading) {
+        return (
+            <SideMenuContainer>
+                <SideMenu />
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: 'auto',
+                        width: '70%',
+                    }}
+                >
+                    <CircularProgress />
+                </Box>
+            </SideMenuContainer>
+        );
+    }
     if (user?.chatrooms != null) {
         return (
             <SideMenuContainer>
@@ -208,6 +228,7 @@ const RandomChat: FC = () => {
             </SideMenuContainer>
         );
     }
+
     return (
         <SideMenuContainer>
             <SideMenu />
