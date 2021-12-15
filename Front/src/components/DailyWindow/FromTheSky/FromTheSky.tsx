@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import ApiImageCard from '../../shared/Card/ApiImageCard';
 
-const FromTheSky = () => {
+const FromTheSky: FC = () => {
     const [nasaImage, setNasaImage] = useState<string>();
 
     const fetchNasa = async () => {

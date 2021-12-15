@@ -105,6 +105,7 @@ const SignUpPage: FC = () => {
 
     const renderButton = () => {
         const handleClick = (e: MouseEvent) => {
+            console.log('e:', e);
             e.preventDefault();
             setFormStep(formStep + 1);
         };
@@ -123,7 +124,7 @@ const SignUpPage: FC = () => {
             <Button
                 disabled={Object.values(errors).length > 0}
                 type="button"
-                onClick={(e: MouseEvent) => handleClick(e)}
+                onClick={(e: any) => handleClick(e)}
                 style={{ maxWidth: '49%' }}
             >
                 Etape suivante

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 import Moment from 'react-moment';
 import {
     Article,
@@ -72,7 +72,7 @@ export const MemberCard = ({ user }: MemberCardProps): ReactElement => {
                 <Hobby>
                     Ses passions:{' '}
                     {user.hobbies.map((hobby) => (
-                        <li>{hobby}</li>
+                        <li key={hobby}>{hobby}</li>
                     ))}
                 </Hobby>
             ) : (
