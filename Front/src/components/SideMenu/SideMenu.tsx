@@ -37,6 +37,10 @@ const SideMenu: FC = () => {
         history.push('/login');
       }
     }
+
+    const redirectToProfil = () => {
+      history.push('/profile');
+    }
     
     return (
       <MainDivSideMenu>
@@ -47,6 +51,7 @@ const SideMenu: FC = () => {
                     : 'default.png'
             }`}
             alt={user?.avatar}
+            onClick={() => redirectToProfil()}
         />
         <MenuContainer>  
             <NavLink to="/dashboard" activeStyle={{color: "purple"}}><BiCoffeeTogo /> Dashboard</NavLink>            

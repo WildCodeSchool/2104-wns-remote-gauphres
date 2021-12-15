@@ -39,7 +39,7 @@ export const UsersConnectedContainer = styled.div`
 `;
 
 export const LogoutButtonContainer = styled.div`
-    margin-top: 100%;
+    margin-top: 60%;
     text-align: center;
 `;
 
