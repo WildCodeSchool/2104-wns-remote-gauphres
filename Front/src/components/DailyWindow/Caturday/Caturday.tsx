@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
 import ApiImageCard from '../../shared/Card/ApiImageCard';
 
 const Caturday = () => {
-    const [caturdayImage, setCaturdayImage] = useState<string>(
-        'https://cdn2.thecatapi.com/images/9g8.jpg'
-    );
+    const [caturdayImage, setCaturdayImage] = useState<string>();
 
     const fetchCaturday = async () => {
         const catResponse = await fetch(

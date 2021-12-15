@@ -2,12 +2,12 @@ import React, { ReactNode } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { CardMedia } from '@mui/material';
+import { Box, CardMedia, Skeleton } from '@mui/material';
 import { fonts, colors } from '../../style/theme';
 
 interface Props {
     title: string;
-    url: string;
+    url: string | undefined;
 }
 
 const ApiImageCard = ({ title, url }: Props) => (
@@ -33,14 +33,26 @@ const ApiImageCard = ({ title, url }: Props) => (
             >
                 {title}
             </Typography>
-            <CardMedia
-                component="img"
-                image={url}
-                width="auto"
-                height="300"
-                alt="Random Kitty of the day"
-                sx={{ py: 1 }}
-            />
+            {!url && (
+                <Box
+                    sx={{
+                        display: 'flex',
+                        my: 2,
+                    }}
+                >
+                    <Skeleton variant="rectangular" width={400} height={300} />
+                </Box>
+            )}
+            {url && (
+                <CardMedia
+                    component="img"
+                    image={url}
+                    width="auto"
+                    height="300"
+                    alt="Random Kitty of the day"
+                    sx={{ py: 1 }}
+                />
+            )}
         </CardContent>
     </Card>
 );

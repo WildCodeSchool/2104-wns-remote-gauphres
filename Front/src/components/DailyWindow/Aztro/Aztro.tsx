@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/destructuring-assignment */
 import React, { useContext, useEffect, useState } from 'react';
