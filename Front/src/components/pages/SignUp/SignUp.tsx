@@ -355,7 +355,6 @@ const SignUpPage: FC = () => {
                     </InputDiv>
                 )}
                 {renderButton()}
-                <pre>{JSON.stringify(watch(), null, 2)}</pre>
             </Form>
         </Container>
     );
