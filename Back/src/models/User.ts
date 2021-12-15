@@ -29,8 +29,8 @@ export class User {
     password?: string;
 
     @Prop()
-    @Field(() => [String], { nullable: true })
-    chatrooms?: string[];
+    @Field(() => String, { nullable: true })
+    chatrooms?: string;
 
     @Prop()
     @Field(() => [String], { nullable: true })
@@ -156,21 +156,8 @@ export class UserInput {
 
 @InputType()
 export class UserChatRoom {
-    @Prop()
-    @Field()
-    id?: string;
-
     @Field()
     username?: string;
-
-    @Field()
-    avatar?: string;
-
-    @Field()
-    isConnected?: boolean = false;
-
-    @Field(() => [String])
-    hobbies?: string[];
 }
 
 @index({ id: 'text' }, { unique: true })
@@ -210,4 +197,13 @@ export class MessageSender {
 export class ArticleCreator {
     @Field()
     username!: string;
+}
+
+@ObjectType()
+export class UserStatusChange {
+    @Field()
+    userId: string;
+
+    @Field()
+    newStatus: boolean;
 }

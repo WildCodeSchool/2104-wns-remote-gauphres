@@ -19,9 +19,8 @@ export const FormInput = styled.input`
     border: none;
     width: 80%;
     padding: 1em;
-    align-self: start;
-    min-height: 100%;
     font-family: ${fonts.text};
+    font-size: larger;
     &:focus {
         outline: none;
     }
@@ -32,12 +31,13 @@ export const FormButton = styled.button`
     color: ${colors.white};
     border-radius: 1em;
     border: none;
-    padding: 1em 3em 1em 3em;
+    padding: 0.5em;
     font-family: ${fonts.text};
     font-weight: bold;
     font-size: 1em;
     margin: 1em;
     width: 20%;
+    min-width: 5em;
     &:focus {
         outline: none;
     }

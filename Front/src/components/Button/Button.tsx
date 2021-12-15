@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { PropTypes } from '@material-ui/core';
 import React, { ReactNode } from 'react';
 import CustomButton from './style';
 
@@ -7,15 +8,16 @@ type ButtonType = 'button' | 'submit' | 'reset' | undefined;
 interface ButtonProps {
     children: ReactNode;
     type?: ButtonType;
-    onClick?: (arg?: any) => void;
-    disabled?: any;
+    onClick?: (arg1: any) => void;
+    disabled?: boolean;
+    color?: PropTypes.Color | undefined;
 }
 
-const Button = ({ children, type, onClick, disabled }: ButtonProps) => {
+const Button = ({ children, type, onClick, disabled, color }: ButtonProps) => {
     return (
         <CustomButton
             variant="contained"
-            color="primary"
+            color={color}
             type={type}
             onClick={onClick}
             disabled={disabled}
@@ -29,6 +31,7 @@ Button.defaultProps = {
     type: 'button',
     onClick: () => undefined,
     disabled: false,
+    color: 'primary',
 };
 
 export default Button;

@@ -4,20 +4,13 @@ import { Container, Form, FormInput, FormButton } from './style';
 
 const CREATE_MESSAGE = gql`
     mutation sendMessage($id: String!, $newMessage: CreateMessageInput!) {
-        sendMessage(_id: $id, newMessage: $newMessage) {
-            messages {
-                text
-                createdAt
-            }
-            createdAt
-            isActiv
-            title
-        }
+        sendMessage(id: $id, newMessage: $newMessage)
     }
 `;
 
 type ChatFormProps = {
     chatId: string;
+    username: string;
 };
 
 const isMessageValid = (message: string): boolean => {
@@ -27,7 +20,7 @@ const isMessageValid = (message: string): boolean => {
     return true;
 };
 
-const ChatForm: FC<ChatFormProps> = ({ chatId }: ChatFormProps) => {
+const ChatForm: FC<ChatFormProps> = ({ chatId, username }: ChatFormProps) => {
     const [message, setMessage] = useState('');
     const [createMessage, { data }] = useMutation(CREATE_MESSAGE);
 
@@ -41,14 +34,12 @@ const ChatForm: FC<ChatFormProps> = ({ chatId }: ChatFormProps) => {
                             variables: {
                                 id: chatId,
                                 newMessage: {
-                                    author: {
-                                        id: '60899d221aeef5070efe5c45',
-                                        userName: 'NiceUser',
-                                    },
+                                    author: username,
                                     text: message,
                                 },
                             },
                         });
+                        setMessage('');
                     } else {
                         // TODO change this to a real error message
                         alert('You cannot send empty message');
@@ -56,6 +47,7 @@ const ChatForm: FC<ChatFormProps> = ({ chatId }: ChatFormProps) => {
                 }}
             >
                 <FormInput
+                    autoComplete="off"
                     type="text"
                     name="text"
                     value={message}

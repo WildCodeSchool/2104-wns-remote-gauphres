@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { fonts } from '../../style/theme';
 
 export const Wrapper = styled.div`
     display: grid;
@@ -15,4 +16,23 @@ export const MainWrapper = styled.div`
 export const RightWrapper = styled.div`
     grid-column-start: 2;
     grid-row-start: 1;
+`;
+
+export const DashboardTitle = styled.div`
+    font-family: ${fonts.title};
+    font-size: 2.5em;
+    margin: 0;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    text-align: center;
+`;
+
+export const ApiCardsContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    @media (max-width: 1224px) {
+        flex-direction: column;
+    }
+    margin: 1.5em 1.5em 0 1.5em;
 `;

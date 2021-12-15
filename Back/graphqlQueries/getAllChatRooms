@@ -1,7 +1,7 @@
 {
   getAllChatRooms{
     id
-    title
+		title
 		chatRoomUsers {
       username 
       isConnected 
@@ -9,8 +9,10 @@
     }
     createdAt
     messages {
+			id
       text 
       author
+			createdAt
     }
     isActiv
   }

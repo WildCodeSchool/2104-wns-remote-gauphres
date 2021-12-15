@@ -1,28 +1,51 @@
-import React, { Dispatch, FC, useContext } from 'react';
-import { User, UserContext } from '../../../contexts/UserContext';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { SideMenuContainer } from '../../../style';
+import Aztro from '../../DailyWindow/Aztro/Aztro';
+import Caturday from '../../DailyWindow/Caturday/Caturday';
+import FromTheSky from '../../DailyWindow/FromTheSky/FromTheSky';
 import MyMood from '../../DailyWindow/MyMood/MyMood';
+import RandomWord from '../../DailyWindow/RandomWord/RandomWord';
 import SideMenu from '../../SideMenu/SideMenu';
-import { MainWrapper, RightWrapper, Wrapper } from './style';
-// import MyMatch from '../../DailyWindow/MyMatch';
+import {
+    ApiCardsContainer,
+    DashboardTitle,
+    MainWrapper,
+    RightWrapper,
+    Wrapper,
+} from './style';
 
 const Dashboard: FC = () => {
-    const user = useContext<[User | undefined, Dispatch<User>] | null>(
-        UserContext
-    );
+    const [randomWord, setRandomWord] = useState();
 
-    // for test, mood id
-    const id = '6096bf9fab2e797b569f4183';
+    const fetchData = async () => {
+        const response = await fetch(
+            'https://random-words-api.vercel.app/word'
+        );
+        const data = await response.json();
+        setRandomWord(data[0]);
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
         <SideMenuContainer>
             <SideMenu />
             <Wrapper>
                 <MainWrapper>
-                    <h1>Dashboard</h1>
+                    <DashboardTitle>Dashboard</DashboardTitle>
+                    <ApiCardsContainer>
+                        <Caturday />
+                        <Aztro />
+                    </ApiCardsContainer>
+                    <ApiCardsContainer>
+                        <RandomWord randomWord={randomWord} />
+                        <FromTheSky />
+                    </ApiCardsContainer>
                 </MainWrapper>
                 <RightWrapper>
-                    <MyMood user={user && user[0]} />
+                    <MyMood />
                     {/* <MyMatch /> */}
                 </RightWrapper>
             </Wrapper>

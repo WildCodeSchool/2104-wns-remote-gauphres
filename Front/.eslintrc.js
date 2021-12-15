@@ -34,5 +34,8 @@ module.exports = {
                 endOfLine: 'auto',
             },
         ],
+        "no-underscore-dangle":  ["error", { "allow": ["_id"] }],
+        "react/jsx-props-no-spreading": "off",
+        "no-console": "off",
     },
 };

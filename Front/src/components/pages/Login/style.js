@@ -18,7 +18,7 @@ export const Title = styled.h2`
     font-size: 32px;
 `;
 
-export const Form = styled.div`
+export const Form = styled.form`
     display: flex;
     flex-direction: column;
     justify-content: space-around;

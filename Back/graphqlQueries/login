@@ -1,0 +1,16 @@
+mutation Login($currentUser: UserLoginInput!) {
+  Login(currentUser: $currentUser) {
+        token
+    		user {
+          _id
+					username
+        }
+  }
+}
+
+Variables :
+{"currentUser": {
+  "email": "coucou@email.com",
+    "password": "coucou"
+}
+}

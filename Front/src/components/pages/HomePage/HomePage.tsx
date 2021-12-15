@@ -1,17 +1,34 @@
 import React, { FC } from 'react';
-import Link from './style';
-import Button from '../../Button/Button';
+import HomePageButton from '../../shared/ButtonHomePage/HomePageButton';
+
+import {
+    Link,
+    HomePageBlock,
+    HomePageBlockLineContainer,
+    HomepageButtonsContainer,
+    HomePageContainer,
+    PictureContent,
+    HomePageTitle,
+} from './homePageStyle';
 
 const HomePage: FC = () => {
     return (
-        <>
-            <Button>
-                <Link to="/login">Se connecter</Link>
-            </Button>
-            <Button>
-                <Link to="/register">Créer un compte</Link>
-            </Button>
-        </>
+        <HomePageContainer>
+            <PictureContent>
+                <HomePageTitle>
+                    <h1 data-testid="homepage-title">MOOWDY!</h1>
+                    <h2>Se rencontrer</h2>
+                </HomePageTitle>
+                <HomepageButtonsContainer>
+                    <HomePageButton>
+                        <Link to="/login">Se connecter</Link>
+                    </HomePageButton>
+                    <HomePageButton>
+                        <Link to="/register">Créer un compte</Link>
+                    </HomePageButton>
+                </HomepageButtonsContainer>
+            </PictureContent>
+        </HomePageContainer>
     );
 };
 

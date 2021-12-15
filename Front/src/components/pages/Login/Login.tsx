@@ -1,48 +1,20 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import { gql, useMutation } from '@apollo/client';
 import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom';
 import { Title, Container, Form, TextInput, Input } from './style';
 import Button from '../../Button/Button';
+import useLogin from '../../../hooks/useLogin';
 
-const LOGIN_USER = gql`
-    mutation Login($user: UserLoginInput!) {
-        Login(currentUser: $user)
-    }
-`;
-
-type FormValues = {
-    email: string;
-    password: string;
-};
-
-const LoginPage: FC<FormValues> = () => {
-    const history = useHistory();
+const LoginPage: FC = () => {
+    const { login } = useLogin();
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm({ mode: 'all' });
-    const [loginUser] = useMutation(LOGIN_USER);
-
-    const onSubmitForm = async (datas: FormValues) => {
-        const result = await loginUser({
-            variables: {
-                user: {
-                    email: datas.email,
-                    password: datas.password,
-                },
-            },
-        });
-        if (result.data.Login) {
-            history.push('/dashboard');
-        }
-    };
 
     return (
         <Container>
-            <Form onSubmit={handleSubmit(onSubmitForm)}>
+            <Form onSubmit={handleSubmit(login)}>
                 <Title>Connecte toi !</Title>
                 <Input>
                     <TextInput
