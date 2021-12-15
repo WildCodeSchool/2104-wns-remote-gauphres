@@ -20,7 +20,7 @@ services:
       - web-client-build:/app/build
     environment:
       - NODE_ENV=production
-      - REACT_APP_SUB_URL=${SUB_URL}
+      - REACT_APP_SUB_URL=${REACT_APP_SUB_URL}
   mongodb:
     image: mongo:4.4.9
     volumes:
