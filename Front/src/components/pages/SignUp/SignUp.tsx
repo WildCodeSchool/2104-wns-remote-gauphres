@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, MouseEvent, useState } from 'react';
+import React, { CSSProperties, FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
     Checkbox,
@@ -104,8 +104,7 @@ const SignUpPage: FC = () => {
     };
 
     const renderButton = () => {
-        const handleClick = (e: MouseEvent) => {
-            console.log('e:', e);
+        const handleClick = (e: any) => {
             e.preventDefault();
             setFormStep(formStep + 1);
         };
