@@ -4,7 +4,7 @@ import {
     Stepper as StepperBase,
     Select as SelectBase,
 } from '@material-ui/core';
-import { colors } from '../../style/theme';
+import { fonts } from '../../style/theme';
 
 export const Stepper = styled(StepperBase)`
     background-color: #fac748 !important;
@@ -29,6 +29,7 @@ export const Container = styled.div`
 export const Title = styled.h2`
     text-align-last: center;
     font-size: 32px;
+    font-family: ${fonts.title};
 `;
 
 export const SubTitle = styled.h3`
