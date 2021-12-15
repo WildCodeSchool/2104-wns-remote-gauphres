@@ -14,13 +14,12 @@ import {
 import RandomChat from './components/pages/RandomChatPage/RandomChat';
 import './App.css';
 import Dashboard from './components/pages/Dashboard/Dashboard';
-import ArticlesPage from './components/pages/Articles/Article';
-import EventsPage from './components/pages/Events/Events';
 import MembersPage from './components/pages/Members/Members';
 import LoginPage from './components/pages/Login/Login';
 import HomePage from './components/pages/HomePage/HomePage';
 import SignUpPage from './components/pages/SignUp/SignUp';
 import { AuthProvider } from './contexts/AuthContext';
+import ProfilePage from './components/pages/Profile/Profile';
 
 type PrivateRouteProps = {
     children: React.ReactNode;
@@ -62,17 +61,14 @@ const App: FC<{ client: ApolloClient<NormalizedCacheObject> }> = ({
                         <PrivateRoute path="/dashboard">
                             <Dashboard />
                         </PrivateRoute>
-                        <PrivateRoute path="/articles">
-                            <ArticlesPage />
+                        <PrivateRoute path="/profile">
+                            <ProfilePage />
                         </PrivateRoute>
                         <PrivateRoute path="/random-chat">
                             <RandomChat />
                         </PrivateRoute>
                         <PrivateRoute path="/members">
                             <MembersPage />
-                        </PrivateRoute>
-                        <PrivateRoute path="/events">
-                            <EventsPage />
                         </PrivateRoute>
                     </Switch>
                 </AuthProvider>
