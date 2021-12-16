@@ -8,7 +8,6 @@ import cors from 'cors';
 import jwt from 'jsonwebtoken';
 import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server';
-import Fixtures from 'node-mongodb-fixtures';
 import { AuthenticationError } from 'apollo-server-errors';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import UserResolver from './resolvers/UserResolver';

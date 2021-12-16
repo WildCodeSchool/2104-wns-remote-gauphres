@@ -55,11 +55,7 @@ interface FormValues {
     hobbies: string[];
 }
 
-const steps = [
-    'Informations de compte',
-    'Informations personelles',
-    'Tes hobbies',
-];
+const steps = ['Account informations', 'Personal informations', 'Your hobbies'];
 
 const SignUpPage: FC = () => {
     const { login } = useLogin();
