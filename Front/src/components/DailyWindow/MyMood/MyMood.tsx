@@ -42,7 +42,7 @@ const MyMood: FC = () => {
 
     return (
         <SmallCard>
-            <p data-testid="myMood-title">Ton mood</p>
+            <p data-testid="myMood-title">Your mood</p>
             <MoodImage
                 id="main-mood"
                 data-testid="myMood-image"
@@ -51,7 +51,7 @@ const MyMood: FC = () => {
                 }`}
                 alt={user?.userMood?.title}
             />
-            <p>Change-le ici</p>
+            <p>Change your mood</p>
             <MiniImages>
                 <MiniImage
                     type="image"

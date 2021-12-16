@@ -65,7 +65,7 @@ const MembersPage: FC = () => {
         <SideMenuContainer>
             <SideMenu />
             <MemberPage>
-                <MemberTitle>Tous les autres membres</MemberTitle>
+                <MemberTitle>All members</MemberTitle>
                 <MembersContainer>
                     {otherUsers &&
                         otherUsers.map((oneUser: UserMember) => (

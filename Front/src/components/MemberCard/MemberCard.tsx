@@ -55,7 +55,7 @@ export const MemberCard = ({ user }: MemberCardProps): ReactElement => {
     const emptyData = {
         avatar: '/images/avatars/default.png',
         moodIcone: '/images/avatars/default.png',
-        moodTitle: 'Humeur du moment non renseignée',
+        moodTitle: 'Current mood not specified',
     };
 
     const birthdayCake = {

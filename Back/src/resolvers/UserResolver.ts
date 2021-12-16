@@ -237,7 +237,7 @@ class UserResolver {
                         const chatroomUserUpdated = {
                             username: chatroomUser.username,
                             hobbies: chatroomUser.hobbies,
-                            avatar: chatroomUser.avatar,
+                            avatar: logout.avatar,
                             id: chatroomUser.id,
                             isConnected: false,
                         };

@@ -58,14 +58,14 @@ export default class ChatRoomResolver {
                     id: user1._id,
                     username: user1.username,
                     isConnected: user1.isConnected,
-                    avatar: user1.avatar ? user1.avatar : "https://resize-gulli.jnsmedia.fr/r/890,__ym__/img//var/jeunesse/storage/images/gulli/chaine-tv/dessins-animes/pokemon/pokemon/pikachu/26571681-1-fre-FR/Pikachu.jpg",
+                    avatar: user1.avatar ? user1.avatar : "default.png",
                     hobbies: user1.hobbies ? user1.hobbies : []
                 },
                 {
                     id: user2._id,
                     username: user2.username,
                     isConnected: user2.isConnected,
-                    avatar: user2.avatar ? user2.avatar : "https://resize-gulli.jnsmedia.fr/r/890,__ym__/img//var/jeunesse/storage/images/gulli/chaine-tv/dessins-animes/pokemon/pokemon/pikachu/26571681-1-fre-FR/Pikachu.jpg",
+                    avatar: user2.avatar ? user2.avatar : "default.png",
                     hobbies: user2.hobbies ? user2.hobbies : []
                 }
             ];

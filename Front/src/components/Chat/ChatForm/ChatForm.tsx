@@ -53,7 +53,7 @@ const ChatForm: FC<ChatFormProps> = ({ chatId, username }: ChatFormProps) => {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                 />
-                <FormButton type="submit">Envoyer</FormButton>
+                <FormButton type="submit">Send</FormButton>
             </Form>
         </Container>
     );

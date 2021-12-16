@@ -156,9 +156,7 @@ const RandomChat: FC = () => {
                 },
             });
         } else {
-            alert(
-                "Aucun utilisateur n'est actuellement disponible pour échanger. Veuillez ré-essayer plus tard ;)"
-            );
+            alert('No user is available to chat ! Please come back later ;)');
         }
         refetch();
     };
@@ -241,7 +239,7 @@ const RandomChat: FC = () => {
                         )
                     }
                 >
-                    Rejoindre une chatroom
+                    Join a chatroom
                 </Button>
             </span>
         </SideMenuContainer>

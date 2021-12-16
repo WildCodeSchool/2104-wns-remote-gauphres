@@ -38,7 +38,7 @@ const CREATE_USER = gql`
     }
 `;
 
-interface EyeIconProps {
+export interface EyeIconProps {
     onClick: () => void;
     show: boolean;
     style: CSSProperties;
@@ -55,11 +55,7 @@ interface FormValues {
     hobbies: string[];
 }
 
-const steps = [
-    'Informations de compte',
-    'Informations personelles',
-    'Tes hobbies',
-];
+const steps = ['Account informations', 'Personal informations', 'Your hobbies'];
 
 const SignUpPage: FC = () => {
     const { login } = useLogin();
@@ -116,7 +112,7 @@ const SignUpPage: FC = () => {
                     type="submit"
                     style={{ maxWidth: '49%' }}
                 >
-                    Valider
+                    Validate
                 </Button>
             );
         return (
@@ -126,7 +122,7 @@ const SignUpPage: FC = () => {
                 onClick={(e: any) => handleClick(e)}
                 style={{ maxWidth: '49%' }}
             >
-                Etape suivante
+                Next step
             </Button>
         );
     };
@@ -134,7 +130,7 @@ const SignUpPage: FC = () => {
     return (
         <Container>
             <Form onSubmit={handleSubmit(onSubmitForm)}>
-                <Title>Crée ton compte ! </Title>
+                <Title>Create you account ! </Title>
                 <Stepper activeStep={formStep} alternativeLabel>
                     {steps.map((label, index) => (
                         <Step onClick={() => setFormStep(index)} key={label}>
@@ -146,7 +142,7 @@ const SignUpPage: FC = () => {
                     <InputDiv>
                         <TextInput
                             autoComplete="off"
-                            label="Pseudo"
+                            label="Username"
                             variant="outlined"
                             error={errors.username}
                             helperText={
@@ -155,7 +151,7 @@ const SignUpPage: FC = () => {
                             {...register('username', {
                                 required: {
                                     value: true,
-                                    message: 'Merci de renseigner un pseudo',
+                                    message: 'Please fill in your username',
                                 },
                             })}
                         />
@@ -168,13 +164,13 @@ const SignUpPage: FC = () => {
                             {...register('email', {
                                 required: {
                                     value: true,
-                                    message: 'Merci de renseigner un email',
+                                    message: 'Please fill in your email',
                                 },
                             })}
                         />
                         <TextInput
                             autoComplete="off"
-                            label="Mot de passe"
+                            label="Password"
                             variant="outlined"
                             type={showPassword ? 'text' : 'password'}
                             InputProps={{
@@ -198,12 +194,11 @@ const SignUpPage: FC = () => {
                                 pattern: {
                                     value: passwordRegex,
                                     message:
-                                        'Merci de saisir un mot de passe valide. Celui-ci doit contenir au minimum 8 caractères avec au moins un chiffre, une lettre majuscule, une lettre minuscule et un caractère non alpha numérique.',
+                                        'Please enter a valid password. The password must contain at least 8 characters with at least one number, one upper case letter, one lower case letter and one non-alpha numeric character.',
                                 },
                                 required: {
                                     value: true,
-                                    message:
-                                        'Merci de renseigner un mot de passe',
+                                    message: 'Please fill in your password',
                                 },
                             })}
                         />
@@ -213,7 +208,7 @@ const SignUpPage: FC = () => {
                     <InputDiv>
                         <TextInput
                             autoComplete="off"
-                            label="Prénom"
+                            label="Firstname"
                             variant="outlined"
                             error={errors.firstname}
                             helperText={
@@ -222,13 +217,13 @@ const SignUpPage: FC = () => {
                             {...register('firstname', {
                                 required: {
                                     value: true,
-                                    message: 'Merci de renseigner un prénom',
+                                    message: 'Please fill in your firstname',
                                 },
                             })}
                         />
                         <TextInput
                             autoComplete="off"
-                            label="Nom"
+                            label="Lastname"
                             variant="outlined"
                             error={errors.lastname}
                             helperText={
@@ -237,25 +232,25 @@ const SignUpPage: FC = () => {
                             {...register('lastname', {
                                 required: {
                                     value: true,
-                                    message: 'Merci de renseigner un nom',
+                                    message: 'Please fill in your lastname',
                                 },
                             })}
                         />
                         <TextInput
                             autoComplete="off"
-                            label="Ville"
+                            label="City"
                             variant="outlined"
                             error={errors.city}
                             helperText={errors.city && errors.city.message}
                             {...register('city', {
                                 required: {
                                     value: true,
-                                    message: 'Merci de renseigner une ville',
+                                    message: 'Please fill in your city',
                                 },
                             })}
                         />
                         <BirthdateContainer>
-                            <BirthdateLabel>Date de naissance</BirthdateLabel>
+                            <BirthdateLabel>Birthdate</BirthdateLabel>
                             <Controller
                                 control={control}
                                 name="birthDate"
@@ -281,7 +276,7 @@ const SignUpPage: FC = () => {
                 {formStep === 2 && (
                     <InputDiv>
                         <InputLabel id="hobbies-mutiple-checkbox-label">
-                            Quels sont tes Hobbies ?
+                            What are your hobbies ?
                         </InputLabel>
                         <Select
                             MenuProps={{
