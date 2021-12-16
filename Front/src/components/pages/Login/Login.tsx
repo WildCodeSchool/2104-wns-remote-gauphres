@@ -1,8 +1,19 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { InputAdornment } from '@material-ui/core';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { Title, Container, Form, TextInput, Input, JoinText } from './style';
 import Button from '../../Button/Button';
 import useLogin from '../../../hooks/useLogin';
+import { EyeIconProps } from '../SignUp/SignUp';
+
+const EyeIcon = ({ show, ...props }: EyeIconProps) => {
+    if (show) {
+        return <VisibilityOffIcon {...props} />;
+    }
+    return <VisibilityIcon {...props} />;
+};
 
 const LoginPage: FC = () => {
     const { login } = useLogin();
@@ -11,6 +22,7 @@ const LoginPage: FC = () => {
         handleSubmit,
         formState: { errors },
     } = useForm({ mode: 'all' });
+    const [showPassword, setShowPassword] = useState(false);
 
     return (
         <Container>
@@ -41,6 +53,20 @@ const LoginPage: FC = () => {
                         variant="outlined"
                         error={errors.password}
                         helperText={errors.password && errors.password.message}
+                        type={showPassword ? 'text' : 'password'}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <EyeIcon
+                                        show={showPassword}
+                                        onClick={() =>
+                                            setShowPassword(!showPassword)
+                                        }
+                                        style={{ cursor: 'pointer' }}
+                                    />
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                 </Input>
                 <Button type="submit">Login</Button>

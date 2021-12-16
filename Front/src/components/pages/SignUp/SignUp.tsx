@@ -38,7 +38,7 @@ const CREATE_USER = gql`
     }
 `;
 
-interface EyeIconProps {
+export interface EyeIconProps {
     onClick: () => void;
     show: boolean;
     style: CSSProperties;
