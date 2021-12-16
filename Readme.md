@@ -14,10 +14,6 @@ Each componenthas his own README.
 ├── mobile # a mobile interface in expo, react native and typescript
 ```
 
-MaJ projets en mono-repo : 23/06/2021
- 
-MaJ add mobile project: 6/09/2021
-
 ## Infrastructure
 Docker is used to manage the project.
 
