@@ -6,13 +6,7 @@ import FromTheSky from '../../DailyWindow/FromTheSky/FromTheSky';
 import MyMood from '../../DailyWindow/MyMood/MyMood';
 import RandomWord from '../../DailyWindow/RandomWord/RandomWord';
 import SideMenu from '../../SideMenu/SideMenu';
-import {
-    ApiCardsContainer,
-    DashboardTitle,
-    MainWrapper,
-    RightWrapper,
-    Wrapper,
-} from './style';
+import { ApiCardsContainer, MainWrapper, RightWrapper, Wrapper } from './style';
 
 const Dashboard: FC = () => {
     return (
@@ -20,7 +14,6 @@ const Dashboard: FC = () => {
             <SideMenu />
             <Wrapper>
                 <MainWrapper>
-                    <DashboardTitle>Dashboard</DashboardTitle>
                     <ApiCardsContainer>
                         <Caturday />
                         <Aztro />
@@ -32,7 +25,6 @@ const Dashboard: FC = () => {
                 </MainWrapper>
                 <RightWrapper>
                     <MyMood />
-                    {/* <MyMatch /> */}
                 </RightWrapper>
             </Wrapper>
         </SideMenuContainer>

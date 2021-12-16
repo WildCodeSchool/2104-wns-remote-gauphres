@@ -7,6 +7,8 @@ export const colors = {
     darkPurple: '#5741cb',
     light: '#edf2f7',
     white: '#ffff',
+    online: '#aed581',
+    offline: '#eb3d34',
 };
 
 export const fonts = {

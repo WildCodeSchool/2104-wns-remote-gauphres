@@ -6,7 +6,7 @@ import { ChatView } from '../../Chat/ChatView/ChatView';
 import ChatForm from '../../Chat/ChatForm/ChatForm';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { ChatPage } from './style';
-import { MemberCard } from '../../Chat/MemberCard/MemberCard';
+import { MemberCard } from '../../MemberCard/MemberCard';
 import SideMenu from '../../SideMenu/SideMenu';
 import { SideMenuContainer } from '../../../style';
 import Button from '../../Button/Button';
