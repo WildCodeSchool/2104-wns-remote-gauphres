@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import ApiImageCard from '../../shared/Card/ApiImageCard';
 
-const Caturday = () => {
+const Caturday: FC = () => {
     const [caturdayImage, setCaturdayImage] = useState<string>();
 
     const fetchCaturday = async () => {

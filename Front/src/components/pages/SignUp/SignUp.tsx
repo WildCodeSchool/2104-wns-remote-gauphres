@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, MouseEvent, useState } from 'react';
+import React, { CSSProperties, FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
     Checkbox,
@@ -104,7 +104,7 @@ const SignUpPage: FC = () => {
     };
 
     const renderButton = () => {
-        const handleClick = (e: MouseEvent) => {
+        const handleClick = (e: any) => {
             e.preventDefault();
             setFormStep(formStep + 1);
         };
@@ -123,7 +123,7 @@ const SignUpPage: FC = () => {
             <Button
                 disabled={Object.values(errors).length > 0}
                 type="button"
-                onClick={(e: MouseEvent) => handleClick(e)}
+                onClick={(e: any) => handleClick(e)}
                 style={{ maxWidth: '49%' }}
             >
                 Etape suivante

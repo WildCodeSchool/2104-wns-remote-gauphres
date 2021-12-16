@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
@@ -51,15 +51,6 @@ const FIND_CHAT = gql`
                 createdAt
             }
             createdAt
-        }
-    }
-`;
-
-const SUBSCRIPTION_USERSTATUS = gql`
-    subscription onUserStatusChanged {
-        userStatusChanged {
-            userId
-            newStatus
         }
     }
 `;
@@ -122,7 +113,7 @@ const RandomChat: FC = () => {
     const [createChatRoom] = useMutation(CREATE_CHATROOM);
     const { data: randomUserForChatRoom } = useQuery(FIND_RANDOM_USER);
 
-    const { loading, error, data, subscribeToMore } = useQuery(FIND_CHAT, {
+    const { loading, data, subscribeToMore } = useQuery(FIND_CHAT, {
         variables: { id: user?.chatrooms },
     });
 

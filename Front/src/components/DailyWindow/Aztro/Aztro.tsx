@@ -1,36 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/destructuring-assignment */
-import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import { AuthContext } from '../../../contexts/AuthContext';
 import ApiCard from '../../shared/Card/ApiCard';
-
-// STYLES
-const BoxStyle = styled.div`
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    color: black;
-    width: 20vw;
-    height: 350px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    border-radius: 2px;
-    margin-top: 100px;
-    padding: 0.5em;
-`;
-
-const Header = styled.div`
-    text-align: center;
-`;
-
-const Body = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-`;
 
 // TYPES
 type Sign = {
@@ -124,10 +97,8 @@ const getMonthOfBirthFromString = (date: string | undefined) => {
     }
 };
 
-// TODO: Ajout du content-loader pour l'attente du chargement des data
-
 // COMPONENT
-const Aztro = () => {
+const Aztro: FC = () => {
     const { user, refetch } = useContext(AuthContext);
     const [aztroSign, setAztroSign] = useState<Sign>();
     const day = getDayOfBirthFromString(user?.birthDate);

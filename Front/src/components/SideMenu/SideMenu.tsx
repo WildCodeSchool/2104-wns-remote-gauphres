@@ -9,7 +9,6 @@ import { BiCoffeeTogo } from 'react-icons/bi';
 import { LogoutButtonContainer, MainDivSideMenu, MenuContainer, UsersConnectedContainer, LogoutButton, Avatar} from './style';
 import  UserConnected from './UserConnected';
 import  AllUsers from './AllUsers';
-import Button from '../Button/Button';
 import { AuthContext } from '../../contexts/AuthContext';
 import { ActionKind } from '../../types/authContextTypes';
 

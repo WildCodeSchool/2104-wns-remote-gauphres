@@ -10,59 +10,61 @@ interface Props {
     subtitle?: string | null;
 }
 
-const ApiCard = ({ title, subtitle, children }: Props) => (
-    <Card
-        sx={{
-            minWidth: 310,
-            maxWidth: 350,
-            m: 2,
-            p: 1,
-            boxShadow: 3,
-            borderRadius: 8,
-        }}
-    >
-        <CardContent>
-            <Typography
-                variant="h2"
-                component="div"
-                sx={{
-                    fontFamily: fonts.title,
-                    color: colors.darkPurple,
-                    fontWeight: 'bold',
-                }}
-            >
-                {title}
-            </Typography>
-
-            {subtitle && (
+const ApiCard = ({ title, subtitle, children }: Props): JSX.Element => {
+    return (
+        <Card
+            sx={{
+                minWidth: 310,
+                maxWidth: 350,
+                m: 2,
+                p: 1,
+                boxShadow: 3,
+                borderRadius: 8,
+            }}
+        >
+            <CardContent>
                 <Typography
+                    variant="h2"
+                    component="div"
+                    sx={{
+                        fontFamily: fonts.title,
+                        color: colors.darkPurple,
+                        fontWeight: 'bold',
+                    }}
+                >
+                    {title}
+                </Typography>
+
+                {subtitle && (
+                    <Typography
+                        sx={{
+                            fontSize: 14,
+                            fontFamily: fonts.text,
+                            color: colors.darkPurple,
+                            fontWeight: 'bold',
+                        }}
+                        color="text.secondary"
+                        gutterBottom
+                    >
+                        {subtitle}
+                    </Typography>
+                )}
+
+                <Typography
+                    variant="body2"
                     sx={{
                         fontSize: 14,
                         fontFamily: fonts.text,
                         color: colors.darkPurple,
                         fontWeight: 'bold',
                     }}
-                    color="text.secondary"
-                    gutterBottom
                 >
-                    {subtitle}
+                    {children}
                 </Typography>
-            )}
-
-            <Typography
-                variant="body2"
-                sx={{
-                    fontSize: 14,
-                    fontFamily: fonts.text,
-                    color: colors.darkPurple,
-                    fontWeight: 'bold',
-                }}
-            >
-                {children}
-            </Typography>
-        </CardContent>
-    </Card>
-);
+            </CardContent>
+        </Card>
+    );
+};
 
 ApiCard.defaultProps = {
     subtitle: null,

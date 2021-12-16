@@ -22,7 +22,7 @@ const isMessageValid = (message: string): boolean => {
 
 const ChatForm: FC<ChatFormProps> = ({ chatId, username }: ChatFormProps) => {
     const [message, setMessage] = useState('');
-    const [createMessage, { data }] = useMutation(CREATE_MESSAGE);
+    const [createMessage] = useMutation(CREATE_MESSAGE);
 
     return (
         <Container>

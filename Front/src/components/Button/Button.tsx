@@ -8,7 +8,7 @@ type ButtonType = 'button' | 'submit' | 'reset' | undefined;
 interface ButtonProps {
     children: ReactNode;
     type?: ButtonType;
-    onClick?: (arg1: any) => void;
+    onClick?: (arg1: unknown) => void;
     disabled?: boolean;
     color?: PropTypes.Color | undefined;
     style?: CSSProperties;

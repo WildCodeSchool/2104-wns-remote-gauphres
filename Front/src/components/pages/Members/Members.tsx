@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import React, { FC, useContext } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -70,7 +69,7 @@ const MembersPage: FC = () => {
                 <MembersContainer>
                     {otherUsers &&
                         otherUsers.map((oneUser: UserMember) => (
-                            <MemberCard user={oneUser} />
+                            <MemberCard key={oneUser._id} user={oneUser} />
                         ))}
                 </MembersContainer>
             </MemberPage>

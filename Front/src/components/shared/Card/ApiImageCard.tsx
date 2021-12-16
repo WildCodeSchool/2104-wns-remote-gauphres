@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -10,7 +10,7 @@ interface Props {
     url: string | undefined;
 }
 
-const ApiImageCard = ({ title, url }: Props) => (
+const ApiImageCard = ({ title, url }: Props): JSX.Element => (
     <Card
         sx={{
             minWidth: 380,
