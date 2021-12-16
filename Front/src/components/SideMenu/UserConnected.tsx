@@ -17,7 +17,7 @@ type UsersConnectedType = {
 };
 
 const UserConnected: FC = () => {
-    const { data } = useQuery(GET_CONNECTED);
+    const { data, loading } = useQuery(GET_CONNECTED);
     const [userConnected, setUserConnected] = useState<UsersConnectedType>();
 
     useEffect(() => {
