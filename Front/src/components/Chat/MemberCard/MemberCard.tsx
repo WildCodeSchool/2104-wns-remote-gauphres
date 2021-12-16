@@ -1,4 +1,4 @@
-import React, { FunctionComponent, ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 import Moment from 'react-moment';
 import {
     Article,
@@ -34,10 +34,8 @@ type MemberCardProps = {
 
 export const MemberCard = ({ user }: MemberCardProps): ReactElement => {
     const emptyData = {
-        avatar:
-            'https://i.pinimg.com/280x280_RS/90/de/a4/90dea4c0841a7416413242b525286a1b.jpg',
-        moodIcone:
-            'https://i.pinimg.com/280x280_RS/90/de/a4/90dea4c0841a7416413242b525286a1b.jpg',
+        avatar: '/images/avatars/default.png',
+        moodIcone: '/images/avatars/default.png',
         moodTitle: 'Humeur du moment non renseignée',
     };
 
@@ -74,7 +72,7 @@ export const MemberCard = ({ user }: MemberCardProps): ReactElement => {
                 <Hobby>
                     Ses passions:{' '}
                     {user.hobbies.map((hobby) => (
-                        <li>{hobby}</li>
+                        <li key={hobby}>{hobby}</li>
                     ))}
                 </Hobby>
             ) : (

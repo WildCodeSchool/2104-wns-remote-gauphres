@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { SideMenuContainer } from '../../../style';
 import Aztro from '../../DailyWindow/Aztro/Aztro';
 import Caturday from '../../DailyWindow/Caturday/Caturday';
@@ -15,20 +15,6 @@ import {
 } from './style';
 
 const Dashboard: FC = () => {
-    const [randomWord, setRandomWord] = useState();
-
-    const fetchData = async () => {
-        const response = await fetch(
-            'https://random-words-api.vercel.app/word'
-        );
-        const data = await response.json();
-        setRandomWord(data[0]);
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
     return (
         <SideMenuContainer>
             <SideMenu />
@@ -40,7 +26,7 @@ const Dashboard: FC = () => {
                         <Aztro />
                     </ApiCardsContainer>
                     <ApiCardsContainer>
-                        <RandomWord randomWord={randomWord} />
+                        <RandomWord />
                         <FromTheSky />
                     </ApiCardsContainer>
                 </MainWrapper>

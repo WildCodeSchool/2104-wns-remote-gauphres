@@ -1,5 +1,7 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import { gql, useMutation, useQuery } from '@apollo/client';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import { ChatView } from '../../Chat/ChatView/ChatView';
 import ChatForm from '../../Chat/ChatForm/ChatForm';
 import { AuthContext } from '../../../contexts/AuthContext';
@@ -49,15 +51,6 @@ const FIND_CHAT = gql`
                 createdAt
             }
             createdAt
-        }
-    }
-`;
-
-const SUBSCRIPTION_USERSTATUS = gql`
-    subscription onUserStatusChanged {
-        userStatusChanged {
-            userId
-            newStatus
         }
     }
 `;
@@ -120,7 +113,7 @@ const RandomChat: FC = () => {
     const [createChatRoom] = useMutation(CREATE_CHATROOM);
     const { data: randomUserForChatRoom } = useQuery(FIND_RANDOM_USER);
 
-    const { loading, error, data, subscribeToMore } = useQuery(FIND_CHAT, {
+    const { loading, data, subscribeToMore } = useQuery(FIND_CHAT, {
         variables: { id: user?.chatrooms },
     });
 
@@ -188,6 +181,24 @@ const RandomChat: FC = () => {
 
     const checkOtherUser = GetOtherUser(otherUser.id);
 
+    if (loading) {
+        return (
+            <SideMenuContainer>
+                <SideMenu />
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: 'auto',
+                        width: '70%',
+                    }}
+                >
+                    <CircularProgress />
+                </Box>
+            </SideMenuContainer>
+        );
+    }
     if (user?.chatrooms != null) {
         return (
             <SideMenuContainer>
@@ -208,6 +219,7 @@ const RandomChat: FC = () => {
             </SideMenuContainer>
         );
     }
+
     return (
         <SideMenuContainer>
             <SideMenu />

@@ -6,10 +6,9 @@ import { IoPersonAddSharp } from 'react-icons/io5';
 import { AiOutlineWechat } from 'react-icons/ai';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { BiCoffeeTogo } from 'react-icons/bi';
-import { LogoutButtonContainer, MainDivSideMenu, MenuContainer, UsersConnectedContainer, LogoutButton} from './style';
+import { LogoutButtonContainer, MainDivSideMenu, MenuContainer, UsersConnectedContainer, LogoutButton, Avatar} from './style';
 import  UserConnected from './UserConnected';
 import  AllUsers from './AllUsers';
-import Button from '../Button/Button';
 import { AuthContext } from '../../contexts/AuthContext';
 import { ActionKind } from '../../types/authContextTypes';
 
@@ -37,14 +36,27 @@ const SideMenu: FC = () => {
         history.push('/login');
       }
     }
+
+    const redirectToProfil = () => {
+      history.push('/profile');
+    }
     
     return (
       <MainDivSideMenu>
+        <Avatar
+            src={`/images/avatars/${
+                user && user.avatar !== null
+                    ? user.avatar
+                    : 'default.png'
+            }`}
+            alt={user?.avatar}
+            onClick={() => redirectToProfil()}
+        />
         <MenuContainer>  
             <NavLink to="/dashboard" activeStyle={{color: "purple"}}><BiCoffeeTogo /> Dashboard</NavLink>            
             <NavLink to="/random-chat" activeStyle={{color: "purple"}}><AiOutlineWechat /> Chat match</NavLink>
             <NavLink to="/members" activeStyle={{color: "purple"}}><IoPersonAddSharp /> Membres</NavLink>
-            <NavLink to="/profile" activeStyle={{color: "purple"}}><BsFillPersonFill /> Profile</NavLink>
+            <NavLink to="/profile" activeStyle={{color: "purple"}}><BsFillPersonFill /> Profil</NavLink>
         </MenuContainer>
         <UsersConnectedContainer>
             <AllUsers />

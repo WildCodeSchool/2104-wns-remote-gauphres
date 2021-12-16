@@ -1,10 +1,16 @@
 import styled from 'styled-components';
 import { colors, fonts } from '../style/theme';
+import { MyAvatar } from '../pages/Profile/style';
 
-// eslint-disable-next-line import/prefer-default-export
 export const MainDivSideMenu = styled.div`
     padding: 0 10px 0 10px;
     min-width: 15rem;
+`;
+
+export const Avatar = styled(MyAvatar)`
+    max-height: 15vh;
+    margin: auto;
+    margin-top: 10%;
 `;
 
 export const MenuContainer = styled.div`
@@ -13,7 +19,7 @@ export const MenuContainer = styled.div`
     background-color: ${colors.light};
     font-family: ${fonts.title};
     font-size: 2em;
-    padding: 3em 0em 2em 1em;
+    padding: 2em 0em 2em 1em;
     a {
         text-decoration: none;
         color: #131212;
@@ -32,7 +38,7 @@ export const UsersConnectedContainer = styled.div`
 `;
 
 export const LogoutButtonContainer = styled.div`
-    margin-top: 100%;
+    margin-top: 60%;
     text-align: center;
 `;
 
