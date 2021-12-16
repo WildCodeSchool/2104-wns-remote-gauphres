@@ -39,7 +39,7 @@ const ProfilePage: FC = () => {
         <SideMenuContainer>
             <SideMenu />
             <ProfilContainer>
-                <ProfileTitle>Your profil</ProfileTitle>
+                <ProfileTitle>Your profile</ProfileTitle>
                 <MyAvatar
                     src={`/images/avatars/${
                         user && user.avatar !== null
