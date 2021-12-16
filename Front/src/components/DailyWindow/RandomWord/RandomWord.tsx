@@ -1,6 +1,8 @@
 /* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import styled from 'styled-components';
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
 import ApiCard from '../../shared/Card/ApiCard';
 
 const BoxStyle = styled.div`
@@ -32,18 +34,73 @@ const Body = styled.div`
 const RandomWord = ({ randomWord }: any) => {
     return (
         <ApiCard title="Daily Word Learning">
-            <p>
-                <span style={{ fontWeight: 'bold' }}>Word :</span>{' '}
-                {randomWord?.word}
-            </p>
-            <p>
-                <span style={{ fontWeight: 'bold' }}>Pronunciation :</span>{' '}
-                {randomWord?.pronunciation}
-            </p>
-            <p>
-                <span style={{ fontWeight: 'bold' }}>Definition :</span>{' '}
-                {randomWord?.definition}
-            </p>
+            {!randomWord?.word && (
+                <Box
+                    sx={{
+                        display: 'flex',
+                        my: 2,
+                    }}
+                >
+                    Word :{' '}
+                    <Skeleton
+                        sx={{
+                            width: '60%',
+                            margin: 'auto',
+                        }}
+                    />
+                </Box>
+            )}
+            {randomWord?.word && (
+                <p>
+                    <span style={{ fontWeight: 'bold' }}>Word :</span>{' '}
+                    {randomWord?.word}
+                </p>
+            )}
+
+            {!randomWord?.pronunciation && (
+                <Box
+                    sx={{
+                        display: 'flex',
+                        my: 2,
+                    }}
+                >
+                    Pronunciation :{' '}
+                    <Skeleton
+                        sx={{
+                            width: '60%',
+                            margin: 'auto',
+                        }}
+                    />
+                </Box>
+            )}
+            {randomWord?.pronunciation && (
+                <p>
+                    <span style={{ fontWeight: 'bold' }}>Pronunciation :</span>{' '}
+                    {randomWord?.pronunciation}
+                </p>
+            )}
+
+            {!randomWord?.definition && (
+                <Box
+                    sx={{
+                        display: 'flex',
+                    }}
+                >
+                    Definition :{' '}
+                    <Skeleton
+                        sx={{
+                            width: '60%',
+                            margin: 'auto',
+                        }}
+                    />
+                </Box>
+            )}
+            {randomWord?.definition && (
+                <p>
+                    <span style={{ fontWeight: 'bold' }}>Definition :</span>{' '}
+                    {randomWord?.definition}
+                </p>
+            )}
         </ApiCard>
     );
 };

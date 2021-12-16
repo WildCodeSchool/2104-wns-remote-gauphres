@@ -2,6 +2,8 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
 import { AuthContext } from '../../../contexts/AuthContext';
 import ApiCard from '../../shared/Card/ApiCard';
 
@@ -160,18 +162,73 @@ const Aztro = () => {
             title="Your Daily Aztro sign !"
             subtitle={findZodiacSign(day, month)}
         >
-            <p>
-                <span style={{ fontWeight: 'bold' }}>Day :</span>{' '}
-                {aztroSign?.current_date}
-            </p>
-            <p>
-                <span style={{ fontWeight: 'bold' }}>Description :</span>{' '}
-                {aztroSign?.description}
-            </p>
-            <p>
-                <span style={{ fontWeight: 'bold' }}>Mood :</span>{' '}
-                {aztroSign?.mood}
-            </p>
+            {!aztroSign?.current_date && (
+                <Box
+                    sx={{
+                        display: 'flex',
+                        my: 2,
+                    }}
+                >
+                    Day:{' '}
+                    <Skeleton
+                        sx={{
+                            width: '60%',
+                            margin: 'auto',
+                        }}
+                    />
+                </Box>
+            )}
+            {aztroSign?.current_date && (
+                <p>
+                    <span style={{ fontWeight: 'bold' }}>Day :</span>{' '}
+                    {aztroSign?.current_date}
+                </p>
+            )}
+
+            {!aztroSign?.description && (
+                <Box
+                    sx={{
+                        display: 'flex',
+                        my: 2,
+                    }}
+                >
+                    Description:{' '}
+                    <Skeleton
+                        sx={{
+                            width: '60%',
+                            margin: 'auto',
+                        }}
+                    />
+                </Box>
+            )}
+            {aztroSign?.description && (
+                <p>
+                    <span style={{ fontWeight: 'bold' }}>Description :</span>{' '}
+                    {aztroSign?.description}
+                </p>
+            )}
+
+            {!aztroSign?.mood && (
+                <Box
+                    sx={{
+                        display: 'flex',
+                    }}
+                >
+                    Mood:{' '}
+                    <Skeleton
+                        sx={{
+                            width: '60%',
+                            margin: 'auto',
+                        }}
+                    />
+                </Box>
+            )}
+            {aztroSign?.description && (
+                <p>
+                    <span style={{ fontWeight: 'bold' }}>Mood:</span>{' '}
+                    {aztroSign?.mood}
+                </p>
+            )}
         </ApiCard>
     );
 };

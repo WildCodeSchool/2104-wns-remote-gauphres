@@ -1,5 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import React, { FC, useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
 
 const GET_CONNECTED = gql`
     query getUsersConnected {
@@ -22,6 +24,38 @@ const UserConnected: FC = () => {
         setUserConnected(data && data.getUsersConnected);
     }, [data]);
 
+    if (loading) {
+        return (
+            <div>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        my: 2,
+                    }}
+                >
+                    <Skeleton
+                        sx={{
+                            width: '80%',
+                            margin: 'auto',
+                        }}
+                    />
+                </Box>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        my: 2,
+                    }}
+                >
+                    <Skeleton
+                        sx={{
+                            width: '60%',
+                            margin: 'auto',
+                        }}
+                    />
+                </Box>
+            </div>
+        );
+    }
     return (
         <div>
             <p>- {userConnected?.length} connectées -</p>
