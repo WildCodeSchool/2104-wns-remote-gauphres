@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { colors, fonts } from '../style/theme';
-import { MyAvatar } from '../pages/Profile/ProfilePage';
+import { MyAvatar } from '../pages/Profile/style';
 
-// eslint-disable-next-line import/prefer-default-export
 export const MainDivSideMenu = styled.div`
     padding: 0 10px 0 10px;
     min-width: 15rem;
