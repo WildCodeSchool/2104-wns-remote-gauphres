@@ -9,7 +9,7 @@ import {
     MyAvatar,
     MiniAvatar,
     Avatars,
-} from './ProfilePage';
+} from './style';
 import { AuthContext } from '../../../contexts/AuthContext';
 
 const UPDATE_USER_PICTURE = gql`
