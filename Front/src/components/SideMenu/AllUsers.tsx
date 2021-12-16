@@ -26,7 +26,7 @@ const AllUsers: FC = () => {
 
     return (
         <div>
-            <p>{allUsers.length - 1} personnes à rencontrer</p>
+            <p>{allUsers.length - 1} user(s) to meet</p>
         </div>
     );
 };

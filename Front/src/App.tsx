@@ -30,7 +30,7 @@ const App: FC<{ client: ApolloClient<NormalizedCacheObject> }> = ({
     client,
 }) => {
     useEffect(() => {
-        document.title = 'MOOWDY!';
+        document.title = '!MOOWDY';
     }, []);
 
     const PrivateRoute = ({ children, path }: PrivateRouteProps) => {

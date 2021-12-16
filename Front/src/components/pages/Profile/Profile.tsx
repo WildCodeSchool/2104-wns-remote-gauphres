@@ -39,7 +39,7 @@ const ProfilePage: FC = () => {
         <SideMenuContainer>
             <SideMenu />
             <ProfilContainer>
-                <ProfileTitle>Ton profil</ProfileTitle>
+                <ProfileTitle>Your profil</ProfileTitle>
                 <MyAvatar
                     src={`/images/avatars/${
                         user && user.avatar !== null
@@ -48,7 +48,7 @@ const ProfilePage: FC = () => {
                     }`}
                     alt={user?.avatar}
                 />
-                <ProfileCard>Modifie ton avatar</ProfileCard>
+                <ProfileCard>Change your avatar</ProfileCard>
                 <Avatars>
                     <MiniAvatar
                         src="/images/avatars/boy.png"

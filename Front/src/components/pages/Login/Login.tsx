@@ -15,13 +15,13 @@ const LoginPage: FC = () => {
     return (
         <Container>
             <Form onSubmit={handleSubmit(login)}>
-                <Title>Connecte toi !</Title>
+                <Title>Login !</Title>
                 <Input>
                     <TextInput
                         {...register('email', {
                             required: {
                                 value: true,
-                                message: 'Ce champ est obligatoire',
+                                message: 'This field is mandatory',
                             },
                         })}
                         label="Email"
@@ -31,20 +31,19 @@ const LoginPage: FC = () => {
                     />
                     <TextInput
                         {...register('password', {
-                            required: 'Ce champ est obligatoire',
+                            required: 'This field is mandatory',
                             minLength: {
-                                value: 3,
-                                message:
-                                    'Votre mot de passe doit faire au moins 3 caractères',
+                                value: 8,
+                                message: 'Please enter your password',
                             },
                         })}
-                        label="Mot de passe"
+                        label="Password"
                         variant="outlined"
                         error={errors.password}
                         helperText={errors.password && errors.password.message}
                     />
                 </Input>
-                <Button type="submit">Se connecter</Button>
+                <Button type="submit">Login</Button>
                 <JoinText>
                     Want to join us ? <a href="/register">Create an account</a>
                 </JoinText>

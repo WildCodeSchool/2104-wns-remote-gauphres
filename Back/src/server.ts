@@ -44,33 +44,23 @@ async function start() {
         useFindAndModify: false,
     });
 
-    // Add fixtures in the DB
-    console.log('Fixtures started');
-    const fixtures = new Fixtures();
-    fixtures
-        .connect(uri)
-        .then(() => fixtures.unload())
-        .then(() => fixtures.load())
-        .then(() => fixtures.disconnect());
-    console.log('Fixtures finished');
-
     const schema = await buildSchema({
         resolvers: [UserResolver, ChatRoomResolver],
         pubSub,
     });
 
     const server = new ApolloServer({
-        cors:{origin:'*', credentials: true},
+        cors: { origin: '*', credentials: true },
         schema,
         subscriptions: {
             path: "/subscriptions",
             onConnect: () => {
-              console.log("Client connected for subscriptions");
+                console.log("Client connected for subscriptions");
             },
             onDisconnect: () => {
-              console.log("Client disconnected from subscriptions");
+                console.log("Client disconnected from subscriptions");
             },
-          },
+        },
         playground: true/* (process.env.NODE_ENV !== 'production') */,
         // Requests interceptor
         context: ({ req }) => {
@@ -94,12 +84,12 @@ async function start() {
     server.installSubscriptionHandlers(httpServer);
 
     httpServer.listen(process.env.PORT, () => {
-    console.log(
-      `Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`
-    );
-    console.log(
-      `Subscriptions ready at ws://localhost:${process.env.PORT}${server.subscriptionsPath}`
-    );
+        console.log(
+            `Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`
+        );
+        console.log(
+            `Subscriptions ready at ws://localhost:${process.env.PORT}${server.subscriptionsPath}`
+        );
     });
 
     const { url } = await server.listen(5000);

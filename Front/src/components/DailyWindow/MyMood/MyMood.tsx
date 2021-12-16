@@ -51,7 +51,7 @@ const MyMood: FC = () => {
                 }`}
                 alt={user?.userMood?.title}
             />
-            <p>Change-le ici</p>
+            <p>Change your mood</p>
             <MiniImages>
                 <MiniImage
                     type="image"
