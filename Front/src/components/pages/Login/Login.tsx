@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { Title, Container, Form, TextInput, Input } from './style';
+import { Title, Container, Form, TextInput, Input, JoinText } from './style';
 import Button from '../../Button/Button';
 import useLogin from '../../../hooks/useLogin';
 
@@ -45,6 +45,9 @@ const LoginPage: FC = () => {
                     />
                 </Input>
                 <Button type="submit">Se connecter</Button>
+                <JoinText>
+                    Want to join us ? <a href="/register">Create an account</a>
+                </JoinText>
             </Form>
         </Container>
     );

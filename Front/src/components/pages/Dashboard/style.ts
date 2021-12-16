@@ -18,15 +18,6 @@ export const RightWrapper = styled.div`
     grid-row-start: 1;
 `;
 
-export const DashboardTitle = styled.div`
-    font-family: ${fonts.title};
-    font-size: 2.5em;
-    margin: 0;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    text-align: center;
-`;
-
 export const ApiCardsContainer = styled.div`
     display: flex;
     flex-direction: row;

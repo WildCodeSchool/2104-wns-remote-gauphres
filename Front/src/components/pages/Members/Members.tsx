@@ -4,7 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import SideMenu from '../../SideMenu/SideMenu';
 import { SideMenuContainer } from '../../../style';
-import { MemberCard, UserMember } from '../../Chat/MemberCard/MemberCard';
+import { MemberCard, UserMember } from '../../MemberCard/MemberCard';
 import { MemberPage, MembersContainer, MemberTitle } from './style';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { User } from '../../../types/authContextTypes';
