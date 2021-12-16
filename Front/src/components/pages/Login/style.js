@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
+import { fonts } from '../../style/theme';
 
 export const TextInput = styled(TextField)`
     width: 70%;
@@ -16,6 +17,7 @@ export const Container = styled.div`
 `;
 export const Title = styled.h2`
     font-size: 32px;
+    font-family: ${fonts.title};
 `;
 
 export const Form = styled.form`
