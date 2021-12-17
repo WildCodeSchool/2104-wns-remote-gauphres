@@ -190,17 +190,17 @@ class UserResolver {
         return updatedUserHobbies;
     }
 
-    @Mutation(() => User)
+    @Mutation(() => Boolean)
     async updateUserPicture(
         @Arg('currentUser') currentUser: UserPictureInput
-    ): Promise<User> {
-        const updatedUserPicture = await UserModel.findOneAndUpdate(
+    ): Promise<boolean> {
+        await UserModel.findOneAndUpdate(
             { email: currentUser.email },
             { avatar: currentUser.picture },
             { new: true }
         );
 
-        return updatedUserPicture;
+        return true;
     }
 
     @Mutation(() => User)
@@ -237,7 +237,7 @@ class UserResolver {
                         const chatroomUserUpdated = {
                             username: chatroomUser.username,
                             hobbies: chatroomUser.hobbies,
-                            avatar: chatroomUser.avatar,
+                            avatar: logout.avatar,
                             id: chatroomUser.id,
                             isConnected: false,
                         };

@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import ApiImageCard from '../../shared/Card/ApiImageCard';
 
-const FromTheSky = () => {
-    const [nasaImage, setNasaImage] = useState<string>(
-        'https://apod.nasa.gov/apod/image/2112/auroraemeteors_boardman_1080.jpg'
-    );
+const FromTheSky: FC = () => {
+    const [nasaImage, setNasaImage] = useState<string>();
 
     const fetchNasa = async () => {
         const nasaResponse = await fetch(

@@ -1,38 +1,34 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import React, {
-    ChangeEvent,
-    CSSProperties,
-    FC,
-    FormEvent,
-    useState,
-} from 'react';
-import { useForm } from 'react-hook-form';
+import React, { CSSProperties, FC, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import {
     Checkbox,
     InputAdornment,
     InputLabel,
     ListItemText,
-    MenuItem,
     Step,
     StepLabel,
     Input,
-    Chip,
+    MenuItem,
 } from '@material-ui/core';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import { gql, useMutation } from '@apollo/client';
-import { useHistory } from 'react-router-dom';
 import {
     Title,
-    SubTitle,
     Container,
     Form,
     TextInput,
     InputDiv,
     Stepper,
     Select,
+    BirthdateContainer,
+    BirthdateLabel,
+    CustomDatePicker,
+    Chip,
 } from './style';
 import Button from '../../Button/Button';
+import useLogin from '../../../hooks/useLogin';
+import { allHobbies } from '../../../type';
 
 const CREATE_USER = gql`
     mutation createUser($newUser: UserCreationInput!) {
@@ -42,17 +38,7 @@ const CREATE_USER = gql`
     }
 `;
 
-const LOGIN = gql`
-    mutation Login($currentUser: UserLoginInput!) {
-        Login(currentUser: $currentUser) {
-            user {
-                username
-            }
-        }
-    }
-`;
-
-interface EyeIconProps {
+export interface EyeIconProps {
     onClick: () => void;
     show: boolean;
     style: CSSProperties;
@@ -69,29 +55,28 @@ interface FormValues {
     hobbies: string[];
 }
 
-const hobbiesList = ['football', 'tennis', 'basketball', 'golf'];
-
-const steps = [
-    'Informations de compte',
-    'Informations personelles',
-    'Tes hobbies',
-];
+const steps = ['Account informations', 'Personal informations', 'Your hobbies'];
 
 const SignUpPage: FC = () => {
-    const history = useHistory();
+    const { login } = useLogin();
     const [showPassword, setShowPassword] = useState(false);
     const [formStep, setFormStep] = useState(0);
     const [selectedHobbies, setSelectedHobbies] = useState<string[]>([]);
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     const {
-        watch,
+        control,
         handleSubmit,
         register,
         formState: { errors },
     } = useForm({ mode: 'all' });
     const [createUser] = useMutation(CREATE_USER);
-    const [login] = useMutation(LOGIN);
-
+    const getAllFirstLettersUpperCase = (str: string): string => {
+        const words = str.split(' ');
+        words.forEach((word: string, i: number) => {
+            words[i] = word[0].toUpperCase() + word.slice(1);
+        });
+        return words.join(' ');
+    };
     const EyeIcon = ({ show, ...props }: EyeIconProps) => {
         if (show) {
             return <VisibilityOffIcon {...props} />;
@@ -104,24 +89,14 @@ const SignUpPage: FC = () => {
     };
 
     const onSubmitForm = async (data: FormValues) => {
-        const createResult = await createUser({
+        await createUser({
             variables: {
                 newUser: {
                     ...data,
                 },
             },
         });
-        if (createResult.data.createUser) {
-            const loginResult = await login({
-                variables: {
-                    currentUser: {
-                        email: data.email,
-                        password: data.password,
-                    },
-                },
-            });
-            if (loginResult.data.Login) history.push('/dashboard');
-        }
+        login({ email: data.email, password: data.password });
     };
 
     const renderButton = () => {
@@ -135,8 +110,9 @@ const SignUpPage: FC = () => {
                 <Button
                     disabled={Object.values(errors).length > 0}
                     type="submit"
+                    style={{ maxWidth: '49%' }}
                 >
-                    Valider mes informations
+                    Validate
                 </Button>
             );
         return (
@@ -144,8 +120,9 @@ const SignUpPage: FC = () => {
                 disabled={Object.values(errors).length > 0}
                 type="button"
                 onClick={(e: any) => handleClick(e)}
+                style={{ maxWidth: '49%' }}
             >
-                Etape suivante
+                Next step
             </Button>
         );
     };
@@ -153,38 +130,19 @@ const SignUpPage: FC = () => {
     return (
         <Container>
             <Form onSubmit={handleSubmit(onSubmitForm)}>
-                {formStep === 3 ? (
-                    <div>
-                        <Title>
-                            Félicitations !!!
-                            <span role="img" aria-label="rocket">
-                                🚀
-                            </span>
-                        </Title>
-                        <SubTitle>
-                            Tu vas être redirigé vers ton dashboard dans
-                            quelques instants
-                        </SubTitle>
-                    </div>
-                ) : (
-                    <>
-                        <Title>Crée ton compte ! </Title>
-                        <Stepper activeStep={formStep} alternativeLabel>
-                            {steps.map((label, index) => (
-                                <Step
-                                    onClick={() => setFormStep(index)}
-                                    key={label}
-                                >
-                                    <StepLabel>{label}</StepLabel>
-                                </Step>
-                            ))}
-                        </Stepper>
-                    </>
-                )}
+                <Title>Create you account ! </Title>
+                <Stepper activeStep={formStep} alternativeLabel>
+                    {steps.map((label, index) => (
+                        <Step onClick={() => setFormStep(index)} key={label}>
+                            <StepLabel>{label}</StepLabel>
+                        </Step>
+                    ))}
+                </Stepper>
                 {formStep === 0 && (
                     <InputDiv>
                         <TextInput
-                            label="Pseudo"
+                            autoComplete="off"
+                            label="Username"
                             variant="outlined"
                             error={errors.username}
                             helperText={
@@ -193,11 +151,12 @@ const SignUpPage: FC = () => {
                             {...register('username', {
                                 required: {
                                     value: true,
-                                    message: 'Merci de renseigner un pseudo',
+                                    message: 'Please fill in your username',
                                 },
                             })}
                         />
                         <TextInput
+                            autoComplete="off"
                             label="Email"
                             variant="outlined"
                             error={errors.email}
@@ -205,12 +164,13 @@ const SignUpPage: FC = () => {
                             {...register('email', {
                                 required: {
                                     value: true,
-                                    message: 'Merci de renseigner un email',
+                                    message: 'Please fill in your email',
                                 },
                             })}
                         />
                         <TextInput
-                            label="Mot de passe"
+                            autoComplete="off"
+                            label="Password"
                             variant="outlined"
                             type={showPassword ? 'text' : 'password'}
                             InputProps={{
@@ -234,12 +194,11 @@ const SignUpPage: FC = () => {
                                 pattern: {
                                     value: passwordRegex,
                                     message:
-                                        'Merci de saisir un mot de passe valide. Celui-ci doit contenir au minimum 8 caractères avec au moins un chiffre, une lettre majuscule, une lettre minuscule et un caractère non alpha numérique.',
+                                        'Please enter a valid password. The password must contain at least 8 characters with at least one number, one upper case letter, one lower case letter and one non-alpha numeric character.',
                                 },
                                 required: {
                                     value: true,
-                                    message:
-                                        'Merci de renseigner un mot de passe',
+                                    message: 'Please fill in your password',
                                 },
                             })}
                         />
@@ -248,7 +207,8 @@ const SignUpPage: FC = () => {
                 {formStep === 1 && (
                     <InputDiv>
                         <TextInput
-                            label="Prénom"
+                            autoComplete="off"
+                            label="Firstname"
                             variant="outlined"
                             error={errors.firstname}
                             helperText={
@@ -257,12 +217,13 @@ const SignUpPage: FC = () => {
                             {...register('firstname', {
                                 required: {
                                     value: true,
-                                    message: 'Merci de renseigner un prénom',
+                                    message: 'Please fill in your firstname',
                                 },
                             })}
                         />
                         <TextInput
-                            label="Nom"
+                            autoComplete="off"
+                            label="Lastname"
                             variant="outlined"
                             error={errors.lastname}
                             helperText={
@@ -271,45 +232,57 @@ const SignUpPage: FC = () => {
                             {...register('lastname', {
                                 required: {
                                     value: true,
-                                    message: 'Merci de renseigner un nom',
+                                    message: 'Please fill in your lastname',
                                 },
                             })}
                         />
                         <TextInput
-                            label="Date de naissance"
-                            variant="outlined"
-                            error={errors.birthDate}
-                            helperText={
-                                errors.birthDate && errors.birthDate.message
-                            }
-                            {...register('birthDate', {
-                                required: {
-                                    value: true,
-                                    message:
-                                        'Merci de renseigner une date de naissance',
-                                },
-                            })}
-                        />
-                        <TextInput
-                            label="Ville"
+                            autoComplete="off"
+                            label="City"
                             variant="outlined"
                             error={errors.city}
                             helperText={errors.city && errors.city.message}
                             {...register('city', {
                                 required: {
                                     value: true,
-                                    message: 'Merci de renseigner une ville',
+                                    message: 'Please fill in your city',
                                 },
                             })}
                         />
+                        <BirthdateContainer>
+                            <BirthdateLabel>Birthdate</BirthdateLabel>
+                            <Controller
+                                control={control}
+                                name="birthDate"
+                                render={({ field }) => (
+                                    <CustomDatePicker
+                                        onChange={(date: Date) =>
+                                            field.onChange(date)
+                                        }
+                                        value={field.value}
+                                        minDate={new Date('01/01/1920')}
+                                        maxDate={new Date()}
+                                        showLeadingZeros
+                                        format="dd / MM / yyyy"
+                                        dayPlaceholder=" "
+                                        monthPlaceholder=" "
+                                        yearPlaceholder=" "
+                                    />
+                                )}
+                            />
+                        </BirthdateContainer>
                     </InputDiv>
                 )}
                 {formStep === 2 && (
                     <InputDiv>
                         <InputLabel id="hobbies-mutiple-checkbox-label">
-                            Hobbies
+                            What are your hobbies ?
                         </InputLabel>
                         <Select
+                            MenuProps={{
+                                style: { maxHeight: '30rem' },
+                                getContentAnchorEl: null,
+                            }}
                             multiple
                             label="Hobbies"
                             name="Hobbies"
@@ -326,14 +299,13 @@ const SignUpPage: FC = () => {
                             renderValue={(hobbiesArray) => (
                                 <div>
                                     {(hobbiesArray as string[]).map(
-                                        (hobbie: string) => {
-                                            const uppercaseHobbie =
-                                                hobbie.charAt(0).toUpperCase() +
-                                                hobbie.slice(1);
+                                        (hobby: string) => {
                                             return (
                                                 <Chip
-                                                    key={uppercaseHobbie}
-                                                    label={uppercaseHobbie}
+                                                    key={hobby}
+                                                    label={getAllFirstLettersUpperCase(
+                                                        hobby
+                                                    )}
                                                 />
                                             );
                                         }
@@ -341,19 +313,26 @@ const SignUpPage: FC = () => {
                                 </div>
                             )}
                         >
-                            {hobbiesList.map((hobby) => (
-                                <MenuItem key={hobby} value={hobby}>
-                                    <Checkbox
-                                        checked={selectedHobbies.includes(
-                                            hobby
-                                        )}
-                                    />
-                                    <ListItemText primary={hobby} />
-                                </MenuItem>
-                            ))}
+                            {allHobbies.map((hobby) => {
+                                return (
+                                    <MenuItem key={hobby} value={hobby}>
+                                        <Checkbox
+                                            checked={selectedHobbies.includes(
+                                                hobby
+                                            )}
+                                        />
+                                        <ListItemText
+                                            primary={getAllFirstLettersUpperCase(
+                                                hobby
+                                            )}
+                                        />
+                                    </MenuItem>
+                                );
+                            })}
                         </Select>
                     </InputDiv>
                 )}
+
                 {renderButton()}
             </Form>
         </Container>

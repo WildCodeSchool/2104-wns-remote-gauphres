@@ -1,10 +1,12 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import { gql, useMutation, useQuery } from '@apollo/client';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import { ChatView } from '../../Chat/ChatView/ChatView';
 import ChatForm from '../../Chat/ChatForm/ChatForm';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { ChatPage } from './style';
-import { MemberCard } from '../../Chat/MemberCard/MemberCard';
+import { MemberCard } from '../../MemberCard/MemberCard';
 import SideMenu from '../../SideMenu/SideMenu';
 import { SideMenuContainer } from '../../../style';
 import Button from '../../Button/Button';
@@ -49,15 +51,6 @@ const FIND_CHAT = gql`
                 createdAt
             }
             createdAt
-        }
-    }
-`;
-
-const SUBSCRIPTION_USERSTATUS = gql`
-    subscription onUserStatusChanged {
-        userStatusChanged {
-            userId
-            newStatus
         }
     }
 `;
@@ -120,7 +113,7 @@ const RandomChat: FC = () => {
     const [createChatRoom] = useMutation(CREATE_CHATROOM);
     const { data: randomUserForChatRoom } = useQuery(FIND_RANDOM_USER);
 
-    const { loading, error, data, subscribeToMore } = useQuery(FIND_CHAT, {
+    const { loading, data, subscribeToMore } = useQuery(FIND_CHAT, {
         variables: { id: user?.chatrooms },
     });
 
@@ -163,9 +156,7 @@ const RandomChat: FC = () => {
                 },
             });
         } else {
-            alert(
-                "Aucun utilisateur n'est actuellement disponible pour échanger. Veuillez ré-essayer plus tard ;)"
-            );
+            alert('No user is available to chat ! Please come back later ;)');
         }
         refetch();
     };
@@ -188,6 +179,24 @@ const RandomChat: FC = () => {
 
     const checkOtherUser = GetOtherUser(otherUser.id);
 
+    if (loading) {
+        return (
+            <SideMenuContainer>
+                <SideMenu />
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: 'auto',
+                        width: '70%',
+                    }}
+                >
+                    <CircularProgress />
+                </Box>
+            </SideMenuContainer>
+        );
+    }
     if (user?.chatrooms != null) {
         return (
             <SideMenuContainer>
@@ -208,6 +217,7 @@ const RandomChat: FC = () => {
             </SideMenuContainer>
         );
     }
+
     return (
         <SideMenuContainer>
             <SideMenu />
@@ -229,7 +239,7 @@ const RandomChat: FC = () => {
                         )
                     }
                 >
-                    Rejoindre une chatroom
+                    Join a chatroom
                 </Button>
             </span>
         </SideMenuContainer>

@@ -2,7 +2,6 @@ import React, { FC, useState, useContext, useEffect } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { SmallCard, MoodImage, MiniImages, MiniImage } from '../moodStyle';
 import { AuthContext } from '../../../contexts/AuthContext';
-import { User } from '../../../types/authContextTypes';
 
 const UPDATE_USER_MOOD = gql`
     mutation updateUserMood($email: String!, $newMood: MoodInput!) {
@@ -43,7 +42,7 @@ const MyMood: FC = () => {
 
     return (
         <SmallCard>
-            <p data-testid="myMood-title">Ton mood</p>
+            <p data-testid="myMood-title">Your mood</p>
             <MoodImage
                 id="main-mood"
                 data-testid="myMood-image"
@@ -52,7 +51,7 @@ const MyMood: FC = () => {
                 }`}
                 alt={user?.userMood?.title}
             />
-            <p>Change-le ici</p>
+            <p>Change your mood</p>
             <MiniImages>
                 <MiniImage
                     type="image"

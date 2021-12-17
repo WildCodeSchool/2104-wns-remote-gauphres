@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom';
 import React, { FC, useContext } from 'react';
 import { gql, useQuery } from '@apollo/client';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import SideMenu from '../../SideMenu/SideMenu';
 import { SideMenuContainer } from '../../../style';
-import { MemberCard, UserMember } from '../../Chat/MemberCard/MemberCard';
+import { MemberCard, UserMember } from '../../MemberCard/MemberCard';
 import { MemberPage, MembersContainer, MemberTitle } from './style';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { User } from '../../../types/authContextTypes';
@@ -42,15 +43,33 @@ const MembersPage: FC = () => {
         }
     }
 
+    if (loading) {
+        return (
+            <SideMenuContainer>
+                <SideMenu />
+                <Box
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: 'auto',
+                        width: '70%',
+                    }}
+                >
+                    <CircularProgress />
+                </Box>
+            </SideMenuContainer>
+        );
+    }
     return (
         <SideMenuContainer>
             <SideMenu />
             <MemberPage>
-                <MemberTitle>Tous les autres membres</MemberTitle>
+                <MemberTitle>All members</MemberTitle>
                 <MembersContainer>
                     {otherUsers &&
                         otherUsers.map((oneUser: UserMember) => (
-                            <MemberCard user={oneUser} />
+                            <MemberCard key={oneUser._id} user={oneUser} />
                         ))}
                 </MembersContainer>
             </MemberPage>

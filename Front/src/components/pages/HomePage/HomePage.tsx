@@ -3,8 +3,6 @@ import HomePageButton from '../../shared/ButtonHomePage/HomePageButton';
 
 import {
     Link,
-    HomePageBlock,
-    HomePageBlockLineContainer,
     HomepageButtonsContainer,
     HomePageContainer,
     PictureContent,

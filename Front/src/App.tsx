@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
     BrowserRouter as Router,
     Redirect,
@@ -29,6 +29,10 @@ type PrivateRouteProps = {
 const App: FC<{ client: ApolloClient<NormalizedCacheObject> }> = ({
     client,
 }) => {
+    useEffect(() => {
+        document.title = '!MOOWDY';
+    }, []);
+
     const PrivateRoute = ({ children, path }: PrivateRouteProps) => {
         const isAuthenticated = localStorage.getItem('jwtToken');
         return (
